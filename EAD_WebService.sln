@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EAD WebService", "EAD WebService.csproj", "{169A694B-2F84-4ECB-849F-AD82023009C6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{169A694B-2F84-4ECB-849F-AD82023009C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{169A694B-2F84-4ECB-849F-AD82023009C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{169A694B-2F84-4ECB-849F-AD82023009C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{169A694B-2F84-4ECB-849F-AD82023009C6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {60169ABC-E72D-4F4E-A5EA-FB1B00BCC4B1}
+	EndGlobalSection
+EndGlobal
