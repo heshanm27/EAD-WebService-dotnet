@@ -1,3 +1,7 @@
+global using EAD_WebService.Models;
+global using EAD_WebService.Models;
+global using EAD_WebService.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
