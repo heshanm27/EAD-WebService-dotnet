@@ -1,13 +1,23 @@
 using EAD_WebService.Models;
 using EAD_WebService.Services.Interfaces;
+using Microsoft.Extensions.Options;
+using MongoDB.Driver;
 
 
 namespace EAD_WebService.Services.Core
 {
     public class UserService : IUserService
     {
-        public User getUser(string id)
-        {
+
+        private readonly IMongoCollection<User> _user;
+
+        public UserService (IOptions<MongoDBSettings> mongoDBSettings ){
+                _user = new MongoClient(mongoDBSettings.Value.ConnectionURI)
+                    .GetDatabase(mongoDBSettings.Value.DatabaseName)
+                    .GetCollection<User>(mongoDBSettings.Value.UserCollection);
+            }
+
+        public User getUser(string id){
             throw new NotImplementedException();
         }
 
@@ -16,10 +26,6 @@ namespace EAD_WebService.Services.Core
             throw new NotImplementedException();
         }
 
-        public User registerUser(User user)
-        {
-            throw new NotImplementedException();
-        }
 
         public void removeUser(string id)
         {

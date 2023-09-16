@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
+
 namespace EAD_WebService.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/train")]
     public class TrainController : ControllerBase
     {
 
