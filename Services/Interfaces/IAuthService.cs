@@ -2,14 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EAD_WebService.Dto.Auth;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EAD_WebService.Services.Interfaces
 {
     public interface IAuthService
     {
-        User registerUser(User user);
+        Task<ServiceResponse<LoginSuccessDto>> registerUser(RegisterUserDto registerUserDto);
 
-        void loginUser(User user);
+        Task<ServiceResponse<LoginSuccessDto>> loginUser(LoginUserDto loginUserDto);
 
         void forgotPassword(User user);
 

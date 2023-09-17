@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace EAD_WebService.Controllers
 {
     [ApiController]
-    [Route("api/train")]
+    [Route("api/v1/train")]
     public class TrainController : ControllerBase
     {
 

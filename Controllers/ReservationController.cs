@@ -4,7 +4,7 @@ namespace EAD_WebService.Controllers
 {
 
     [ApiController]
-    [Route("api/reservation")]
+    [Route("api/v1/reservation")]
     public class ReservationController : ControllerBase
     {
 

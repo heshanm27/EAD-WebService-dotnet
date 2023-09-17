@@ -1,45 +1,58 @@
+using EAD_WebService.Dto.Auth;
+using EAD_WebService.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EAD_WebService.Controllers
 {
     [ApiController]
-    [Route("api/auth")]
+    [Route("api/v1/auth")]
     public class AuthController : ControllerBase
     {
+
+        IAuthService _authService;
+
+        public AuthController(IAuthService authService)
+        {
+            _authService = authService;
+        }
         
         [HttpPost("login")]
-        public IActionResult Login() 
+        public async Task<ActionResult<ServiceResponse<LoginSuccessDto>>> Login(LoginUserDto loginUserDto) 
         {
-            return Ok("Login");
+           ServiceResponse<LoginSuccessDto> response =  await _authService.loginUser(loginUserDto);
+            if(!response.Status) return BadRequest(response);
+            return Ok(response);
         }
 
         [HttpPost("register")]
-        public IActionResult Register()
+        public async Task<ActionResult<ServiceResponse<LoginSuccessDto>>> Register(RegisterUserDto registerUserDto)
         {
-            return Ok("Register");
+            ServiceResponse<LoginSuccessDto> response =  await _authService.registerUser(registerUserDto);
+            if(!response.Status) return BadRequest(response);
+            return Ok(response);
         }
 
-        [HttpPost("forgot-password")]
-        public IActionResult ForgotPassword()
-        {
-            return Ok("Forgot Password");
-        }
+        // [HttpPost("forgot-password")]
+        // public IActionResult ForgotPassword()
+        // {
+        //     return Ok("Forgot Password");
+        // }
 
 
-        [HttpPost("change-password")]
-        public IActionResult ChangePassword()
-        {
-            return Ok("Change Password");
-        }
+        // [HttpPost("change-password")]
+        // public IActionResult ChangePassword()
+        // {
+        //     return Ok("Change Password");
+        // }
 
       
 
-        [HttpPost("verify-email")]
+        // [HttpPost("verify-email")]
 
-        public IActionResult VerifyEmail()
-        {
-            return Ok("Verify Email");
-        }
+        // public IActionResult VerifyEmail()
+        // {
+        //     return Ok("Verify Email");
+        // }
 
      
 
