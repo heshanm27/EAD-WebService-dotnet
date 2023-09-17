@@ -17,5 +17,7 @@ namespace EAD_WebService.Services.Interfaces
 
         void changePassword(User user);
 
+        string createToken(User user);
+
     }
 }

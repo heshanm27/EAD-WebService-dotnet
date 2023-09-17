@@ -15,24 +15,25 @@ namespace EAD_WebService.Models
         [BsonRepresentation(MongoDB.Bson.BsonType.String)]
         public string Email { get; set; } = null!;
 
-         [BsonElement("first_name")]
+        [BsonElement("first_name")]
         [BsonRequired]   
         public string FirstName { get; set; } = null!;
 
         [BsonElement("last_name")]
         [BsonRequired]
-        public string LastName { get; set; }
+        public string LastName { get; set; } = null!;
 
         [BsonElement("password")]
         [BsonRequired]
-        public string Password { get; set; }   
+        public string Password { get; set; } = null!;
 
         [BsonElement("avatar_url")]
-        public string AvatarUrl { get; set; }
+        public string AvatarUrl { get; set; } = string.Empty;
 
         [BsonElement("role")]
-        [BsonDefaultValue("user")]
-        public string Role { get; set; }
+        [BsonDefaultValue(UserEnum.User)]
+
+        public string Role { get; set; } = UserEnum.User;
 
         [BsonElement("is_active")]
         [BsonDefaultValue(true)]
