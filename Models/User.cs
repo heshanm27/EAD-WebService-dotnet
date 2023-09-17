@@ -1,4 +1,5 @@
 
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace EAD_WebService.Models
@@ -6,9 +7,8 @@ namespace EAD_WebService.Models
     public class User
     {
 
-        [BsonId]
-        [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
-        public int Id { get; set; }
+
+        public ObjectId Id { get; set; }
 
         [BsonElement("email")]
         [BsonRequired]
@@ -41,11 +41,9 @@ namespace EAD_WebService.Models
 
 
         [BsonElement("created_at")]
-        [BsonRepresentation(MongoDB.Bson.BsonType.Timestamp)]
         public DateTime CreatedAt { get; set; }
 
         [BsonElement("updated_at")]
-        [BsonRepresentation(MongoDB.Bson.BsonType.Timestamp)]
         public DateTime UpdatedAt { get; set; }
 
     

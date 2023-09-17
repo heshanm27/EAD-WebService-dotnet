@@ -1,11 +1,14 @@
 
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 //Setup mongoDB service
-builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection(nameof(MongoDBSettings)));
-builder.Services.AddSingleton<ReservationService>();
-builder.Services.AddSingleton<TrainService>();
-builder.Services.AddSingleton<UserService>();
+builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB"));
+builder.Services.AddSingleton<IReservationService,ReservationService>();
+builder.Services.AddSingleton<ITrainService,TrainService>();
+builder.Services.AddScoped<IUserService,UserService>();
+builder.Services.AddScoped<IAuthService,AuthService>();
 
 // Add services to the container.
 

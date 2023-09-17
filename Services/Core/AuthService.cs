@@ -39,7 +39,7 @@ namespace EAD_WebService.Services.Core
                 {
                     Data = new LoginSuccessDto
                     {
-                        Token =  createToken(user),
+                        Token =  "createToken(user)",
                         FirstName = user.FirstName,
                         LastName = user.LastName,
                         AvatarUrl = user.AvatarUrl
@@ -51,6 +51,7 @@ namespace EAD_WebService.Services.Core
 
             }catch(Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return new ServiceResponse<LoginSuccessDto>
                 {
                     Status = false,
@@ -125,17 +126,19 @@ namespace EAD_WebService.Services.Core
             };
 
             //genrate a key for the token using Microsoft.IdentityModel.Tokens
-             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value!));
+             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSetting:Token").Value!));
 
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
             //sign the key using Microsoft.IdentityModel.Tokens
             var token = new JwtSecurityToken(
                 claims: claims,
                 expires: DateTime.Now.AddDays(1),
-                signingCredentials: new SigningCredentials(key,SecurityAlgorithms.HmacSha512Signature)
+                signingCredentials: creds
             );
 
             //return the token
             return  new JwtSecurityTokenHandler().WriteToken(token);
         }
+
     }
 }
