@@ -12,8 +12,12 @@ namespace EAD_WebService.Models
 
         [BsonElement("email")]
         [BsonRequired]
-        [BsonRepresentation(MongoDB.Bson.BsonType.String)]
         public string Email { get; set; } = null!;
+
+        [BsonElement("nic")]
+        [BsonRequired]
+        public string Nic { get; set; } = null!;
+
 
         [BsonElement("first_name")]
         [BsonRequired]   
@@ -41,10 +45,10 @@ namespace EAD_WebService.Models
 
 
         [BsonElement("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [BsonElement("updated_at")]
-        public DateTime UpdatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
     
     }

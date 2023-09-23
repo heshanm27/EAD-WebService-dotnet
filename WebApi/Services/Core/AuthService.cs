@@ -3,7 +3,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using EAD_WebService.Dto.Auth;
-using EAD_WebService.Services.Interfaces;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
@@ -16,13 +15,13 @@ namespace EAD_WebService.Services.Core
 
         private readonly IMongoCollection<User> _authCollection;
         private readonly IConfiguration _configuration;
-        
-        public AuthService(IOptions<MongoDBSettings> mongoDBSettings,IConfiguration configuration)
+
+        public AuthService(IOptions<MongoDBSettings> mongoDBSettings, IConfiguration configuration)
         {
             _configuration = configuration;
-             _authCollection = new MongoClient(mongoDBSettings.Value.ConnectionURI)
-                .GetDatabase(mongoDBSettings.Value.DatabaseName)
-                .GetCollection<User>(mongoDBSettings.Value.UserCollection);
+            _authCollection = new MongoClient(mongoDBSettings.Value.ConnectionURI)
+               .GetDatabase(mongoDBSettings.Value.DatabaseName)
+               .GetCollection<User>(mongoDBSettings.Value.UserCollection);
         }
 
         public async Task<ServiceResponse<LoginSuccessDto>> loginUser(LoginUserDto loginUserDto)
@@ -33,13 +32,13 @@ namespace EAD_WebService.Services.Core
 
                 if (user == null) throw new Exception("User does not exist");
 
-                if (!BCrypt.Net.BCrypt.Verify(loginUserDto.Password,user.Password)) throw new Exception("Invalid Password");
+                if (!BCrypt.Net.BCrypt.Verify(loginUserDto.Password, user.Password)) throw new Exception("Invalid Password");
 
                 return new ServiceResponse<LoginSuccessDto>
                 {
                     Data = new LoginSuccessDto
                     {
-                        Token =  "createToken(user)",
+                        Token = "createToken(user)",
                         FirstName = user.FirstName,
                         LastName = user.LastName,
                         AvatarUrl = user.AvatarUrl
@@ -49,7 +48,8 @@ namespace EAD_WebService.Services.Core
 
                 };
 
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return new ServiceResponse<LoginSuccessDto>
@@ -68,25 +68,41 @@ namespace EAD_WebService.Services.Core
 
                 var userExists = await _authCollection.Find(u => u.Email == registerUserDto.Email).FirstOrDefaultAsync();
 
-                if(userExists != null) throw new Exception("User already exists");
+                if (userExists != null) throw new Exception("User already exists");
 
                 string hashPassword = BCrypt.Net.BCrypt.HashPassword(registerUserDto.Password);
+
+                // // Create a unique index on the "email" field
+                var emailIndexKeys = Builders<User>.IndexKeys.Ascending(u => u.Email);
+                var emailIndexOptions = new CreateIndexOptions { Unique = true };
+                var emailIndexModel = new CreateIndexModel<User>(emailIndexKeys, emailIndexOptions);
+
+                // Create a unique index on the "nic" field
+                var nicIndexKeys = Builders<User>.IndexKeys.Ascending(u => u.Nic);
+                var nicIndexOptions = new CreateIndexOptions { Unique = true };
+                var nicIndexModel = new CreateIndexModel<User>(nicIndexKeys, nicIndexOptions);
+
+                // Create the unique indexes on the collection
+                await _authCollection.Indexes.CreateOneAsync(emailIndexModel);
+                await _authCollection.Indexes.CreateOneAsync(nicIndexModel);
+
 
                 var user = new User
                 {
                     FirstName = registerUserDto.FirstName,
+                    Nic = registerUserDto.NIC,
                     LastName = registerUserDto.LastName,
                     Email = registerUserDto.Email,
                     Password = hashPassword,
                 };
-
 
                 await _authCollection.InsertOneAsync(user);
 
 
                 return new ServiceResponse<LoginSuccessDto>
                 {
-                    Data= new LoginSuccessDto{
+                    Data = new LoginSuccessDto
+                    {
                         FirstName = user.FirstName,
                         LastName = user.LastName,
                         AvatarUrl = user.AvatarUrl,
@@ -95,7 +111,24 @@ namespace EAD_WebService.Services.Core
                     Message = "User created successfully",
                     Status = true
                 };
-            }catch(Exception ex)
+            }
+            catch (MongoWriteException ex)
+            {
+                if (ex.WriteError.Category == ServerErrorCategory.DuplicateKey)
+                {
+                    return new ServiceResponse<LoginSuccessDto>
+                    {
+                        Status = false,
+                        Message = "With this email or nic user already exists"
+                    };
+                }
+                return new ServiceResponse<LoginSuccessDto>
+                {
+                    Status = false,
+                    Message = ex.Message
+                };
+            }
+            catch (Exception ex)
             {
                 return new ServiceResponse<LoginSuccessDto>
                 {
@@ -103,7 +136,7 @@ namespace EAD_WebService.Services.Core
                     Message = ex.Message
                 };
             }
-             
+
         }
 
 
@@ -126,9 +159,9 @@ namespace EAD_WebService.Services.Core
             };
 
             //genrate a key for the token using Microsoft.IdentityModel.Tokens
-             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSetting:Token").Value!));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSetting:Token").Value!));
 
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
             //sign the key using Microsoft.IdentityModel.Tokens
             var token = new JwtSecurityToken(
                 claims: claims,
@@ -137,7 +170,7 @@ namespace EAD_WebService.Services.Core
             );
 
             //return the token
-            return  new JwtSecurityTokenHandler().WriteToken(token);
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
     }
