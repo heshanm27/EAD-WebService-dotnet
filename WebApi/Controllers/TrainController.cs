@@ -1,41 +1,33 @@
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace EAD_WebService.Controllers
 {
-
     [ApiController]
-    [Route("api/[controller]")]
-    public class ReservationController : ControllerBase
+    [Route("api/v1/train")]
+    public class TrainController : ControllerBase
     {
 
-
         [HttpGet]
-
-        public ActionResult<List<Reservation>> Get()
+        public ActionResult<List<Train>> Get()
         {
             return Ok();
         }
+
 
         [HttpGet("{id}")]
-        public ActionResult<Reservation> Get(string id)
+        public ActionResult<Train> Get(string id)
         {
             return Ok();
         }
 
-
         [HttpPost]
-        public ActionResult<Reservation> Post(Reservation reservation)
+        public ActionResult<Train> Post(Train train)
         {
             return Ok();
         }
 
         [HttpPatch("{id}")]
-
-        public IActionResult Put(string id, Reservation reservationIn)
+        public IActionResult Put(string id, Train trainIn)
         {
             return Ok();
         }
@@ -47,7 +39,5 @@ namespace EAD_WebService.Controllers
         }
 
 
-
-        
     }
 }

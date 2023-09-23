@@ -1,16 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EAD_WebService.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/v1/user")]
     public class UserController : ControllerBase
     {
-
 
         [HttpGet]
         public ActionResult<List<User>> Get()
@@ -18,7 +13,7 @@ namespace EAD_WebService.Controllers
             return Ok();
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public ActionResult<User> Get(string id)
         {
             return Ok();
@@ -37,8 +32,6 @@ namespace EAD_WebService.Controllers
         {
             return Ok();
         }
-
-    
 
     }
 }
