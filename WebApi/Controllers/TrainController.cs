@@ -7,35 +7,58 @@ namespace EAD_WebService.Controllers
     public class TrainController : ControllerBase
     {
 
-        [HttpGet]
-        public ActionResult<List<Train>> Get()
+        private readonly ITrainService _trainService;
+        public TrainController(ITrainService trainService)
         {
-            return Ok();
+            _trainService = trainService;
+        }
+        [HttpGet]
+        public async Task<ActionResult<List<Train>>> Get([FromQuery] BasicFilters filters)
+        {
+            ServiceResponse<List<Train>> response = await _trainService.getTrains();
+            if (!response.Status) return BadRequest(response);
+            return Ok(response);
+
         }
 
 
         [HttpGet("{id}")]
-        public ActionResult<Train> Get(string id)
+        public async Task<ActionResult<Train>> Get(string id)
         {
-            return Ok();
+            ServiceResponse<Train> response = await _trainService.getTrain(id);
+            if (!response.Status) return BadRequest(response);
+            return Ok(response);
         }
 
         [HttpPost]
-        public ActionResult<Train> Post(Train train)
+        public async Task<ActionResult<ServiceResponse<Train>>> Post(Train train)
         {
-            return Ok();
+
+            ServiceResponse<Train> response = await _trainService.createTrain(train);
+
+            if (!response.Status) return BadRequest(response);
+
+            return Ok(response);
         }
 
         [HttpPatch("{id}")]
-        public IActionResult Put(string id, Train trainIn)
+        public async Task<ActionResult<ServiceResponse<EmptyData>>> Put(string id, Train trainIn)
         {
-            return Ok();
+
+            ServiceResponse<EmptyData> response = await _trainService.updateTrain(id, trainIn);
+
+            if (!response.Status) return BadRequest(response);
+            return Ok(response);
+
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(string id)
+        public async Task<ActionResult<ServiceResponse<EmptyData>>> Delete(string id)
         {
-            return Ok();
+            ServiceResponse<EmptyData> response = await _trainService.removeTrain(id);
+
+            if (!response.Status) return BadRequest(response);
+            return Ok(response);
         }
 
 

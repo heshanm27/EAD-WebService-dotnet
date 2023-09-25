@@ -5,35 +5,43 @@ namespace EAD_WebService.Models
 {
     public class Reservation
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.String)]
-        public required string Id { get; set; }
-
+        public ObjectId Id { get; set; }
         [BsonElement("reservation_date")]
         public required DateTime ReservationDate { get; set; }
 
+        public bool isActive { get; set; } = true;
 
-        public bool status { get; set; }
+        [BsonElement("reserved_train")]
+        public ObjectId ReservedTrainId { get; set; }
+
+
+        [BsonElement("reserved_user")]
+        public ObjectId ReservedUserId { get; set; }
+
+
+        [BsonElement("reservation_seat")]
+        [BsonRequired]
+        public string ReservationSeat { get; set; } = null!;
+
+        [BsonElement("reservation_class")]
+        [BsonRequired]
+        public string ReservationClass { get; set; } = null!;
+
+        [BsonElement("reservation_type")]
+        [BsonRequired]
+        public string ReservationType { get; set; } = null!;
+
+        [BsonElement("reservation_price")]
+        [BsonRequired]
+        public double ReservationPrice { get; set; }
 
         //auto generate time stamp for created at and updated at 
         [BsonElement("created_at")]
-        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
-        [BsonRepresentation(BsonType.DateTime)]
-        [BsonRequired()]
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
 
         [BsonElement("updated_at")]
-        [BsonRequired()]
-        [BsonDateTimeOptions(Kind =DateTimeKind.Utc)]
-        [BsonRepresentation(BsonType.DateTime)]
-        public DateTime UpdatedAt { get; set;
-        }
-
-// 
-
-
-
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
 
     }
