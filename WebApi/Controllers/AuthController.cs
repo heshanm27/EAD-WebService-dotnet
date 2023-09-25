@@ -1,5 +1,4 @@
 using EAD_WebService.Dto.Auth;
-using EAD_WebService.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EAD_WebService.Controllers
@@ -15,7 +14,7 @@ namespace EAD_WebService.Controllers
         {
             _authService = authService;
         }
-        
+
         // [HttpPost("login")]
         // public async Task<ActionResult<ServiceResponse<LoginSuccessDto>>> Login(LoginUserDto loginUserDto) 
         // {
@@ -27,9 +26,9 @@ namespace EAD_WebService.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<ServiceResponse<LoginSuccessDto>>> Register(RegisterUserDto registerUserDto)
         {
-            ServiceResponse<LoginSuccessDto> response =  await _authService.registerUser(registerUserDto);
-    
-            if(!response.Status) return BadRequest(response);
+            ServiceResponse<LoginSuccessDto> response = await _authService.registerUser(registerUserDto);
+
+            if (!response.Status) return BadRequest(response);
             return Ok(response);
         }
 
@@ -46,7 +45,7 @@ namespace EAD_WebService.Controllers
         //     return Ok("Change Password");
         // }
 
-      
+
 
         // [HttpPost("verify-email")]
 
@@ -55,7 +54,7 @@ namespace EAD_WebService.Controllers
         //     return Ok("Verify Email");
         // }
 
-     
+
 
 
     }

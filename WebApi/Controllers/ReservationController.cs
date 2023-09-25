@@ -1,3 +1,4 @@
+using EAD_WebService.Dto.Reservation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EAD_WebService.Controllers
@@ -9,41 +10,61 @@ namespace EAD_WebService.Controllers
     {
 
 
-        [HttpGet]
+        private readonly IReservationService _reservationService;
 
-        public ActionResult<List<Reservation>> Get()
+        public ReservationController(IReservationService reservationService)
         {
-            return Ok();
+            _reservationService = reservationService;
+        }
+
+        [HttpGet()]
+
+        public async Task<ActionResult<List<Reservation>>> Get([FromQuery] BasicFilters filters)
+        {
+
+            ServiceResponse<List<Reservation>> response = await _reservationService.GetReservation(filters);
+            if (!response.Status) return BadRequest(response);
+            return Ok(response);
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Reservation> Get(string id)
+        public async Task<ActionResult<Reservation>> Get(string id)
         {
-            return Ok();
+            ServiceResponse<Reservation> response = await _reservationService.GetReservation(id);
+
+            if (!response.Status) return BadRequest(response);
+
+            return Ok(response);
         }
 
 
         [HttpPost]
-        public ActionResult<Reservation> Post(Reservation reservation)
+        public async Task<ActionResult<ServiceResponse<Reservation>>> Post(ReservationDto reservationDto)
         {
-            return Ok();
+
+            // Console.WriteLine(reservation.ReservedUserId);
+            ServiceResponse<Reservation> response = await _reservationService.CreateReservation(reservationDto);
+            if (!response.Status) return BadRequest(response);
+            return Ok(response);
+
         }
 
         [HttpPatch("{id}")]
 
-        public IActionResult Put(string id, Reservation reservationIn)
+        public async Task<ActionResult<ServiceResponse<EmptyData>>> Put(string id, ReservationDto reservationIn)
         {
-            return Ok();
+            ServiceResponse<EmptyData> response = await _reservationService.UpdateReservation(id, reservationIn);
+
+            if (!response.Status) return BadRequest(response);
+            return Ok(response);
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(string id)
+        public async Task<ActionResult<ServiceResponse<EmptyData>>> Delete(string id)
         {
-            return Ok();
+            ServiceResponse<EmptyData> response = await _reservationService.RemoveReservation(id);
+            if (!response.Status) return BadRequest(response);
+            return Ok(response);
         }
-
-
-
-        
     }
 }

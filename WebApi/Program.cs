@@ -5,10 +5,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 //Setup mongoDB service
 builder.Services.Configure<MongoDBSettings>(builder.Configuration.GetSection("MongoDB"));
-builder.Services.AddSingleton<IReservationService,ReservationService>();
-builder.Services.AddSingleton<ITrainService,TrainService>();
-builder.Services.AddScoped<IUserService,UserService>();
-builder.Services.AddScoped<IAuthService,AuthService>();
+builder.Services.AddSingleton<IReservationService, ReservationService>();
+builder.Services.AddSingleton<ITrainService, TrainService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 // Add services to the container.
 
@@ -29,6 +29,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+app.MapGet("/", () => "Server is running");
 
 app.MapControllers();
 
