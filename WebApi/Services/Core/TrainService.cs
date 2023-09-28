@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 
@@ -30,24 +31,138 @@ namespace EAD_WebService.Services.Core
 
         }
 
-        public Task<ServiceResponse<Train>> getTrain(string id)
+        public async Task<ServiceResponse<Train>> getTrain(string id)
         {
-            throw new NotImplementedException();
+
+            try
+            {
+                var train = await _train.Find(Train => Train.Id == new ObjectId(id)).FirstOrDefaultAsync();
+
+                return new ServiceResponse<Train>
+                {
+                    Message = "Train retrieved successfully",
+                    Status = true,
+                    Data = train
+                };
+            }
+            catch (Exception e)
+            {
+                return new ServiceResponse<Train>
+                {
+                    Message = "Train not found",
+                    Status = false,
+                    Data = null
+                };
+            }
         }
 
-        public Task<ServiceResponse<List<Train>>> getTrains()
+        public async Task<ServiceResponse<List<Train>>> getTrains()
         {
-            throw new NotImplementedException();
+
+            try
+            {
+                await _train.Find(Train => true).ToListAsync();
+
+                return new ServiceResponse<List<Train>>
+                {
+                    Message = "Trains retrieved successfully",
+                    Status = true,
+                    Data = await _train.Find(Train => true).ToListAsync()
+                };
+            }
+            catch (MongoException)
+            {
+                return new ServiceResponse<List<Train>>
+                {
+                    Data = null,
+                    Message = "Train retrive failed",
+                    Status = false
+                };
+            }
+            catch (Exception e)
+            {
+                return new ServiceResponse<List<Train>>
+                {
+                    Message = e.Message,
+                    Status = false,
+                    Data = null
+                };
+            }
         }
 
-        public Task<ServiceResponse<EmptyData>> removeTrain(string id)
+        public async Task<ServiceResponse<EmptyData>> removeTrain(string id)
         {
-            throw new NotImplementedException();
+
+            try
+            {
+                await _train.DeleteOneAsync(Train => Train.Id == new ObjectId(id));
+
+                return new ServiceResponse<EmptyData>
+                {
+                    Message = "Train deleted successfully",
+                    Status = true
+                };
+            }
+            catch (MongoException)
+            {
+                return new ServiceResponse<EmptyData>
+                {
+                    Message = "Train deleteion faild",
+                    Status = false
+                };
+            }
+            catch (Exception e)
+            {
+                return new ServiceResponse<EmptyData>
+                {
+                    Message = e.Message,
+                    Status = false
+                };
+            }
         }
 
-        public Task<ServiceResponse<EmptyData>> updateTrain(string id, Train trainIn)
+        public async Task<ServiceResponse<EmptyData>> updateTrain(string id, Train trainIn)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var filter = Builders<Train>.Filter.Eq("Id", new ObjectId(id));
+                var update = Builders<Train>.Update
+                               .Set("train_name", trainIn.TrainName)
+                               .Set("train_type", trainIn.TrainType)
+                              .Set("train_route", trainIn.TrainRoute)
+                              .Set("train_start", trainIn.TrainStart)
+                              .Set("train_end", trainIn.TrainEnd)
+                              .Set("train_start_time", trainIn.TrainStartTime)
+                              .Set("train_end_time", trainIn.TrainEndTime)
+                              .Set("train_start_date", trainIn.TrainStartDate)
+                              .Set("train_ticket_prices", trainIn.TrainTicketPrices);
+
+                await _train.UpdateOneAsync(filter, update);
+
+                return new ServiceResponse<EmptyData>
+                {
+                    Message = "Train updated successfully",
+                    Status = true
+                };
+
+
+            }
+            catch (MongoException)
+            {
+                return new ServiceResponse<EmptyData>
+                {
+                    Message = "Train not found",
+                    Status = false
+                };
+            }
+            catch (Exception e)
+            {
+                return new ServiceResponse<EmptyData>
+                {
+                    Message = e.Message,
+                    Status = false
+                };
+            }
         }
     }
 }

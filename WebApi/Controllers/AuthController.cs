@@ -15,17 +15,19 @@ namespace EAD_WebService.Controllers
             _authService = authService;
         }
 
-        // [HttpPost("login")]
-        // public async Task<ActionResult<ServiceResponse<LoginSuccessDto>>> Login(LoginUserDto loginUserDto) 
-        // {
-        //    ServiceResponse<LoginSuccessDto> response =  await _authService.loginUser(loginUserDto);
-        //     if(!response.Status) return BadRequest(response);
-        //     return Ok(response);
-        // }
+        [HttpPost("login")]
+        public async Task<ActionResult<ServiceResponse<LoginSuccessDto>>> Login(LoginUserDto loginUserDto)
+        {
+            ServiceResponse<LoginSuccessDto> response = await _authService.loginUser(loginUserDto);
+            if (!response.Status) return BadRequest(response);
+            return Ok(response);
+        }
 
         [HttpPost("register")]
-        public async Task<ActionResult<ServiceResponse<LoginSuccessDto>>> Register(RegisterUserDto registerUserDto)
+        public async Task<ActionResult<ServiceResponse<LoginSuccessDto>>> Register([FromForm] RegisterUserDto registerUserDto)
         {
+
+
             ServiceResponse<LoginSuccessDto> response = await _authService.registerUser(registerUserDto);
 
             if (!response.Status) return BadRequest(response);

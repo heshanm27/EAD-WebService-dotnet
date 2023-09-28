@@ -2,7 +2,10 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
 using EAD_WebService.Dto.Auth;
+using EAD_WebService.Util;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
@@ -15,9 +18,9 @@ namespace EAD_WebService.Services.Core
 
         private readonly IMongoCollection<User> _authCollection;
         private readonly IConfiguration _configuration;
-
         public AuthService(IOptions<MongoDBSettings> mongoDBSettings, IConfiguration configuration)
         {
+
             _configuration = configuration;
             _authCollection = new MongoClient(mongoDBSettings.Value.ConnectionURI)
                .GetDatabase(mongoDBSettings.Value.DatabaseName)
@@ -38,7 +41,7 @@ namespace EAD_WebService.Services.Core
                 {
                     Data = new LoginSuccessDto
                     {
-                        Token = "createToken(user)",
+                        Token = createToken(user),
                         FirstName = user.FirstName,
                         LastName = user.LastName,
                         AvatarUrl = user.AvatarUrl
@@ -62,7 +65,6 @@ namespace EAD_WebService.Services.Core
 
         public async Task<ServiceResponse<LoginSuccessDto>> registerUser(RegisterUserDto registerUserDto)
         {
-
             try
             {
 
@@ -85,7 +87,22 @@ namespace EAD_WebService.Services.Core
                 // Create the unique indexes on the collection
                 await _authCollection.Indexes.CreateOneAsync(emailIndexModel);
                 await _authCollection.Indexes.CreateOneAsync(nicIndexModel);
+                dynamic uploadResult = "";
+                //Image Upload
+                if (registerUserDto.Avatar != null)
+                {
 
+                    Cloudinary cloudinary = CloudinaryConfig.GetCloudinaryInstance();
+                    var uploadParams = new ImageUploadParams()
+                    {
+                        File = new FileDescription(registerUserDto.Avatar.FileName, registerUserDto.Avatar.OpenReadStream()),
+                        UseFilename = true,
+                        UniqueFilename = false,
+                        Overwrite = true
+                    };
+                    uploadResult = cloudinary.Upload(uploadParams);
+                    Console.WriteLine(uploadResult.Url);
+                }
 
                 var user = new User
                 {
@@ -94,6 +111,7 @@ namespace EAD_WebService.Services.Core
                     LastName = registerUserDto.LastName,
                     Email = registerUserDto.Email,
                     Password = hashPassword,
+                    AvatarUrl = uploadResult.Url.ToString() ?? uploadResult,
                 };
 
                 await _authCollection.InsertOneAsync(user);
@@ -155,7 +173,7 @@ namespace EAD_WebService.Services.Core
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Email,user.Email),
-                new Claim(ClaimTypes.Role,user.Role)
+                new Claim(ClaimTypes.Role,user.Role),
             };
 
             //genrate a key for the token using Microsoft.IdentityModel.Tokens

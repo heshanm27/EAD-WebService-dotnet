@@ -18,9 +18,9 @@ namespace EAD_WebService.Models
         [BsonRequired]
         public string TrainType { get; set; } = null!;
 
-        [BsonElement("train_number")]
+        [BsonElement("train_route")]
         [BsonRequired]
-        public string TrainNumber { get; set; } = null!;
+        public string TrainRoute { get; set; } = null!;
 
 
         [BsonElement("train_start")]
@@ -49,14 +49,10 @@ namespace EAD_WebService.Models
 
 
         [BsonElement("created_at")]
-        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
-        [BsonRepresentation(BsonType.DateTime)]
-        [BsonRequired()]
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+
         [BsonElement("updated_at")]
-        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
-        [BsonRepresentation(BsonType.DateTime)]
-        [BsonRequired()]
-        public DateTime UpdatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 }

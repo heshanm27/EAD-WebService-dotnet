@@ -1,5 +1,5 @@
-
-
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +16,17 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+// builder.Services.AddAuthentication().AddJwtBearer(options =>
+// {
+//     options.TokenValidationParameters = new TokenValidationParameters
+//     {
+//         ValidateIssuerSigningKey = true,
+//         ValidateAudience = false,
+//         ValidateIssuer = false,
+//         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+//                 builder.Configuration.GetSection("AppSettings:Token").Value!))
+//     };
+// });
 
 var app = builder.Build();
 
