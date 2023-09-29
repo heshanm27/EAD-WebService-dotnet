@@ -21,5 +21,13 @@ namespace EAD_WebService.Dto.Auth
         [Required(ErrorMessage = "Password is required")]
         public string Password { get; set; } = null!;
 
+        [Required(ErrorMessage = "Confirm Password is required")]
+        [Compare("Password", ErrorMessage = "Password and Confirm Password must match")]
+        public string ConfirmPassword { get; set; } = null!;
+
+
+        //Image Upload
+        public IFormFile? Avatar { get; set; }
+
     }
 }

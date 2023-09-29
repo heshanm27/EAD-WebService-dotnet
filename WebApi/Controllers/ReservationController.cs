@@ -1,4 +1,5 @@
 using EAD_WebService.Dto.Reservation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EAD_WebService.Controllers
@@ -38,7 +39,7 @@ namespace EAD_WebService.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "User,Admin,Agent")]
         public async Task<ActionResult<ServiceResponse<Reservation>>> Post(ReservationDto reservationDto)
         {
 

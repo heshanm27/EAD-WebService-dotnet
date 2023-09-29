@@ -19,9 +19,9 @@ namespace EAD_WebService.Models
         public ObjectId ReservedUserId { get; set; }
 
 
-        [BsonElement("reservation_seat")]
+        [BsonElement("reservation_seat_count")]
         [BsonRequired]
-        public string ReservationSeat { get; set; } = null!;
+        public int ReservationSeatCount { get; set; }
 
         [BsonElement("reservation_class")]
         [BsonRequired]

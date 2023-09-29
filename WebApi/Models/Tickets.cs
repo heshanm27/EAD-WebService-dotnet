@@ -4,14 +4,10 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace EAD_WebService.Models
 {
-    public class TrainTicketPrice
+    public class Tickets
     {
 
-
-        [BsonElement("ticket_class")]
-        [BsonRequired]
-
-        public string TicketClass { get; set; } = null!;
+        public ObjectId Id { get; set; }
 
         [BsonElement("ticket_type")]
         [BsonRequired]
@@ -21,6 +17,12 @@ namespace EAD_WebService.Models
         [BsonRequired]
         public double TicketPrice { get; set; }
 
+        [BsonElement("ticket_count")]
+        [BsonRequired]
+        public int TicketCount { get; set; }
+
+        [BsonElement("ticket_booked")]
+        public int TicketBooked { get; set; } = 0;
 
     }
 }
