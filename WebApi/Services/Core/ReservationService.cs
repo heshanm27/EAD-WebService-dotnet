@@ -11,7 +11,7 @@ namespace EAD_WebService.Services.Core
         private readonly IMongoCollection<Reservation> _reservation;
         private readonly ITrainScheduleService _trainScheduleService;
 
-        public ReservationService(IOptions<MongoDBSettings> mongoDBSettings, TrainScheduleService trainScheduleService)
+        public ReservationService(IOptions<MongoDBSettings> mongoDBSettings, ITrainScheduleService trainScheduleService)
         {
             _trainScheduleService = trainScheduleService;
             _reservation = new MongoClient(mongoDBSettings.Value.ConnectionURI)
@@ -31,6 +31,7 @@ namespace EAD_WebService.Services.Core
                 ReservationType = booking.ReservationType,
                 ReservationPrice = booking.ReservationPrice,
             };
+
             if (booking.ReservationSeatCount > 5)
             {
                 return new ServiceResponse<Reservation>
@@ -38,10 +39,16 @@ namespace EAD_WebService.Services.Core
                     Message = "You can only book a maximum of 5 seats",
                     Status = false
                 };
+
             }
-            // await _trainScheduleService.addReservation(booking.ReservedTrainId,booking.Reservati);
-            await _trainScheduleService.updateTicketsAvailability(booking.ReservedTrainId, booking.ReservedTrainId, booking.ReservationSeatCount);
+
+            // need to get the reservation _id of new document to update the train schedule
             await _reservation.InsertOneAsync(Reservation);
+
+
+            await _trainScheduleService.addReservation(booking.ReservedTrainId, Reservation.Id.ToString());
+            await _trainScheduleService.updateTicketsAvailability(booking.ReservedTrainId, booking.ReservedTrainId, booking.ReservationSeatCount);
+
 
             return new ServiceResponse<Reservation>
             {
@@ -158,8 +165,6 @@ namespace EAD_WebService.Services.Core
                     ReservationClass = reservation.ReservationClass,
                     ReservationType = reservation.ReservationType,
                     ReservationPrice = reservation.ReservationPrice,
-
-
                 };
 
                 var isExists = await _reservation.Find(Reservation => Reservation.Id == new ObjectId(id)).AnyAsync();

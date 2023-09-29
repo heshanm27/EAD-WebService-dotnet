@@ -39,7 +39,7 @@ namespace EAD_WebService.Controllers
         }
 
 
-        [HttpPost, Authorize(Roles = "User,Admin,Agent")]
+        [HttpPost]
         public async Task<ActionResult<ServiceResponse<Reservation>>> Post(ReservationDto reservationDto)
         {
 

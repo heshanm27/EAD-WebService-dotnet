@@ -115,7 +115,7 @@ namespace EAD_WebService.Services.Core
                     LastName = registerUserDto.LastName,
                     Email = registerUserDto.Email,
                     Password = hashPassword,
-                    AvatarUrl = uploadResult.Url.ToString() ?? uploadResult,
+                    // AvatarUrl = uploadResult.Url.ToString() ?? uploadResult,
                 };
 
                 await _authCollection.InsertOneAsync(user);

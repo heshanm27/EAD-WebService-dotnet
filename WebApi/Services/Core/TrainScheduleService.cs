@@ -335,12 +335,28 @@ namespace EAD_WebService.Services.Core
             }
         }
 
-        public async Task<ServiceResponse<EmptyData>> addTickets(string id, Tickets tickets)
+        public async Task<ServiceResponse<EmptyData>> addTickets(string id, List<Tickets> tickets)
         {
 
             try
             {
-                await _train.FindOneAndUpdateAsync(Train => Train.Id == new ObjectId(id), Builders<Train>.Update.Push(Train => Train.Tickets, tickets));
+                // neeed to genrate new Tickets object list with new object id
+
+                var ticketsList = new List<Tickets>();
+                foreach (var ticket in tickets)
+                {
+                    var newTicket = new Tickets
+                    {
+                        Id = ObjectId.GenerateNewId(),
+                        TicketPrice = ticket.TicketPrice,
+                        TicketCount = ticket.TicketCount,
+                        TicketType = ticket.TicketType
+                    };
+                    ticketsList.Add(newTicket);
+                }
+
+
+                await _train.FindOneAndUpdateAsync(Train => Train.Id == new ObjectId(id), Builders<Train>.Update.PushEach(Train => Train.Tickets, ticketsList));
 
 
                 return new ServiceResponse<EmptyData>

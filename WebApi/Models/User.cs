@@ -8,6 +8,7 @@ namespace EAD_WebService.Models
     {
 
 
+
         public ObjectId Id { get; set; }
 
         [BsonElement("email")]
@@ -20,7 +21,7 @@ namespace EAD_WebService.Models
 
 
         [BsonElement("first_name")]
-        [BsonRequired]   
+        [BsonRequired]
         public string FirstName { get; set; } = null!;
 
         [BsonElement("last_name")]
@@ -50,6 +51,6 @@ namespace EAD_WebService.Models
         [BsonElement("updated_at")]
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
-    
+
     }
 }
