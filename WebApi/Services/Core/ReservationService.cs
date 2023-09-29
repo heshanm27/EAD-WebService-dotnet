@@ -9,11 +9,11 @@ namespace EAD_WebService.Services.Core
     public class ReservationService : IReservationService
     {
         private readonly IMongoCollection<Reservation> _reservation;
+        private readonly ITrainScheduleService _trainScheduleService;
 
-        // create a constructor that takes in IOptions<MongoDBSettings> and assigns the value of the connectionURI,
-        // databaseName and collectionName to the _reservation variable
-        public ReservationService(IOptions<MongoDBSettings> mongoDBSettings)
+        public ReservationService(IOptions<MongoDBSettings> mongoDBSettings, TrainScheduleService trainScheduleService)
         {
+            _trainScheduleService = trainScheduleService;
             _reservation = new MongoClient(mongoDBSettings.Value.ConnectionURI)
                 .GetDatabase(mongoDBSettings.Value.DatabaseName)
                 .GetCollection<Reservation>(mongoDBSettings.Value.ReservationCollection);
@@ -26,14 +26,21 @@ namespace EAD_WebService.Services.Core
                 ReservationDate = booking.ReservationDate,
                 ReservedTrainId = new ObjectId(booking.ReservedTrainId),
                 ReservedUserId = new ObjectId(booking.ReservedUserId),
-                ReservationSeat = booking.ReservationSeat,
+                ReservationSeatCount = booking.ReservationSeatCount,
                 ReservationClass = booking.ReservationClass,
                 ReservationType = booking.ReservationType,
                 ReservationPrice = booking.ReservationPrice,
-
-
             };
-
+            if (booking.ReservationSeatCount > 5)
+            {
+                return new ServiceResponse<Reservation>
+                {
+                    Message = "You can only book a maximum of 5 seats",
+                    Status = false
+                };
+            }
+            // await _trainScheduleService.addReservation(booking.ReservedTrainId,booking.Reservati);
+            await _trainScheduleService.updateTicketsAvailability(booking.ReservedTrainId, booking.ReservedTrainId, booking.ReservationSeatCount);
             await _reservation.InsertOneAsync(Reservation);
 
             return new ServiceResponse<Reservation>
@@ -138,7 +145,7 @@ namespace EAD_WebService.Services.Core
 
         }
 
-        async Task<ServiceResponse<EmptyData>> IReservationService.UpdateReservation(string id, ReservationDto reservation)
+        public async Task<ServiceResponse<EmptyData>> UpdateReservation(string id, ReservationDto reservation)
         {
             try
             {
@@ -147,7 +154,7 @@ namespace EAD_WebService.Services.Core
                     ReservationDate = reservation.ReservationDate,
                     ReservedTrainId = new ObjectId(reservation.ReservedTrainId),
                     ReservedUserId = new ObjectId(reservation.ReservedUserId),
-                    ReservationSeat = reservation.ReservationSeat,
+                    ReservationSeatCount = reservation.ReservationSeatCount,
                     ReservationClass = reservation.ReservationClass,
                     ReservationType = reservation.ReservationType,
                     ReservationPrice = reservation.ReservationPrice,
@@ -170,7 +177,7 @@ namespace EAD_WebService.Services.Core
                     .Set(Reservation => Reservation.ReservationDate, reservation.ReservationDate)
                     .Set(Reservation => Reservation.ReservedTrainId, new ObjectId(reservation.ReservedTrainId))
                     .Set(Reservation => Reservation.ReservedUserId, new ObjectId(reservation.ReservedUserId))
-                    .Set(Reservation => Reservation.ReservationSeat, reservation.ReservationSeat)
+                    .Set(Reservation => Reservation.ReservationSeatCount, reservation.ReservationSeatCount)
                     .Set(Reservation => Reservation.ReservationClass, reservation.ReservationClass)
                     .Set(Reservation => Reservation.ReservationType, reservation.ReservationType)
                     .Set(Reservation => Reservation.ReservationPrice, reservation.ReservationPrice);

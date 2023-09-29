@@ -9,7 +9,7 @@ namespace EAD_WebService.Dto.Reservation
 
         public required string ReservedUserId { get; set; }
 
-        public required string ReservationSeat { get; set; }
+        public required int ReservationSeatCount { get; set; }
 
 
         public required string ReservationClass { get; set; }

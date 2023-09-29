@@ -97,10 +97,14 @@ namespace EAD_WebService.Services.Core
                     {
                         File = new FileDescription(registerUserDto.Avatar.FileName, registerUserDto.Avatar.OpenReadStream()),
                         UseFilename = true,
-                        UniqueFilename = false,
-                        Overwrite = true
+                        UniqueFilename = true,
+                        Overwrite = true,
+                        Folder = "EAD-Project/Avatar",
+                        Transformation = new Transformation().Width(150).Height(150).Crop("fill"),
+
+
                     };
-                    uploadResult = cloudinary.Upload(uploadParams);
+                    uploadResult = await cloudinary.UploadAsync(uploadParams);
                     Console.WriteLine(uploadResult.Url);
                 }
 

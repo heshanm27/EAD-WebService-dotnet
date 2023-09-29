@@ -5,31 +5,24 @@ namespace EAD_WebService.Models
 {
     public class Train
     {
-
-
         public ObjectId Id { get; set; }
-
 
         [BsonElement("train_name")]
         [BsonRequired]
         public string TrainName { get; set; } = null!;
 
-        [BsonElement("train_type")]
-        [BsonRequired]
-        public string TrainType { get; set; } = null!;
 
-        [BsonElement("train_route")]
+        [BsonElement("train_number")]
         [BsonRequired]
-        public string TrainRoute { get; set; } = null!;
+        public string TrainNumber { get; set; } = null!;
 
-
-        [BsonElement("train_start")]
+        [BsonElement("start_station")]
         [BsonRequired]
-        public string TrainStart { get; set; } = null!;
+        public string StartStation { get; set; } = null!;
 
-        [BsonElement("train_end")]
+        [BsonElement("end_station")]
         [BsonRequired]
-        public string TrainEnd { get; set; } = null!;
+        public string EndStation { get; set; } = null!;
 
 
         [BsonElement("train_start_time")]
@@ -40,17 +33,24 @@ namespace EAD_WebService.Models
         [BsonRequired]
         public DateTime TrainEndTime { get; set; }
 
-        [BsonElement("train_start_date")]
+        [BsonElement("departure_date")]
         [BsonRequired]
-        public DateTime TrainStartDate { get; set; }
+        public DateTime DepartureDate { get; set; }
 
-        [BsonElement("train_ticket_prices")]
-        public List<TrainTicketPrice> TrainTicketPrices { get; set; } = new List<TrainTicketPrice>();
+        [BsonElement("tickets")]
+        public List<Tickets> Tickets { get; set; } = new List<Tickets>();
 
+        [BsonElement("reservation")]
+        public List<ObjectId> Reservations { get; set; } = new List<ObjectId>();
+
+        [BsonElement("isActive")]
+        public bool IsActive { get; set; } = true;
+
+        [BsonElement("isPublished")]
+        public bool IsPublished { get; set; } = false;
 
         [BsonElement("created_at")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
 
         [BsonElement("updated_at")]
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
