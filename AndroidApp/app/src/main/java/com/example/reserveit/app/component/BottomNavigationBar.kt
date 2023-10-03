@@ -1,47 +1,64 @@
 package com.example.reserveit.app.component
 
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.MaterialTheme
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.reserveit.app.navigation.BottomNavItem
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Bottomnavigationbar(
+fun BottomNavigationBar(
     items: List<BottomNavItem>,
     onItemClick: (BottomNavItem) -> Unit,
     modifier: Modifier = Modifier,
     navController: NavController,
 ) {
     val backStackEntry = navController.currentBackStackEntry
-    BottomNavigation(
-        modifier = modifier,
-        backgroundColor = MaterialTheme.colors.onBackground,
-        elevation = 5.dp
-    )
+    NavigationBar()
     {
 
         items.forEach { item ->
             val selected = item.route == backStackEntry?.destination?.route;
-            BottomNavigationItem(
+            NavigationBarItem(
                 selected = selected,
+                modifier = Modifier.padding(5.dp),
+
+
+
                 onClick = {
                     onItemClick(item)
                 },
-                icon = {
-                    item.icon
-                },
 
                 label = {
-                    item.title
+                    Text(text = item.title)
                 },
-                selectedContentColor = MaterialTheme.colors.primary,
-                unselectedContentColor = MaterialTheme.colors.onSurface,
+                icon = {
+                    BadgedBox(
+                        badge = {
+                            if(item.badgeCount != null) {
+                                Badge {
+                                    Text(text = item.badgeCount.toString())
+                                }
+                            }
+                        }
+                    ) {
+                        Icon(
+                            imageVector = if (selected) {
+                                item.icon
+                            } else item.icon,
+                            contentDescription = item.title
+                        )
+                    }
+                }
             )
         }
 
     }
 }
+

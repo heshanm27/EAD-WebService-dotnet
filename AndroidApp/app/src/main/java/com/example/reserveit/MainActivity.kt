@@ -4,13 +4,13 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material.Scaffold
-import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
-import com.example.reserveit.app.component.Bottomnavigationbar
+import com.example.reserveit.app.component.BottomNavigationBar
 import com.example.reserveit.app.navigation.BottomNavItem
 import com.example.reserveit.app.navigation.Navigation
 import com.example.reserveit.app.navigation.Routes
@@ -29,7 +29,10 @@ class MainActivity : ComponentActivity() {
 
 
 
-    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+    @OptIn(ExperimentalMaterial3Api::class)
+    @SuppressLint("UnusedMaterialScaffoldPaddingParameter",
+        "UnusedMaterial3ScaffoldPaddingParameter"
+    )
     @Composable
     fun ReserveItApp(){
         val navController = rememberNavController()
@@ -38,7 +41,7 @@ class MainActivity : ComponentActivity() {
 
             },
             bottomBar = {
-                Bottomnavigationbar(items = listOf(
+                BottomNavigationBar(items = listOf(
                     BottomNavItem(
                         route = Routes.HOME_SCREEN,
                         icon = Icons.Filled.Home,
