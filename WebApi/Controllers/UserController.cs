@@ -6,8 +6,6 @@ namespace EAD_WebService.Controllers
     [Route("api/v1/user")]
     public class UserController : ControllerBase
     {
-
-
         private readonly IUserService _userService;
         public UserController(IUserService userService)
         {
