@@ -13,6 +13,8 @@
     <string name="bottom_nav_home">Home</string>
     <string name="bottom_nav_reservation">Reservation</string>
     <string name="bottom_nav_profile">Profile</string>
+    <string name="station_from">Station From</string>
+    <string name="station_to">Station To</string>
 
 
     <string-array name="station_arr">
