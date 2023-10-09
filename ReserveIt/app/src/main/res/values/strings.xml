@@ -1,0 +1,111 @@
+<resources>
+    <string name="app_name">ReserveIt</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+
+    <!-- Strings used for bottom nav bar -->
+
+    <string name="bottom_nav_home">Home</string>
+    <string name="bottom_nav_reservation">Reservation</string>
+    <string name="bottom_nav_profile">Profile</string>
+    <string name="station_from">Station From</string>
+    <string name="station_to">Station To</string>
+
+
+    <string-array name="station_arr">
+        <item>Ahangama</item>
+        <item>Aluthgama</item>
+        <item>Ambalangoda</item>
+        <item>Ambewela</item>
+        <item>Anuradhapura</item>
+        <item>Anuradhapura Town</item>
+        <item>Avissawella</item>
+        <item>Badulla</item>
+        <item>Bandarawela</item>
+        <item>Batticaloa</item>
+        <item>Beliatta</item>
+        <item>Bentota</item>
+        <item>Beruwala</item>
+        <item>China bay</item>
+        <item>Chunnakam</item>
+        <item>Colombo Fort</item>
+        <item>Demodara-Ella</item>
+        <item>Diyathalawa</item>
+        <item>Ella</item>
+        <item>Eraur</item>
+        <item>Galgamuwa</item>
+        <item>Galle</item>
+        <item>Galoya</item>
+        <item>Gampaha</item>
+        <item>Gampola</item>
+        <item>Habaraduwa</item>
+        <item>Habarana</item>
+        <item>Hali Ela</item>
+        <item>Haputhale</item>
+        <item>Hatton</item>
+        <item>Hikkaduwa</item>
+        <item>Hingurakgoda</item>
+        <item>Jaffna</item>
+        <item>Kakirawa</item>
+        <item>Kalutara South</item>
+        <item>Kamburugamuwa</item>
+        <item>Kandy</item>
+        <item>Kankesanthurai</item>
+        <item>Kanthale</item>
+        <item>Kilinochchi</item>
+        <item>Kodikamam</item>
+        <item>Koggala</item>
+        <item>Kurunegala</item>
+        <item>Madhupara</item>
+        <item>Mahawa</item>
+        <item>Makumbura</item>
+        <item>Mannar</item>
+        <item>Maradhana</item>
+        <item>Matale</item>
+        <item>Matara</item>
+        <item>Medawachchiya</item>
+        <item>Mirigama</item>
+        <item>Mirissa</item>
+        <item>Moratuwa</item>
+        <item>Mount Lavinia</item>
+        <item>NAGOLLAGAMA</item>
+        <item>Nanu Oya</item>
+        <item>Nawalapitiya</item>
+        <item>Nawalapitya</item>
+        <item>Nugegoda</item>
+        <item>Omantha</item>
+        <item>Pallai</item>
+        <item>Panadura</item>
+        <item>Peradeniya</item>
+        <item>Polgahawela</item>
+        <item>Polonnaruwa</item>
+        <item>Puwakpitiya</item>
+        <item>Ragama</item>
+        <item>Rambukkana</item>
+        <item>Rathmalana</item>
+        <item>Return Colombo</item>
+        <item>Return Waga</item>
+        <item>Talaimannar Pier</item>
+        <item>Thambalagamuwa</item>
+        <item>Thambuththegama</item>
+        <item>Thandikulam</item>
+        <item>Trincomalee</item>
+        <item>Unawatuna</item>
+        <item>Valachchena</item>
+        <item>Vauniya</item>
+        <item>Veyangoda</item>
+        <item>Waduwwa</item>
+        <item>Weligama</item>
+        <item>Welikanda</item>
+        <item>Wellawa</item>
+        <item>Wellawatte</item>
+    </string-array>
+
+
+
+</resources>

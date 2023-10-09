@@ -22,7 +22,7 @@ namespace EAD_WebService.Services.Interfaces
 
         Task<ServiceResponse<EmptyData>> deactivateTrainSchedule(string id);
 
-        Task<ServiceResponse<EmptyData>> addTickets(string id, Tickets tickets);
+        Task<ServiceResponse<EmptyData>> addTickets(string id, List<Tickets> tickets);
 
         Task<ServiceResponse<EmptyData>> removeTickets(string trainid, string ticketsId);
 

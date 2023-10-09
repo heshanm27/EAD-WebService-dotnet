@@ -1,11 +1,15 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
 
 namespace EAD_WebService.Models
 {
     public class Train
     {
-        public ObjectId Id { get; set; }
+
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string? Id { get; set; }
 
         [BsonElement("train_name")]
         [BsonRequired]
@@ -41,7 +45,7 @@ namespace EAD_WebService.Models
         public List<Tickets> Tickets { get; set; } = new List<Tickets>();
 
         [BsonElement("reservation")]
-        public List<ObjectId> Reservations { get; set; } = new List<ObjectId>();
+        public List<string> Reservations { get; set; } = new List<string>();
 
         [BsonElement("isActive")]
         public bool IsActive { get; set; } = true;
