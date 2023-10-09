@@ -8,6 +8,7 @@ using EAD_WebService.Dto.Auth;
 using EAD_WebService.Util;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 
@@ -44,7 +45,8 @@ namespace EAD_WebService.Services.Core
                         Token = createToken(user),
                         FirstName = user.FirstName,
                         LastName = user.LastName,
-                        AvatarUrl = user.AvatarUrl
+                        AvatarUrl = user.AvatarUrl,
+                        Role = user.Role
                     },
                     Message = "Login Successful",
                     Status = true
@@ -115,6 +117,7 @@ namespace EAD_WebService.Services.Core
                     LastName = registerUserDto.LastName,
                     Email = registerUserDto.Email,
                     Password = hashPassword,
+
                     // AvatarUrl = uploadResult.Url.ToString() ?? uploadResult,
                 };
 
@@ -136,6 +139,7 @@ namespace EAD_WebService.Services.Core
             }
             catch (MongoWriteException ex)
             {
+                Console.WriteLine(ex.Message);
                 if (ex.WriteError.Category == ServerErrorCategory.DuplicateKey)
                 {
                     return new ServiceResponse<LoginSuccessDto>

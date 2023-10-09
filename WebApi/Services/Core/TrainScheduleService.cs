@@ -1,3 +1,4 @@
+using System.Reflection.Metadata;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -36,7 +37,7 @@ namespace EAD_WebService.Services.Core
 
             try
             {
-                var train = await _train.Find(Train => Train.Id == new ObjectId(id)).FirstOrDefaultAsync();
+                var train = await _train.Find(Train => Train.Id == id).FirstOrDefaultAsync();
 
                 if (train == null)
                 {
@@ -47,6 +48,7 @@ namespace EAD_WebService.Services.Core
                         Data = null
                     };
                 }
+
 
                 return new ServiceResponse<Train>
                 {
@@ -71,13 +73,14 @@ namespace EAD_WebService.Services.Core
 
             try
             {
-                await _train.Find(Train => true).ToListAsync();
+                var trains = await _train.Find(Train => true).ToListAsync();
+
 
                 return new ServiceResponse<List<Train>>
                 {
                     Message = "Trains retrieved successfully",
                     Status = true,
-                    Data = await _train.Find(Train => true).ToListAsync()
+                    Data = trains
                 };
             }
             catch (MongoException)
@@ -104,7 +107,7 @@ namespace EAD_WebService.Services.Core
         {
             try
             {
-                var train = await _train.FindAsync(Train => Train.Id == new ObjectId(id));
+                var train = await _train.FindAsync(Train => Train.Id == id);
 
                 if (train == null)
                 {
@@ -127,7 +130,7 @@ namespace EAD_WebService.Services.Core
                     };
                 }
 
-                await _train.DeleteOneAsync(Train => Train.Id == new ObjectId(id));
+                await _train.DeleteOneAsync(Train => Train.Id == id);
 
                 return new ServiceResponse<EmptyData>
                 {
@@ -160,7 +163,7 @@ namespace EAD_WebService.Services.Core
             try
             {
 
-                var train = await _train.FindAsync(Train => Train.Id == new ObjectId(id));
+                var train = await _train.FindAsync(Train => Train.Id == id);
 
                 if (train == null)
                 {
@@ -225,8 +228,8 @@ namespace EAD_WebService.Services.Core
         {
             try
             {
-                var filter = Builders<Train>.Filter.Eq(Train => Train.Id, new ObjectId(trainId));
-                var update = Builders<Train>.Update.Push(Train => Train.Reservations, new ObjectId(reservationId));
+                var filter = Builders<Train>.Filter.Eq(Train => Train.Id, trainId);
+                var update = Builders<Train>.Update.Push(Train => Train.Reservations, reservationId);
 
                 await _train.UpdateOneAsync(filter, update);
 
@@ -242,8 +245,8 @@ namespace EAD_WebService.Services.Core
         {
             try
             {
-                var filter = Builders<Train>.Filter.Eq(Train => Train.Id, new ObjectId(trainId));
-                var update = Builders<Train>.Update.Pull(Train => Train.Reservations, new ObjectId(reservationId));
+                var filter = Builders<Train>.Filter.Eq(Train => Train.Id, trainId);
+                var update = Builders<Train>.Update.Pull(Train => Train.Reservations, reservationId);
 
 
                 await _train.UpdateOneAsync(filter, update);
@@ -261,7 +264,7 @@ namespace EAD_WebService.Services.Core
         {
             try
             {
-                var train = await _train.FindAsync(Train => Train.Id == new ObjectId(id));
+                var train = await _train.FindAsync(Train => Train.Id == id);
 
                 if (train == null)
                 {
@@ -300,7 +303,7 @@ namespace EAD_WebService.Services.Core
         {
             try
             {
-                var train = await _train.FindAsync(Train => Train.Id == new ObjectId(id));
+                var train = await _train.FindAsync(Train => Train.Id == id);
 
                 if (train == null)
                 {
@@ -347,7 +350,7 @@ namespace EAD_WebService.Services.Core
                 {
                     var newTicket = new Tickets
                     {
-                        Id = ObjectId.GenerateNewId(),
+
                         TicketPrice = ticket.TicketPrice,
                         TicketCount = ticket.TicketCount,
                         TicketType = ticket.TicketType
@@ -356,7 +359,7 @@ namespace EAD_WebService.Services.Core
                 }
 
 
-                await _train.FindOneAndUpdateAsync(Train => Train.Id == new ObjectId(id), Builders<Train>.Update.PushEach(Train => Train.Tickets, ticketsList));
+                await _train.FindOneAndUpdateAsync(Train => Train.Id == id, Builders<Train>.Update.PushEach(Train => Train.Tickets, ticketsList));
 
 
                 return new ServiceResponse<EmptyData>
@@ -393,8 +396,8 @@ namespace EAD_WebService.Services.Core
 
             try
             {
-                var filter = Builders<Train>.Filter.Eq(Train => Train.Id, new ObjectId(trainid));
-                var update = Builders<Train>.Update.PullFilter(Train => Train.Tickets, Builders<Tickets>.Filter.Eq(Tickets => Tickets.Id, new ObjectId(ticketsId)));
+                var filter = Builders<Train>.Filter.Eq(Train => Train.Id, trainid);
+                var update = Builders<Train>.Update.PullFilter(Train => Train.Tickets, Builders<Tickets>.Filter.Eq(Tickets => Tickets.Id, ticketsId));
 
                 await _train.UpdateOneAsync(filter, update);
 
@@ -461,7 +464,7 @@ namespace EAD_WebService.Services.Core
         {
             try
             {
-                var train = await _train.FindAsync(Train => Train.Id == new ObjectId(id));
+                var train = await _train.FindAsync(Train => Train.Id == id);
 
                 if (train == null)
                 {
@@ -500,7 +503,7 @@ namespace EAD_WebService.Services.Core
         {
             try
             {
-                var train = await _train.FindAsync(Train => Train.Id == new ObjectId(id));
+                var train = await _train.FindAsync(Train => Train.Id == id);
 
                 if (train == null)
                 {
@@ -544,7 +547,7 @@ namespace EAD_WebService.Services.Core
                 var trainSchedule = await _train.Find(filter).FirstOrDefaultAsync();
 
                 // Find the specific ticket object in the Tickets array
-                var ticket = trainSchedule.Tickets.Find(t => t.Id == new ObjectId(ticketsId));
+                var ticket = trainSchedule.Tickets.Find(t => t.Id == ticketsId);
 
                 // Update booked ticket count
                 if (ticket != null)

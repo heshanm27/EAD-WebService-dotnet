@@ -1,19 +1,14 @@
 package com.example.reserveit
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import android.view.Menu
-import android.view.MenuItem
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.example.reserveit.R
 import com.example.reserveit.databinding.ActivityMainBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,6 +25,18 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNavigation.setupWithNavController(navController)
 
+    }
+
+
+    fun hideBottomNavigationView() {
+        val bottomNavigationView =binding.bottomNavigation
+        bottomNavigationView.visibility = View.GONE
+    }
+
+    fun showBottomNavigationView() {
+        val bottomNavigationView =
+            binding.bottomNavigation
+        bottomNavigationView.visibility = View.VISIBLE
     }
 
 

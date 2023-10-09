@@ -1,4 +1,7 @@
+using System.Globalization;
+using EAD_WebService.Dto.Train;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 
 namespace EAD_WebService.Controllers
 {
@@ -16,6 +19,7 @@ namespace EAD_WebService.Controllers
         public async Task<ActionResult<List<Train>>> Get([FromQuery] BasicFilters filters)
         {
             ServiceResponse<List<Train>> response = await _trainService.getTrainSchedule();
+
             if (!response.Status) return BadRequest(response);
             return Ok(response);
 
@@ -31,10 +35,35 @@ namespace EAD_WebService.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ServiceResponse<Train>>> Post(Train train)
+        public async Task<ActionResult<ServiceResponse<Train>>> Post(TrainCreateDto train)
         {
 
-            ServiceResponse<Train> response = await _trainService.createTrainSchedule(train);
+
+            DateTime startParseTime = DateTime.ParseExact(train.TrainStartTime, "HH:mm", CultureInfo.InvariantCulture);
+            DateTime endParseTime = DateTime.ParseExact(train.TrainEndTime, "HH:mm", CultureInfo.InvariantCulture);
+            DateTime departureParseDate = DateTime.ParseExact(train.DepartureDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+            Train recievedTrain = new Train
+            {
+
+
+                TrainNumber = train.TrainNumber,
+                TrainName = train.TrainName,
+                StartStation = train.StartStation,
+                EndStation = train.EndStation,
+                TrainStartTime = startParseTime,
+                TrainEndTime = endParseTime,
+                DepartureDate = departureParseDate,
+                Tickets = train.Tickets.Select(ticket => new Tickets
+                {
+                    Id = ObjectId.GenerateNewId().ToString(),
+                    TicketType = ticket.TicketType,
+                    TicketPrice = ticket.TicketPrice,
+                    TicketCount = ticket.TicketCount
+                }).ToList()
+            };
+
+            ServiceResponse<Train> response = await _trainService.createTrainSchedule(recievedTrain);
 
             if (!response.Status) return BadRequest(response);
 

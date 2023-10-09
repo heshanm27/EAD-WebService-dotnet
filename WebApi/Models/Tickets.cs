@@ -7,7 +7,9 @@ namespace EAD_WebService.Models
     public class Tickets
     {
 
-        public ObjectId Id { get; set; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
 
         [BsonElement("ticket_type")]
         [BsonRequired]

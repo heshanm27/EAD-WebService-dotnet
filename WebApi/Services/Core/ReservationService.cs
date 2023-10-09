@@ -63,7 +63,7 @@ namespace EAD_WebService.Services.Core
 
             try
             {
-                var Reservation = await _reservation.Find(Reservation => Reservation.Id == new ObjectId(id)).FirstOrDefaultAsync();
+                var Reservation = await _reservation.Find(Reservation => Reservation.Id == id).FirstOrDefaultAsync();
 
                 return new ServiceResponse<Reservation>
                 {
@@ -122,7 +122,7 @@ namespace EAD_WebService.Services.Core
             try
             {
 
-                var isExists = await _reservation.Find(Reservation => Reservation.Id == new ObjectId(id)).AnyAsync();
+                var isExists = await _reservation.Find(Reservation => Reservation.Id == id).AnyAsync();
 
                 if (!isExists)
                 {
@@ -134,7 +134,7 @@ namespace EAD_WebService.Services.Core
                 }
 
 
-                await _reservation.DeleteOneAsync(Reservation => Reservation.Id == new ObjectId(id));
+                await _reservation.DeleteOneAsync(Reservation => Reservation.Id == id);
                 return new ServiceResponse<EmptyData>
                 {
                     Message = "Booking deleted successfully",
@@ -167,7 +167,7 @@ namespace EAD_WebService.Services.Core
                     ReservationPrice = reservation.ReservationPrice,
                 };
 
-                var isExists = await _reservation.Find(Reservation => Reservation.Id == new ObjectId(id)).AnyAsync();
+                var isExists = await _reservation.Find(Reservation => Reservation.Id == id).AnyAsync();
 
                 if (!isExists)
                 {
@@ -177,7 +177,7 @@ namespace EAD_WebService.Services.Core
                         Status = false
                     };
                 }
-                var filter = Builders<Reservation>.Filter.Eq(Reservation => Reservation.Id, new ObjectId(id));
+                var filter = Builders<Reservation>.Filter.Eq(Reservation => Reservation.Id, id);
                 var update = Builders<Reservation>.Update
                     .Set(Reservation => Reservation.ReservationDate, reservation.ReservationDate)
                     .Set(Reservation => Reservation.ReservedTrainId, new ObjectId(reservation.ReservedTrainId))

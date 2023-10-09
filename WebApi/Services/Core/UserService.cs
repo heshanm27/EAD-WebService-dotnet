@@ -20,7 +20,7 @@ namespace EAD_WebService.Services.Core
         {
             try
             {
-                var user = await _user.Find<User>(user => user.Id == new ObjectId(id)).FirstOrDefaultAsync();
+                var user = await _user.Find<User>(user => user.Id == id).FirstOrDefaultAsync();
                 return new ServiceResponse<User>
                 {
                     Data = user,
@@ -64,7 +64,7 @@ namespace EAD_WebService.Services.Core
         {
             try
             {
-                await _user.DeleteOneAsync(user => user.Id == new ObjectId(id));
+                await _user.DeleteOneAsync(user => user.Id == id);
                 return new ServiceResponse<EmptyData>
                 {
                     Message = "User deleted",

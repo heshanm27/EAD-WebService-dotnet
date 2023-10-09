@@ -5,6 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reserveit.R
 import com.example.reserveit.models.reservation.Reservation
@@ -17,6 +20,7 @@ class ReservationAdapter(private var reservationList: List<Reservation>) :Recycl
             val departTime = itemView.findViewById<TextView>(R.id.depart_time)
             val arriveTime = itemView.findViewById<TextView>(R.id.arrive_time)
             val price = itemView.findViewById<TextView>(R.id.ticket_price)
+            val card = itemView.findViewById<CardView>(R.id.card_main_item)
         }
 
 
@@ -37,5 +41,9 @@ class ReservationAdapter(private var reservationList: List<Reservation>) :Recycl
         holder.departTime?.text = reservation.departTime
         holder.arriveTime?.text = reservation.arriveTime
         holder.price?.text = reservation.price
+        holder.card.setOnClickListener {
+//            val action = HomeFragmentDirections.actionHomeFragmentToReservationDetailsFragment(reservation)
+            holder.card.findNavController().navigate(R.id.action_homeFragment_to_reservation_details_Fragment)
+        }
     }
 }

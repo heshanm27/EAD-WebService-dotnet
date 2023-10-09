@@ -19,13 +19,13 @@ namespace EAD_WebService.Dto.Train
         public string EndStation { get; set; } = null!;
 
         [Required(ErrorMessage = "Train Start Time is required")]
-        public DateTime TrainStartTime { get; set; }
+        public string TrainStartTime { get; set; } = null!;
 
         [Required(ErrorMessage = "Train End Time is required")]
-        public DateTime TrainEndTime { get; set; }
+        public string TrainEndTime { get; set; } = null!;
 
         [Required(ErrorMessage = "Departure Date is required")]
-        public DateTime DepartureDate { get; set; }
+        public string DepartureDate { get; set; } = null!;
 
         [Required(ErrorMessage = "Tickets is required")]
         public List<TicketsCreateDto> Tickets { get; set; } = new List<TicketsCreateDto>();

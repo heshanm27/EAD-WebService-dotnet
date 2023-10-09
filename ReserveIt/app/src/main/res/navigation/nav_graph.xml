@@ -13,6 +13,10 @@
         <action
             android:id="@+id/action_homeFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_reservation_details_Fragment"
+            app:destination="@id/reservation_details_Fragment" />
+
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -22,6 +26,7 @@
         <action
             android:id="@+id/action_profileFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/resrevationFragment"
@@ -49,5 +54,26 @@
         <action
             android:id="@+id/action_signUpFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/reservation_details_Fragment"
+        android:name="com.example.reserveit.screens.reservationDetails.reservation_details_Fragment"
+        android:label="fragment_reservation_details"
+        tools:layout="@layout/fragment_reservation_details" >
+        <action
+            android:id="@+id/action_reservation_details_Fragment_to_addReservation"
+            app:destination="@id/addReservation" />
+        <action
+            android:id="@+id/action_reservation_details_Fragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addReservation"
+        android:name="com.example.reserveit.screens.addReservation"
+        android:label="fragment_add_reservation"
+        tools:layout="@layout/fragment_add_reservation" >
+        <action
+            android:id="@+id/action_addReservation_to_reservation_details_Fragment"
+            app:destination="@id/reservation_details_Fragment" />
     </fragment>
 </navigation>

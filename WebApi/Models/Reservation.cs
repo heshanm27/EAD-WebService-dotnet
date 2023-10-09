@@ -5,7 +5,9 @@ namespace EAD_WebService.Models
 {
     public class Reservation
     {
-        public ObjectId Id { get; set; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string? Id { get; set; }
         [BsonElement("reservation_date")]
         public required DateTime ReservationDate { get; set; }
 

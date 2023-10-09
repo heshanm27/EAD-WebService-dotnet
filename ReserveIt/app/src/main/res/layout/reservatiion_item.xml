@@ -18,6 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:clickable="true"
         android:focusable="true"
+        android:id="@+id/card_main_item"
         >
 
 
