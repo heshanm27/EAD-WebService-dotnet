@@ -15,6 +15,14 @@
     <string name="bottom_nav_profile">Profile</string>
     <string name="station_from">Station From</string>
     <string name="station_to">Station To</string>
+    <string name="add_reservation_heading">Add Reservation</string>
+    <string name="add_reservation_pasenger_details">Passenger Details</string>
+    <string name="add_reservation_pasenger_name">Name Of The Reservation Holder</string>
+    <string name="add_reservation__date">Date</string>
+    <string name="add_reservation_from">From</string>
+    <string name="add_reservation_to">To</string>
+    <string name="add_reservation_no_of_ticket">Number of tickets</string>
+    <string name="add_reservation_btn_reserve">Book Now!</string>
 
 
     <string-array name="station_arr">
