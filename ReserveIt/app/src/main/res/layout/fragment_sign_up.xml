@@ -7,7 +7,7 @@
     tools:context=".screens.signUp.SignUpFragment">
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textView2_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -27,7 +27,7 @@
         android:padding="32dp">
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/textView2_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Name"
@@ -48,7 +48,7 @@
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/textView_4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
@@ -58,7 +58,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/editTextTextEmailAddress"
+            android:id="@+id/editTextTextEmailAddress_"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="12dp"
@@ -69,7 +69,7 @@
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/textView_5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
@@ -90,7 +90,7 @@
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/textView_6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"

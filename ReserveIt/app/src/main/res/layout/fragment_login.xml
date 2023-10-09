@@ -7,7 +7,7 @@
     tools:context=".screens.login.LoginFragment">
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textView2_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -27,7 +27,7 @@
         android:padding="32dp">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/textView_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Email"
@@ -47,7 +47,7 @@
             android:hint="Enter Your Email"/>
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/textView_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Password"
@@ -68,7 +68,7 @@
             android:hint="Enter Your Password"/>
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/textView_3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Don't Remember Password? Recovery It"
