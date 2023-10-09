@@ -9,8 +9,9 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import androidx.fragment.app.Fragment
 import com.example.reserveit.R
+import com.example.reserveit.adapters.TrainScheduleAdapter
 import com.example.reserveit.databinding.FragmentHomeBinding
-import com.example.reserveit.models.reservation.Reservation
+import com.example.reserveit.models.train_schedule.TrainSchedule
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.datepicker.*
 import com.google.android.material.datepicker.CalendarConstraints.DateValidator
@@ -50,7 +51,7 @@ class HomeFragment : Fragment() {
         Log.d("dpHeight", dpHeight.toString())
         Log.d("dpHeight", displayMetrics.widthPixels.toString())
 
-        val peekHeightRatio = 0.4 // Set the ratio as needed (0.5 means the peek height is half of the screen height)
+        val peekHeightRatio = 0.3 // Set the ratio as needed (0.5 means the peek height is half of the screen height)
         val peekHeight = (dpHeight * peekHeightRatio).toInt()
 
         standardBottomSheetBehavior.peekHeight = peekHeight
@@ -64,10 +65,10 @@ class HomeFragment : Fragment() {
         val recyclerView = binding!!.bottomSheetReservationsRecyclerView
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
-        viewModel.addReservation(Reservation("start", "end", "depart", "arrive", "price"))
+        viewModel.addReservation(TrainSchedule("start", "end", "depart", "arrive", "price"))
 
-        val list = viewModel.reservationList
-        val adapter = ReservationAdapter(list)
+        val list = viewModel.trainScheduleList
+        val adapter = TrainScheduleAdapter(list)
         recyclerView.adapter = adapter
 
 
