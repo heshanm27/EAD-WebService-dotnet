@@ -8,30 +8,41 @@ namespace EAD_WebService.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; }
-        [BsonElement("reservation_date")]
-        public required DateTime ReservationDate { get; set; }
+
+        [BsonElement("reserved_date")]
+        public required DateTime ReservedDate { get; set; }
 
         public bool isActive { get; set; } = true;
 
         [BsonElement("reserved_train")]
-        public ObjectId ReservedTrainId { get; set; }
+
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string ReservedTrainId { get; set; }
 
 
         [BsonElement("reserved_user")]
-        public ObjectId ReservedUserId { get; set; }
+
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string ReservedUserId { get; set; }
 
 
-        [BsonElement("reservation_seat_count")]
+        [BsonElement("reserved_seat_count")]
         [BsonRequired]
-        public int ReservationSeatCount { get; set; }
+        public int ReservedSeatCount { get; set; }
 
-        [BsonElement("reservation_class")]
+        [BsonElement("ticket_type")]
         [BsonRequired]
-        public string ReservationClass { get; set; } = null!;
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string TicketType { get; set; }
 
-        [BsonElement("reservation_type")]
-        [BsonRequired]
-        public string ReservationType { get; set; } = null!;
+        // [BsonElement("ticket_label")]
+        // [BsonRequired]
+        // public string TicketLabel { get; set; }
+
+        // [BsonElement("ticket_price")]
+        // [BsonRequired]
+        // public double TicketPrice { get; set; }
+
 
         [BsonElement("reservation_price")]
         [BsonRequired]

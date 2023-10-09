@@ -152,10 +152,25 @@ namespace EAD_WebService.Controllers
         }
 
         [HttpPatch("{id}")]
-        public async Task<ActionResult<ServiceResponse<EmptyData>>> Put(string id, Train trainIn)
+        public async Task<ActionResult<ServiceResponse<EmptyData>>> Put(string id, TrainUpdateDo trainIn)
         {
 
-            ServiceResponse<EmptyData> response = await _trainService.updateTrainSchedule(id, trainIn);
+            DateTime startParseTime = DateTime.ParseExact(trainIn.TrainStartTime, "HH:mm", CultureInfo.InvariantCulture);
+            DateTime endParseTime = DateTime.ParseExact(trainIn.TrainEndTime, "HH:mm", CultureInfo.InvariantCulture);
+            DateTime departureParseDate = DateTime.ParseExact(trainIn.DepartureDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+            Train updatedTrain = new Train
+            {
+                TrainNumber = trainIn.TrainNumber,
+                TrainName = trainIn.TrainName,
+                StartStation = trainIn.StartStation,
+                EndStation = trainIn.EndStation,
+                TrainStartTime = startParseTime,
+                TrainEndTime = endParseTime,
+                DepartureDate = departureParseDate
+            };
+
+            ServiceResponse<EmptyData> response = await _trainService.updateTrainSchedule(id, updatedTrain);
 
             if (!response.Status) return BadRequest(response);
             return Ok(response);

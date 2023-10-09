@@ -5,22 +5,17 @@
     android:layout_height="match_parent"
     tools:context=".screens.resrevation.ResrevationFragment">
 
-    <TextView
-        android:id="@+id/textView2"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
-        android:text="Hello" />
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_below="@+id/textView2"
+        android:layout_below="@+id/toolbar"
         android:layout_height="match_parent" />
 
 </RelativeLayout>

@@ -9,7 +9,7 @@ namespace EAD_WebService.Models
 
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        public string? Id { get; set; }
 
         [BsonElement("ticket_type")]
         [BsonRequired]

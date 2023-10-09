@@ -121,7 +121,7 @@ namespace EAD_WebService.Services.Core
                 //count if there is reservations for this train
                 var reservationCount = train.FirstOrDefault().Reservations.Count;
 
-                if (reservationCount == 0)
+                if (reservationCount != 0)
                 {
                     return new ServiceResponse<EmptyData>
                     {
@@ -177,7 +177,7 @@ namespace EAD_WebService.Services.Core
                 //count if there is reservations for this train
                 var reservationCount = train.FirstOrDefault().Reservations.Count;
 
-                if (reservationCount == 0)
+                if (reservationCount != 0)
                 {
                     return new ServiceResponse<EmptyData>
                     {
@@ -193,7 +193,8 @@ namespace EAD_WebService.Services.Core
                                 .Set("end_station", trainIn.EndStation)
                               .Set("train_start_time", trainIn.TrainStartTime)
                               .Set("train_end_time", trainIn.TrainEndTime)
-                              .Set("departure_date", trainIn.DepartureDate);
+                              .Set("departure_date", trainIn.DepartureDate)
+                              .Set("updated_at", DateTime.UtcNow);
 
 
                 await _train.UpdateOneAsync(filter, update);
@@ -277,7 +278,9 @@ namespace EAD_WebService.Services.Core
 
                 var filter = Builders<Train>.Filter.Eq("Id", new ObjectId(id));
                 var update = Builders<Train>.Update
-                               .Set("isPublished", true);
+                               .Set("isPublished", true)
+                                 .Set("updated_at", DateTime.UtcNow);
+                ;
 
 
                 await _train.UpdateOneAsync(filter, update);
@@ -316,7 +319,7 @@ namespace EAD_WebService.Services.Core
 
                 var filter = Builders<Train>.Filter.Eq("Id", new ObjectId(id));
                 var update = Builders<Train>.Update
-                               .Set("isPublished", false);
+                               .Set("isPublished", false).Set("updated_at", DateTime.UtcNow);
 
 
                 await _train.UpdateOneAsync(filter, update);
@@ -350,7 +353,7 @@ namespace EAD_WebService.Services.Core
                 {
                     var newTicket = new Tickets
                     {
-
+                        Id = ObjectId.GenerateNewId().ToString(),
                         TicketPrice = ticket.TicketPrice,
                         TicketCount = ticket.TicketCount,
                         TicketType = ticket.TicketType
@@ -364,7 +367,7 @@ namespace EAD_WebService.Services.Core
 
                 return new ServiceResponse<EmptyData>
                 {
-                    Message = "Train schedule published successfully",
+                    Message = "Train ticket added successfully",
                     Status = true
 
                 };
@@ -373,7 +376,7 @@ namespace EAD_WebService.Services.Core
             {
                 return new ServiceResponse<EmptyData>
                 {
-                    Message = "Train shedule publish faild",
+                    Message = "Train ticket addition faild",
                     Status = false
                 };
             }
@@ -381,7 +384,7 @@ namespace EAD_WebService.Services.Core
             {
                 return new ServiceResponse<EmptyData>
                 {
-                    Message = "Train shedule publish faild",
+                    Message = "Train ticket addition faild",
                     Status = false
                 };
             }
@@ -403,7 +406,7 @@ namespace EAD_WebService.Services.Core
 
                 return new ServiceResponse<EmptyData>
                 {
-                    Message = "Train schedule published successfully",
+                    Message = "Ticket type removed successfully",
                     Status = true
 
                 };
@@ -412,7 +415,7 @@ namespace EAD_WebService.Services.Core
             {
                 return new ServiceResponse<EmptyData>
                 {
-                    Message = "Train shedule publish faild",
+                    Message = "Ticket type removed  faild",
                     Status = false
                 };
             }
@@ -420,7 +423,7 @@ namespace EAD_WebService.Services.Core
             {
                 return new ServiceResponse<EmptyData>
                 {
-                    Message = "Train shedule publish faild",
+                    Message = "Ticket type removed faild",
                     Status = false
                 };
             }
@@ -439,13 +442,14 @@ namespace EAD_WebService.Services.Core
                 var update = Builders<Train>.Update
                     .Set("Tickets.$.TicketPrice", ticketsIn.TicketPrice)
                     .Set("Tickets.$.TicketCount", ticketsIn.TicketCount)
-                    .Set("Tickets.$.TicketType", ticketsIn.TicketType);
+                    .Set("Tickets.$.TicketType", ticketsIn.TicketType)
+                      .Set("updated_at", DateTime.UtcNow);
 
                 await _train.UpdateOneAsync(filter, update);
 
                 return new ServiceResponse<EmptyData>
                 {
-                    Message = "Train schedule published successfully",
+                    Message = "Ticket type update successfully",
                     Status = true
 
                 };
@@ -454,7 +458,7 @@ namespace EAD_WebService.Services.Core
             {
                 return new ServiceResponse<EmptyData>
                 {
-                    Message = "Train shedule publish faild",
+                    Message = "Ticket type update faild",
                     Status = false
                 };
             }
