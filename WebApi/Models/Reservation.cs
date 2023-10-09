@@ -35,6 +35,15 @@ namespace EAD_WebService.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string TicketType { get; set; }
 
+        // [BsonElement("ticket_label")]
+        // [BsonRequired]
+        // public string TicketLabel { get; set; }
+
+        // [BsonElement("ticket_price")]
+        // [BsonRequired]
+        // public double TicketPrice { get; set; }
+
+
         [BsonElement("reservation_price")]
         [BsonRequired]
         public double ReservationPrice { get; set; }
