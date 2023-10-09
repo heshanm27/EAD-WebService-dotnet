@@ -18,21 +18,9 @@ namespace EAD_WebService.Services.Core
                 .GetDatabase(mongoDBSettings.Value.DatabaseName)
                 .GetCollection<Reservation>(mongoDBSettings.Value.ReservationCollection);
         }
-        public async Task<ServiceResponse<Reservation>> CreateReservation(ReservationDto booking)
+        public async Task<ServiceResponse<Reservation>> CreateReservation(Reservation booking)
         {
-
-            var Reservation = new Reservation
-            {
-                ReservationDate = booking.ReservationDate,
-                ReservedTrainId = new ObjectId(booking.ReservedTrainId),
-                ReservedUserId = new ObjectId(booking.ReservedUserId),
-                ReservationSeatCount = booking.ReservationSeatCount,
-                ReservationClass = booking.ReservationClass,
-                ReservationType = booking.ReservationType,
-                ReservationPrice = booking.ReservationPrice,
-            };
-
-            if (booking.ReservationSeatCount > 5)
+            if (booking.ReservedSeatCount > 5)
             {
                 return new ServiceResponse<Reservation>
                 {
@@ -42,12 +30,12 @@ namespace EAD_WebService.Services.Core
 
             }
 
-            // need to get the reservation _id of new document to update the train schedule
-            await _reservation.InsertOneAsync(Reservation);
+
+            await _reservation.InsertOneAsync(booking);
 
 
-            await _trainScheduleService.addReservation(booking.ReservedTrainId, Reservation.Id.ToString());
-            await _trainScheduleService.updateTicketsAvailability(booking.ReservedTrainId, booking.ReservedTrainId, booking.ReservationSeatCount);
+            await _trainScheduleService.addReservation(booking.ReservedTrainId, booking.Id);
+            await _trainScheduleService.updateTicketsAvailability(booking.ReservedTrainId, booking.ReservedTrainId, booking.ReservedSeatCount);
 
 
             return new ServiceResponse<Reservation>
@@ -58,7 +46,7 @@ namespace EAD_WebService.Services.Core
         }
 
 
-        async Task<ServiceResponse<Reservation>> IReservationService.GetReservation(string id)
+        async Task<ServiceResponse<Reservation>> IReservationService.GetOneReservation(string id)
         {
 
             try
@@ -92,7 +80,7 @@ namespace EAD_WebService.Services.Core
                 //get all the reservations
                 var reservations = await _reservation.Find(Reservation => true).ToListAsync();
                 //limit the reservations to the number of records specified in the filters
-                reservations = reservations.Skip(filters.Page).Take(filters.PageSize).ToList();
+                //reservations = reservations.Skip(filters.Page).Take(filters.PageSize).ToList();
                 //return the reservations make order by the sortby field and order specified in the filters
 
 
@@ -152,20 +140,19 @@ namespace EAD_WebService.Services.Core
 
         }
 
-        public async Task<ServiceResponse<EmptyData>> UpdateReservation(string id, ReservationDto reservation)
+        public async Task<ServiceResponse<EmptyData>> UpdateReservation(string id, Reservation reservation)
         {
             try
             {
-                var Reservation = new Reservation
+                if (reservation.ReservedSeatCount > 5)
                 {
-                    ReservationDate = reservation.ReservationDate,
-                    ReservedTrainId = new ObjectId(reservation.ReservedTrainId),
-                    ReservedUserId = new ObjectId(reservation.ReservedUserId),
-                    ReservationSeatCount = reservation.ReservationSeatCount,
-                    ReservationClass = reservation.ReservationClass,
-                    ReservationType = reservation.ReservationType,
-                    ReservationPrice = reservation.ReservationPrice,
-                };
+                    return new ServiceResponse<EmptyData>
+                    {
+                        Message = "You can only book a maximum of 5 seats",
+                        Status = false
+                    };
+
+                }
 
                 var isExists = await _reservation.Find(Reservation => Reservation.Id == id).AnyAsync();
 
@@ -179,13 +166,12 @@ namespace EAD_WebService.Services.Core
                 }
                 var filter = Builders<Reservation>.Filter.Eq(Reservation => Reservation.Id, id);
                 var update = Builders<Reservation>.Update
-                    .Set(Reservation => Reservation.ReservationDate, reservation.ReservationDate)
-                    .Set(Reservation => Reservation.ReservedTrainId, new ObjectId(reservation.ReservedTrainId))
-                    .Set(Reservation => Reservation.ReservedUserId, new ObjectId(reservation.ReservedUserId))
-                    .Set(Reservation => Reservation.ReservationSeatCount, reservation.ReservationSeatCount)
-                    .Set(Reservation => Reservation.ReservationClass, reservation.ReservationClass)
-                    .Set(Reservation => Reservation.ReservationType, reservation.ReservationType)
-                    .Set(Reservation => Reservation.ReservationPrice, reservation.ReservationPrice);
+                    .Set(Reservation => Reservation.ReservedDate, reservation.ReservedDate)
+                    .Set(Reservation => Reservation.ReservedTrainId, reservation.ReservedTrainId)
+                    .Set(Reservation => Reservation.ReservedUserId, reservation.ReservedUserId)
+                    .Set(Reservation => Reservation.ReservedSeatCount, reservation.ReservedSeatCount)
+                    .Set(Reservation => Reservation.ReservationPrice, reservation.ReservationPrice)
+                    .Set(Reservation => Reservation.TicketType, reservation.TicketType);
 
 
                 await _reservation.UpdateOneAsync(filter, update);
