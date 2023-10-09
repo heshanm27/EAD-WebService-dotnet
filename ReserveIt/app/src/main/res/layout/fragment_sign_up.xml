@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FDFDFD"
     tools:context=".screens.signUp.SignUpFragment">
 
     <TextView
@@ -12,7 +13,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:text="Create\nAccount"
-        android:textColor="#ffffff"
+        android:textColor="#000000"
         android:textSize="30sp"
         android:textStyle="bold" />
 
@@ -30,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Name"
-            android:textColor="#ffffff"
+            android:textColor="#000000"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -39,6 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="12dp"
+            android:background="#D7D6D7"
             android:ems="10"
             android:hint="Enter Your Name"
             android:inputType="textEmailAddress"
@@ -51,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:text="Email"
-            android:textColor="#ffffff"
+            android:textColor="#000000"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -72,7 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:text="Password"
-            android:textColor="#ffffff"
+            android:textColor="#000000"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -82,7 +84,7 @@
             android:layout_height="50dp"
             android:layout_marginTop="12dp"
             android:ems="10"
-            android:hint="Enter Your Pasword"
+            android:hint="Enter Your Password"
             android:inputType="textEmailAddress"
             android:padding="12dp"
             android:textSize="18sp" />
@@ -93,7 +95,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:text="RePassword"
-            android:textColor="#ffffff"
+            android:textColor="#000000"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -107,14 +109,6 @@
             android:inputType="textPassword"
             android:padding="12dp"
             android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:text="Don't Remember Password? Recovery It"
-            android:textAlignment="center" />
 
         <Button
             android:id="@+id/button2"
