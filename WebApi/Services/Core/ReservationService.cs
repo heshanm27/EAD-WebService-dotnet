@@ -84,13 +84,29 @@ namespace EAD_WebService.Services.Core
                 //return the reservations make order by the sortby field and order specified in the filters
 
 
+                var pipeline = new BsonDocument[]
+{
+    BsonDocument.Parse("{ $lookup: { from: 'train', localField: 'reserved_train', foreignField: '_id', as: 'reserved_train' } }"),
+    BsonDocument.Parse("{ $lookup: { from: 'user', localField: 'reserved_user', foreignField: '_id', as: 'reserved_train' } }"),
+    // BsonDocument.Parse("{ $lookup: { from: 'users.', localField: 'TicketType', foreignField: '_id', as: 'TicketType' } }"),
+
+};
+
+                var results = _reservation.Aggregate<Reservation>(pipeline).ToList();
 
                 return new ServiceResponse<List<Reservation>>
                 {
                     Message = "Bookings retrieved successfully",
                     Status = true,
-                    Data = reservations
+                    Data = results
                 };
+
+                // return new ServiceResponse<List<Reservation>>
+                // {
+                //     Message = "Bookings retrieved successfully",
+                //     Status = true,
+                //     Data = reservations
+                // };
             }
             catch (Exception ex)
             {
@@ -144,15 +160,16 @@ namespace EAD_WebService.Services.Core
         {
             try
             {
-                if (reservation.ReservedSeatCount > 5)
-                {
-                    return new ServiceResponse<EmptyData>
-                    {
-                        Message = "You can only book a maximum of 5 seats",
-                        Status = false
-                    };
+                // var Reservation = new Reservation
+                // {
 
-                }
+                //     ReservedTrainId = reservation.ReservedTrainId,
+                //     ReservedUserId = reservation.ReservedUserId,
+                //     ReservationPrice = reservation.ReservationPrice,
+                //     ReservedDate = reservation.ReservedDate,
+                //     ReservedSeatCount = reservation.ReservedSeatCount,
+
+                // };
 
                 var isExists = await _reservation.Find(Reservation => Reservation.Id == id).AnyAsync();
 
