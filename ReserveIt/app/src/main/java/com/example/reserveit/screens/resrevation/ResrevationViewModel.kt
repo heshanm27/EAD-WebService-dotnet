@@ -9,7 +9,7 @@ class ResrevationViewModel : ViewModel() {
     private  val _reservationList = mutableListOf<Reservation>()
 
 
-    val trainScheduleList: List<Reservation>
+    val reservationList: List<Reservation>
         get() = _reservationList
 
 
