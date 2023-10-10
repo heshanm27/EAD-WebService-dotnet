@@ -3,6 +3,12 @@ using EAD_WebService.Dto.Train;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 
+/*
+    File: Train Controller.cs
+    Author:
+    Description: This file is used Manage the train information and shedules.
+ */
+
 namespace EAD_WebService.Controllers
 {
     [ApiController]
@@ -15,6 +21,8 @@ namespace EAD_WebService.Controllers
         {
             _trainService = trainService;
         }
+
+        //This API provides all train shedules
         [HttpGet]
         public async Task<ActionResult<List<Train>>> Get([FromQuery] BasicFilters filters)
         {
@@ -25,7 +33,7 @@ namespace EAD_WebService.Controllers
 
         }
 
-
+        //This API provide train shedule for given ID
         [HttpGet("{id}")]
         public async Task<ActionResult<Train>> Get(string id)
         {
@@ -34,6 +42,7 @@ namespace EAD_WebService.Controllers
             return Ok(response);
         }
 
+        //This is used to add new train shedule to the database
         [HttpPost]
         public async Task<ActionResult<ServiceResponse<Train>>> Post(TrainCreateDto train)
         {
@@ -69,6 +78,8 @@ namespace EAD_WebService.Controllers
 
             return Ok(response);
         }
+
+
 
         [HttpPatch("{id}/ticket")]
         public async Task<ActionResult<ServiceResponse<EmptyData>>> addTicket(string id, List<Tickets> trainIn)

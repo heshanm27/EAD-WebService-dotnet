@@ -1,6 +1,11 @@
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 
+/*
+    File: Program.cs
+    Author:
+    Description: This file is used to initialize the program.
+ */
 internal class Program
 {
     private static void Main(string[] args)

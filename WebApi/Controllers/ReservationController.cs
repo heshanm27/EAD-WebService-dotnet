@@ -3,6 +3,12 @@ using EAD_WebService.Dto.Reservation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+/*
+    File: Resrvation Controller.cs
+    Author:
+    Description: This file is used to manage the reservations/bookings.
+ */
+
 namespace EAD_WebService.Controllers
 {
 
@@ -29,6 +35,8 @@ namespace EAD_WebService.Controllers
             return Ok(response);
         }
 
+        //API endpoint for getting one reservation for given reservation id
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Reservation>> Get(string id)
         {
@@ -39,6 +47,8 @@ namespace EAD_WebService.Controllers
             return Ok(response);
         }
 
+
+        //API endpoit for add new reservation
 
         [HttpPost]
         public async Task<ActionResult<ServiceResponse<Reservation>>> Post(ReservationDto reservationDto)
@@ -63,6 +73,8 @@ namespace EAD_WebService.Controllers
 
         }
 
+        //API Endpoint for updating the reservation
+
         [HttpPatch("{id}")]
 
         public async Task<ActionResult<ServiceResponse<EmptyData>>> Put(string id, ReservationUpdateDto reservationIn)
@@ -86,6 +98,8 @@ namespace EAD_WebService.Controllers
             if (!response.Status) return BadRequest(response);
             return Ok(response);
         }
+
+        //API endpoint for deleting reservations.
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<ServiceResponse<EmptyData>>> Delete(string id)
