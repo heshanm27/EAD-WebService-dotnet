@@ -98,7 +98,7 @@ namespace EAD_WebService.Services.Core
                 {
                     Message = "Bookings retrieved successfully",
                     Status = true,
-                    Data = results
+                    Data = reservations
                 };
 
                 // return new ServiceResponse<List<Reservation>>

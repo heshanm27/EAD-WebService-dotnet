@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:fitsSystemWindows="true"
     tools:context=".screens.home.HomeFragment">
 
 
@@ -13,9 +13,7 @@
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+
         >
 
         <com.google.android.material.appbar.MaterialToolbar
@@ -39,9 +37,9 @@
         android:layout_marginRight="32dp"
         android:layout_marginBottom="16dp"
         app:cardCornerRadius="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
+        android:layout_below="@+id/appBarLayout"
+
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -96,11 +94,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="32dp"
-
         app:cardCornerRadius="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/card2">
+        android:layout_below="@+id/card2"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -136,9 +132,6 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
 
         >
         <!--    // Bottom Sheet-->
@@ -149,17 +142,16 @@
             android:layout_height="match_parent"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
             android:layout_gravity="center"
-
             >
 
 
-            <!-- Bottom sheet contents. -->
-            <com.google.android.material.bottomsheet.BottomSheetDragHandleView
-                android:id="@+id/drag_handle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-         />
+<!--            &lt;!&ndash; Bottom sheet contents. &ndash;&gt;-->
+<!--            <com.google.android.material.bottomsheet.BottomSheetDragHandleView-->
+<!--                android:id="@+id/drag_handle"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="2dp"-->
+<!--         />-->
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/bottom_sheet_reservations_recycler_view"
@@ -174,4 +166,4 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

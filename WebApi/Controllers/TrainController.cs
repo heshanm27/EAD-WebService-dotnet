@@ -80,7 +80,7 @@ namespace EAD_WebService.Controllers
         }
 
 
-
+     //This API is used to add new tickets to the train shedule
         [HttpPatch("{id}/ticket")]
         public async Task<ActionResult<ServiceResponse<EmptyData>>> addTicket(string id, List<Tickets> trainIn)
         {
@@ -92,6 +92,7 @@ namespace EAD_WebService.Controllers
 
         }
 
+        //This API is used to update the tickets in the train shedule
         [HttpPatch("{id}/ticket/{ticketId}")]
         public async Task<ActionResult<ServiceResponse<EmptyData>>> updateTicket(string id, string ticketId, Tickets trainIn)
         {
@@ -103,6 +104,7 @@ namespace EAD_WebService.Controllers
 
         }
 
+        //This API is used to remove the tickets in the train shedule
         [HttpDelete("{id}/ticket/{ticketId}")]
         public async Task<ActionResult<ServiceResponse<EmptyData>>> removeTicket(string id, string ticketId)
         {
@@ -114,7 +116,7 @@ namespace EAD_WebService.Controllers
 
         }
 
-
+    //This API is used to activate the train shedule
         [HttpPatch("{id}/activate")]
         public async Task<ActionResult<ServiceResponse<EmptyData>>> updateActive(string id)
         {
@@ -126,7 +128,7 @@ namespace EAD_WebService.Controllers
 
         }
 
-
+        //This API is used to deactivate the train shedule
         [HttpPatch("{id}/deactivate")]
         public async Task<ActionResult<ServiceResponse<EmptyData>>> updateDeactive(string id)
         {
@@ -138,7 +140,7 @@ namespace EAD_WebService.Controllers
 
         }
 
-
+    //This API is used to publish the train shedule
         [HttpPatch("{id}/publish")]
         public async Task<ActionResult<ServiceResponse<EmptyData>>> updatePublish(string id)
         {
@@ -150,7 +152,7 @@ namespace EAD_WebService.Controllers
 
         }
 
-
+        //This API is used to unpublish the train shedule
         [HttpPatch("{id}/unpublish")]
         public async Task<ActionResult<ServiceResponse<EmptyData>>> updateUnpublish(string id)
         {
@@ -162,6 +164,7 @@ namespace EAD_WebService.Controllers
 
         }
 
+//This API is used to update the train shedule
         [HttpPatch("{id}")]
         public async Task<ActionResult<ServiceResponse<EmptyData>>> Put(string id, TrainUpdateDo trainIn)
         {
@@ -188,6 +191,7 @@ namespace EAD_WebService.Controllers
 
         }
 
+//This API is used to remove the train shedule
         [HttpDelete("{id}")]
         public async Task<ActionResult<ServiceResponse<EmptyData>>> Delete(string id)
         {

@@ -16,14 +16,16 @@ namespace EAD_WebService.Services.Interfaces
 {
     public interface IAuthService
     {
+
+        //register user service  method
         Task<ServiceResponse<LoginSuccessDto>> registerUser(RegisterUserDto registerUserDto);
-
+        //login user service method
         Task<ServiceResponse<LoginSuccessDto>> loginUser(LoginUserDto loginUserDto);
-
+        //forgot user service method
         void forgotPassword(User user);
-
+        //change password service method
         void changePassword(User user);
-
+        //create token service method
         string createToken(User user);
 
     }
