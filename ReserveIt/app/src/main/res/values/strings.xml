@@ -23,6 +23,8 @@
     <string name="add_reservation_to">To</string>
     <string name="add_reservation_no_of_ticket">Number of tickets</string>
     <string name="add_reservation_btn_reserve">Book Now!</string>
+    <string name="update_Reservation">Update Reservation</string>
+    <string name="update_reservation_btn">Update Now!</string>
 
 
     <string-array name="station_arr">

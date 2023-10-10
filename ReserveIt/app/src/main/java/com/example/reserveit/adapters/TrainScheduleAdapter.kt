@@ -1,4 +1,4 @@
-package com.example.reserveit.screens.home
+package com.example.reserveit.adapters
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,12 +7,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reserveit.R
-import com.example.reserveit.models.reservation.Reservation
+import com.example.reserveit.models.train_schedule.TrainSchedule
 
-class ReservationAdapter(private var reservationList: List<Reservation>) :RecyclerView.Adapter<ReservationAdapter.ReservationViewHolder>() {
+class TrainScheduleAdapter(private var trainScheduleList: List<TrainSchedule>) :RecyclerView.Adapter<TrainScheduleAdapter.ReservationViewHolder>() {
 
         inner class ReservationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val start = itemView.findViewById<TextView>(R.id.from_station)
@@ -25,16 +24,16 @@ class ReservationAdapter(private var reservationList: List<Reservation>) :Recycl
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReservationViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.reservatiion_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.train_schedule_item, parent, false)
         return ReservationViewHolder(view)
     }
 
     override fun getItemCount(): Int {
-        return reservationList.size
+        return trainScheduleList.size
     }
 
     override fun onBindViewHolder(holder: ReservationViewHolder, position: Int) {
-        val reservation = reservationList[position]
+        val reservation = trainScheduleList[position]
         Log.d("reservation", reservation.toString())
         holder.start?.text = reservation.startStation
         holder.end?.text = reservation.endStation
