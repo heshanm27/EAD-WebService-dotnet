@@ -2,6 +2,12 @@ using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using MongoDB.Bson;
 
+/*
+    File: UserServices.cs
+    Author:
+    Description: This file is used to store the logic related to user management.
+ */
+
 namespace EAD_WebService.Services.Core
 {
     public class UserService : IUserService
@@ -15,6 +21,8 @@ namespace EAD_WebService.Services.Core
                 .GetDatabase(mongoDBSettings.Value.DatabaseName)
                 .GetCollection<User>(mongoDBSettings.Value.UserCollection);
         }
+
+        //This mathod is used to handle the business logic when getting the user information
 
         public async Task<ServiceResponse<User>> getUser(string id)
         {
@@ -38,6 +46,7 @@ namespace EAD_WebService.Services.Core
             }
         }
 
+        //This method is used to handle the business logic when getting all uesr data
         public async Task<ServiceResponse<List<User>>> getUsers(BasicFilters filters)
         {
             try
@@ -60,6 +69,8 @@ namespace EAD_WebService.Services.Core
             }
         }
 
+        //This method is used to handle the business logic when deleting a user
+
         public async Task<ServiceResponse<EmptyData>> removeUser(string id)
         {
             try
@@ -81,6 +92,7 @@ namespace EAD_WebService.Services.Core
             }
         }
 
+        //This method is used to handle the business logic when updating a user
         public async Task<ServiceResponse<EmptyData>> updateUser(string id, User userIn)
         {
             try
@@ -105,6 +117,7 @@ namespace EAD_WebService.Services.Core
             }
         }
 
+        //This method is used to handle the business logic when activating a user
         public async Task<ServiceResponse<EmptyData>> activateUser(string id)
         {
             try
@@ -130,6 +143,7 @@ namespace EAD_WebService.Services.Core
             }
         }
 
+        //This method is used to handle the business logic when de-activating a user
         public async Task<ServiceResponse<EmptyData>> deativateUser(string id)
         {
             try
@@ -155,6 +169,7 @@ namespace EAD_WebService.Services.Core
             }
         }
 
+        //This method is used to handle the business logic when updating a user role
         public async Task<ServiceResponse<EmptyData>> updateUserRole(string id, UserEnum role)
         {
             try

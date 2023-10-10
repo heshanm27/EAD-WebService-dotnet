@@ -1,4 +1,8 @@
-
+/*
+    File: ITrainSheduleService.cs
+    Author:
+    Description: This is the custom interface for handling train sheduling.
+*/
 
 
 namespace EAD_WebService.Services.Interfaces

@@ -1,5 +1,11 @@
 using EAD_WebService.Dto.Reservation;
 
+/*
+    File: IReservationService.cs
+    Author:
+    Description: This is the custom interface for handling ticket reservations.
+*/
+
 namespace EAD_WebService.Services.Interfaces
 {
     public interface IReservationService

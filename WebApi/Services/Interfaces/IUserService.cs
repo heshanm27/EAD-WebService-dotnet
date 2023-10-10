@@ -1,4 +1,8 @@
-
+/*
+    File: IUserService.cs
+    Author:
+    Description: This is the custom interface for handling user information maintainence.
+*/
 
 
 namespace EAD_WebService.Services.Interfaces

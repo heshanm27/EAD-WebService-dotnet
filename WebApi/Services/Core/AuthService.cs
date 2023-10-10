@@ -11,6 +11,11 @@ using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
+/*
+    File: AuthService.cs
+    Author:
+    Description: This file is used to handle the business logic when authenticating a user.
+*/
 
 namespace EAD_WebService.Services.Core
 {
@@ -28,6 +33,7 @@ namespace EAD_WebService.Services.Core
                .GetCollection<User>(mongoDBSettings.Value.UserCollection);
         }
 
+        //This method is used to handle login verification
         public async Task<ServiceResponse<LoginSuccessDto>> loginUser(LoginUserDto loginUserDto)
         {
             try
@@ -65,6 +71,7 @@ namespace EAD_WebService.Services.Core
             }
         }
 
+        //This method handles user registration logic
         public async Task<ServiceResponse<LoginSuccessDto>> registerUser(RegisterUserDto registerUserDto)
         {
             try
@@ -176,6 +183,7 @@ namespace EAD_WebService.Services.Core
             throw new NotImplementedException();
         }
 
+        //This method creates a token for Identity server
         public string createToken(User user)
         {
             List<Claim> claims = new List<Claim>

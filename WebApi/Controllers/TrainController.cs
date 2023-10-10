@@ -33,7 +33,7 @@ namespace EAD_WebService.Controllers
 
         }
 
-        //This API provide train shedule for given ID
+        //This API provide train shedule for given shedule ID
         [HttpGet("{id}")]
         public async Task<ActionResult<Train>> Get(string id)
         {

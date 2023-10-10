@@ -2,6 +2,12 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
+/*
+    File: User.cs
+    Author:
+    Description: This file is used to store the model for user information.
+ */
+
 namespace EAD_WebService.Models
 {
     public class User
