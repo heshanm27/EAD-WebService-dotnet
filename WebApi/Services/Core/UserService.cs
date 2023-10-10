@@ -6,7 +6,7 @@ using MongoDB.Bson;
     File: UserServices.cs
     Author:
     Description: This file is used to store the logic related to user management.
- */
+*/
 
 namespace EAD_WebService.Services.Core
 {
