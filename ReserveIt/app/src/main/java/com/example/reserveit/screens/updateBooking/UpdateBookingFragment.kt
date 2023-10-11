@@ -30,21 +30,9 @@ class UpdateBookingFragment : Fragment() {
         binding = FragmentUpdateBookingBinding.inflate(inflater, container, false)
         (activity as MainActivity?)!!.hideBottomNavigationView()
 
-        context?.let {
-            MaterialAlertDialogBuilder(it)
-                .setTitle("Cancel Reservation")
-                .setMessage("Are you sure you want to cancel this reservation?")
-                .setMessage("Cancel Reservation can not be undone")
-                .setNeutralButton("Cancel") { dialog, which ->
-                    dialog.dismiss()
-                }
-                .setPositiveButton("Continue") { dialog, which ->
-                    // Respond to positive button press
-                    dialog.dismiss()
-                    findNavController().popBackStack()
-                }
-                .show()
-        }
+
+
+
         return binding?.root
     }
 
