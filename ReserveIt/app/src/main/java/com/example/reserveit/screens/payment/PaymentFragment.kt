@@ -1,4 +1,4 @@
-package com.example.reserveit.screens
+package com.example.reserveit.screens.payment
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -8,24 +8,24 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.reserveit.R
 
-class addReservation : Fragment() {
+class PaymentFragment : Fragment() {
 
     companion object {
-        fun newInstance() = addReservation()
+        fun newInstance() = PaymentFragment()
     }
 
-    private lateinit var viewModel: AddReservationViewModel
+    private lateinit var viewModel: PaymentViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_add_reservation, container, false)
+        return inflater.inflate(R.layout.fragment_payment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(AddReservationViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(PaymentViewModel::class.java)
         // TODO: Use the ViewModel
     }
 

@@ -33,7 +33,7 @@ class ReservationDetailsFragment : Fragment() {
             findNavController().popBackStack()
         }
         binding?.checkOutAction?.setOnClickListener {
-            findNavController().navigate(R.id.action_reservation_details_Fragment_to_addReservation)
+
         }
 
 //        binding?.cancelAction?.setOnClickListener {
