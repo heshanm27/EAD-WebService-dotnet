@@ -26,7 +26,6 @@
     <string name="update_Reservation">Update Reservation</string>
     <string name="update_reservation_btn">Update Now!</string>
 
-
     <string-array name="station_arr">
         <item>Ahangama</item>
         <item>Aluthgama</item>
@@ -115,7 +114,15 @@
         <item>Wellawa</item>
         <item>Wellawatte</item>
     </string-array>
+    <string-array name="no_seats" >
 
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+
+    </string-array>
 
 
 </resources>

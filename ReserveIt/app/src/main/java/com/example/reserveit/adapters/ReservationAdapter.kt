@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reserveit.R
 import com.example.reserveit.models.reservation.Reservation
@@ -42,7 +43,7 @@ class ReservationAdapter(
         holder.arriveTime?.text = reservation.arriveTime
         holder.price?.text = reservation.totalPrice
         holder.card.setOnClickListener {
-            Log.d("reservation", reservation.toString())
+            holder.card.findNavController().navigate(R.id.action_resrevationFragment_to_bookedDetailsFragment)
         }
 
     }

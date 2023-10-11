@@ -1,107 +1,329 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".screens.reservationDetails.reservation_details_Fragment">
+    tools:context=".screens.reservationDetails.ReservationDetailsFragment"
+    android:orientation="vertical">
 
+<com.google.android.material.appbar.AppBarLayout
+    android:id="@+id/appBarLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
 
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="0dp"
-        android:layout_height="253dp"
-        android:layout_marginTop="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@tools:sample/backgrounds/scenic" />
-
-    <TextView
-        android:id="@+id/textView14"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="58dp"
-        android:layout_marginEnd="195dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputEditText" />
-
-    <TextView
-        android:id="@+id/textView18"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="34dp"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView21"
-        tools:ignore="MissingConstraints" />
-
-    <TextView
-        android:id="@+id/textView19"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="65dp"
-        android:layout_marginTop="51dp"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputEditText" />
-
-    <TextView
-        android:id="@+id/textView20"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="249dp"
-        android:layout_marginTop="58dp"
-        android:text="TextView"
-        app:layout_constraintStart_toEndOf="@+id/textView21"
-        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
-
-
-
-    <TextView
-        android:id="@+id/textView21"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="58dp"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView4" />
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/textInputEditText"
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/topAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="89dp"
-        android:hint="hint"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView18" />
+        android:minHeight="?attr/actionBarSize"
+        app:navigationIcon="@drawable/baseline_arrow_back_24"
+        app:title="Schedule Details"
 
-    <Button
-        android:id="@+id/cancel_action"
-        android:layout_width="0dp"
+        />
+
+</com.google.android.material.appbar.AppBarLayout>
+
+<LinearLayout
+    android:id="@+id/linearLayout2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.Material3.CardView.Outlined"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:text="Button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/book_action"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:cardCornerRadius="8dp"
 
-    <Button
-        android:id="@+id/book_action"
-        android:layout_width="0dp"
+        app:contentPadding="12dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textView_booked_1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:fontFamily="sans-serif-black"
+                android:text="Kandy - Badulla"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView_booked_2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="2023/10/08"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_booked_1" />
+
+            <ImageView
+                android:id="@+id/imageView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+
+                android:src="@drawable/reservation"
+
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.Material3.CardView.Outlined"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="17dp"
-        android:text="Button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/cancel_action" />
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:cardCornerRadius="8dp"
+        app:contentPadding="10dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textView_booked_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-light"
+                android:text="Train Name"
+                />
+            <TextView
+                android:id="@+id/train_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-light"
+                android:text="GG Train"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+
+                    >
+
+                    <TextView
+                        android:id="@+id/textView7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:text="From:" />
+
+                    <TextView
+                        android:id="@+id/depart_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+
+                        android:text="12:45PM"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:orientation="vertical"
+
+                    >
+
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:text="To :" />
+
+                    <TextView
+                        android:id="@+id/arrive_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:text="15:09PM"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/textView_booked_7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-light"
+                android:text="Number Tickets"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_book_13" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:layout_height="wrap_content"
+                app:startIconDrawable="@drawable/baseline_airline_seat_recline_normal_24"
+                android:hint="Select Number Tickets"
+                android:id="@+id/no_seats_layout"
+                >
+                <AutoCompleteTextView
+                    android:id="@+id/no_seats"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:inputType="none"
+                    tools:ignore="LabelFor" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/ticket_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-light"
+                android:text="Select Ticket Type"
+                />
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                >
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:singleLine="true"
+                    >
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ac"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Non A/C"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="First Class"/>
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/chip4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Second Class"/>
+                    <!-- Chips can be declared here, or added dynamically. -->
+
+                </com.google.android.material.chip.ChipGroup>
+            </HorizontalScrollView>
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="8dp"
+        app:cardCornerRadius="8dp"
+        app:contentPadding="10dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/textView_booked_9"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="60dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Total"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/textView_booked_16"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/textView_booked_16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="30dp"
+                android:fontFamily="sans-serif-black"
+                android:text="2500.00"
+                android:textColor="#FF5722"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:gravity="bottom"
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:layout_marginTop="17dp">
+
+
+        <Button
+            style="@style/Widget.Material3.Button.IconButton.Filled"
+            android:id="@+id/checkOut_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:text="Check Out"
+            android:padding="15dp"
+            />
+    </LinearLayout>
+
+</LinearLayout>
+</LinearLayout>
