@@ -25,12 +25,12 @@ namespace EAD_WebService.Controllers
             _reservationService = reservationService;
         }
 
-        [HttpGet()]
+        [HttpGet("all/{id}")]
 
-        public async Task<ActionResult<List<Reservation>>> Get([FromQuery] BasicFilters filters)
+        public async Task<ActionResult<List<Reservation>>> Get([FromQuery] BasicFilters filters, string id)
         {
 
-            ServiceResponse<List<Reservation>> response = await _reservationService.GetReservation(filters);
+            ServiceResponse<List<Reservation>> response = await _reservationService.GetReservation(filters, id);
             if (!response.Status) return BadRequest(response);
             return Ok(response);
         }
@@ -62,7 +62,7 @@ namespace EAD_WebService.Controllers
                 ReservedSeatCount = reservationDto.ReservationSeatCount,
                 ReservedUserId = reservationDto.ReservedUserId,
                 ReservationPrice = reservationDto.ReservationPrice,
-                ReservedDate = ReservationDate,
+                ReservedDate = ReservationDate.AddHours(5).AddMinutes(30),
                 TicketType = reservationDto.TicketType
             };
 
@@ -90,7 +90,7 @@ namespace EAD_WebService.Controllers
                 ReservedSeatCount = reservationIn.ReservationSeatCount,
                 ReservedUserId = reservationIn.ReservedUserId,
                 ReservationPrice = reservationIn.ReservationPrice,
-                ReservedDate = ReservationDate,
+                ReservedDate = ReservationDate.AddHours(5).AddMinutes(30),
                 TicketType = reservationIn.TicketType
             };
             ServiceResponse<EmptyData> response = await _reservationService.UpdateReservation(id, reservation);

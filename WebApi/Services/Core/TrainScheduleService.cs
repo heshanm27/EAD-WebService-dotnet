@@ -1,7 +1,9 @@
+using System.Globalization;
 using System.Reflection.Metadata;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using Newtonsoft.Json.Converters;
 
 
 namespace EAD_WebService.Services.Core
@@ -68,13 +70,40 @@ namespace EAD_WebService.Services.Core
             }
         }
 
-        public async Task<ServiceResponse<List<Train>>> getTrainSchedule()
+        public async Task<ServiceResponse<List<Train>>> getTrainSchedule(TrainFilters filters)
         {
 
             try
             {
-                var trains = await _train.Find(Train => true).ToListAsync();
+                // var trains = await _train.Find(Train => true).ToListAsync();
 
+
+                // return new ServiceResponse<List<Train>>
+                // {
+                //     Message = "Trains retrieved successfully",
+                //     Status = true,
+                //     Data = trains
+                // };
+                DateTime ReservationDate = DateTime.Parse(filters.date);
+                // ReservationDate = ReservationDate.AddHours(5).AddMinutes(30);
+
+                // DateTime SriLankanUtcDate = new DateTime(ReservationDate.Ticks, DateTimeKind.Utc).AddHours(5).AddMinutes(30);
+                Console.WriteLine(new BsonDateTime(ReservationDate.AddHours(5).AddMinutes(30)));
+
+                var filter = Builders<Train>.Filter.AnyEq("start_station", filters.start)
+                & Builders<Train>.Filter.AnyEq("end_station", filters.end)
+                & Builders<Train>.Filter.Eq("departure_date", new BsonDateTime(ReservationDate.AddHours(5).AddMinutes(30)))
+                ;
+                // & Builders<Train>.Filter.Lte("departure_date", new BsonDateTime(ReservationDate))
+                ;
+                var sort = Builders<Train>.Sort.Descending("train_start_time");
+
+                Console.WriteLine(filter);
+                if (filters.Order == "asc")
+                {
+                    sort = Builders<Train>.Sort.Ascending(filters.Order);
+                }
+                var trains = await _train.Find(filter).Sort(sort).Skip((filters.Page - 1) * filters.PageSize).Limit(filters.PageSize).ToListAsync();
 
                 return new ServiceResponse<List<Train>>
                 {
@@ -82,6 +111,7 @@ namespace EAD_WebService.Services.Core
                     Status = true,
                     Data = trains
                 };
+
             }
             catch (MongoException)
             {
@@ -194,7 +224,7 @@ namespace EAD_WebService.Services.Core
                               .Set("train_start_time", trainIn.TrainStartTime)
                               .Set("train_end_time", trainIn.TrainEndTime)
                               .Set("departure_date", trainIn.DepartureDate)
-                              .Set("updated_at", DateTime.UtcNow);
+                              .Set("updated_at", DateTime.UtcNow.AddHours(5).AddMinutes(30));
 
 
                 await _train.UpdateOneAsync(filter, update);

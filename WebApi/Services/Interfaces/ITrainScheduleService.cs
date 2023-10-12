@@ -15,7 +15,7 @@ namespace EAD_WebService.Services.Interfaces
         //get one train schedule service method
         Task<ServiceResponse<Train>> getTrainSchedule(string id);
         //get all train schedules service method
-        Task<ServiceResponse<List<Train>>> getTrainSchedule();
+        Task<ServiceResponse<List<Train>>> getTrainSchedule(TrainFilters filters);
         //update train schedule service method
         Task<ServiceResponse<EmptyData>> updateTrainSchedule(string id, Train trainIn);
         //remove train schedule service method
@@ -23,13 +23,13 @@ namespace EAD_WebService.Services.Interfaces
 
         //add reservation service method
         Task<bool> addReservation(string trainId, string reservationId);
-            //remove reservation service method
+        //remove reservation service method
         Task<bool> removeReservation(string trainId, string reservationId);
-            //updatet train schedule status service method
+        //updatet train schedule status service method
         Task<ServiceResponse<EmptyData>> publishTrainSchedule(string id);
-            //updatet train schedule status service method
+        //updatet train schedule status service method
         Task<ServiceResponse<EmptyData>> unpublishTrainSchedule(string id);
-            //activate train schedule service method
+        //activate train schedule service method
         Task<ServiceResponse<EmptyData>> activateTrainSchedule(string id);
         //deactivate train schedule service method
         Task<ServiceResponse<EmptyData>> deactivateTrainSchedule(string id);
@@ -39,7 +39,7 @@ namespace EAD_WebService.Services.Interfaces
         Task<ServiceResponse<EmptyData>> removeTickets(string trainid, string ticketsId);
         //update tickets service method
         Task<ServiceResponse<EmptyData>> updateTickets(string trainid, string ticketsId, Tickets ticketsIn);
-    //update tickets availability service method
+        //update tickets availability service method
         Task<ServiceResponse<EmptyData>> updateTicketsAvailability(string trainid, string ticketsId, int count);
 
 

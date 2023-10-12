@@ -71,34 +71,163 @@ namespace EAD_WebService.Services.Core
 
         }
 
-        async Task<ServiceResponse<List<Reservation>>> IReservationService.GetReservation(BasicFilters filters)
+        [Obsolete]
+        async Task<ServiceResponse<List<Reservation>>> IReservationService.GetReservation(BasicFilters filters, string userId)
         {
             try
             {
 
+                // BsonDocument train = new BsonDocument
+                //             {
+                //                 { "$lookup", new BsonDocument
+                //                     {
+                //                         { "from", "trains" },
+                //                         { "localField", "reservedTrainId" },
+                //                         { "foreignField", "_id" },
+                //                         { "as", "train" }
+                //                     }
+                //                 }
+                //             };
 
-                //get all the reservations
-                var reservations = await _reservation.Find(Reservation => true).ToListAsync();
-                //limit the reservations to the number of records specified in the filters
-                //reservations = reservations.Skip(filters.Page).Take(filters.PageSize).ToList();
-                //return the reservations make order by the sortby field and order specified in the filters
 
 
-                var pipeline = new BsonDocument[]
-{
-    BsonDocument.Parse("{ $lookup: { from: 'train', localField: 'reserved_train', foreignField: '_id', as: 'reserved_train' } }"),
-    BsonDocument.Parse("{ $lookup: { from: 'user', localField: 'reserved_user', foreignField: '_id', as: 'reserved_train' } }"),
-    // BsonDocument.Parse("{ $lookup: { from: 'users.', localField: 'TicketType', foreignField: '_id', as: 'TicketType' } }"),
+                BsonDocument pipLineStage1 = new BsonDocument{
+                    { "$match", new BsonDocument
+                        {
+                            { "reserved_user",new ObjectId("6523c287436b168fdcc86244") }
+                        }
+                    }
+                };
 
-};
+                BsonDocument piplineStage2 = new BsonDocument{
+                    { "$lookup", new BsonDocument
+                        {
+                            { "from", "train" },
+                            { "localField", "reserved_train" },
+                            { "foreignField", "_id" },
+                            { "as", "train" }
+                        }
+                    }
+                };
+                BsonDocument piplineStage3 = new BsonDocument{
+                    { "$lookup", new BsonDocument
+                        {
+                            { "from", "user" },
+                            { "localField", "reserved_user" },
+                            { "foreignField", "_id" },
+                            { "as", "user" }
+                        }
+                    }
+                };
+                BsonDocument piplineStage4 = new BsonDocument {
+                    { "$unwind", "$train" },
 
-                var results = _reservation.Aggregate<Reservation>(pipeline).ToList();
+                   };
+                BsonDocument piplineStage5 = new BsonDocument {
+                    { "$unwind", "$user" },
+
+                   };
+
+
+                BsonDocument piplineStage6 = new BsonDocument {
+                    { "$match", new BsonDocument
+                        {
+                            { "train.$tickets", new BsonDocument
+                                {
+                                    { "$elemMatch", new BsonDocument
+                                        {
+                                            { "_id", "$ticket_type" }
+
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                   };
+                //    BsonDocument piplineStage6 = new BsonDocument {
+                //     { "$project" },
+
+                //    };
+                //         BsonDocument piplineStage4 = new BsonDocument{
+                //             { "$project", new BsonDocument
+                //     {
+                //         { "_id", 1 },
+                //         { "reserved_date", 1 },
+                //         { "reserved_seat_count", 1 },
+                //         { "reservation_price", 1 },
+                //         // { "ticket_type", 1 },
+                //         { "train", 1 },
+                //         // { "user", 1 },
+                //         // { "reserved_train", 1 },
+                //         // { "reserved_user", 1 },
+                //         { "reserved_train", new BsonDocument
+                //             {
+                //                 { "$arrayElemAt", new BsonDocument
+                //                     {
+                //                         { "input", "$train" },
+                //                         { "at", 0 }
+                //                     }
+                //                 }
+                //             }
+                //         }
+                //         //  {
+                //         //     "user", new BsonDocument
+                //         //     {
+                //         //         { "$arrayElemAt", new BsonDocument
+                //         //             {
+                //         //                 { "input", "$user" },
+                //         //                 { "at", 0 }
+
+                //         //             }
+                //         //         }
+                //         //     }
+                //         // },
+                //     }
+                // }
+
+                //         };
+
+                //             BsonDocument piplineStage5 = new BsonDocument{
+                //              new BsonDocument
+                // {
+                //     { "$match", new BsonDocument
+                //         {
+                //             { "train.$tickets", new BsonDocument
+                //                 {
+                //                     { "$elemMatch", new BsonDocument
+                //                         {
+                //                             { "_id", new BsonObjectId("65274b91cf6f6485c293901e") }
+                //                         }
+                //                     }
+                //                 }
+                //             }
+                //         }
+                //     }
+                // }
+                //             };
+
+
+
+                BsonDocument[] pipeline = new BsonDocument[
+
+                ] { pipLineStage1, piplineStage2, piplineStage3, piplineStage4, piplineStage5, piplineStage6 };
+                List<BsonDocument> pipelineList = _reservation.Aggregate<BsonDocument>(pipeline).ToList();
+                foreach (var item in pipelineList)
+                {
+                    Console.WriteLine(item);
+                }
+
+
 
                 return new ServiceResponse<List<Reservation>>
                 {
                     Message = "Bookings retrieved successfully",
                     Status = true,
-                    Data = reservations
+                    Data = new List<Reservation>()
+                    {
+
+                    }
                 };
 
                 // return new ServiceResponse<List<Reservation>>

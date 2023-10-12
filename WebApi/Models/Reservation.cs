@@ -50,11 +50,11 @@ namespace EAD_WebService.Models
 
         //auto generate time stamp for created at and updated at 
         [BsonElement("created_at")]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow.AddHours(5).AddMinutes(30);
 
 
         [BsonElement("updated_at")]
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow.AddHours(5).AddMinutes(30);
 
 
     }
