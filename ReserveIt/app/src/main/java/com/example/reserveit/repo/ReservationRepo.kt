@@ -3,9 +3,9 @@ package com.example.reserveit.repo
 import com.example.reserveit.api.ReservationApi
 import com.example.reserveit.models.reservation.Reservation
 import retrofit2.Response
-import javax.inject.Inject
 
-class ReservationRepo @Inject constructor(
+
+class ReservationRepo(
     private val reservationApi: ReservationApi
 ){
 

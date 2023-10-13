@@ -1,6 +1,6 @@
 package com.example.reserveit.dto.auth
 
 data class LoginRequestBody(
-    val username: String,
+    val email: String,
     val password: String
 )

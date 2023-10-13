@@ -1,27 +1,20 @@
 package com.example.reserveit.models.login
 
-import com.beust.klaxon.*
+import com.google.gson.annotations.SerializedName
 
-private val klaxon = Klaxon()
 
 data class LoginModel (
     val data: Data,
     val status: Boolean,
     val message: String
-) {
-    public fun toJson() = klaxon.toJsonString(this)
-
-    companion object {
-        public fun fromJson(json: String) = klaxon.parse<LoginModel>(json)
-    }
-}
+)
 
 data class Data (
     val token: String,
     val firstName: String,
     val lastName: String,
 
-    @Json(name = "avatarUrl")
+    @SerializedName( "avatarUrl")
     val avatarURL: String,
 
     val role: String
