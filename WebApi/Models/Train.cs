@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
@@ -13,6 +14,7 @@ namespace EAD_WebService.Models
 
         [BsonElement("train_name")]
         [BsonRequired]
+
         public string TrainName { get; set; } = null!;
 
 

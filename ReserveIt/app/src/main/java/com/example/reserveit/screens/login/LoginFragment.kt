@@ -6,7 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.reserveit.MainActivity
 import com.example.reserveit.R
@@ -33,12 +35,44 @@ class LoginFragment : Fragment() {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
 
         val authRepo = AuthRepo()
-        loginViewModel = LoginViewModel(authRepo)
+        loginViewModel = LoginViewModel(authRepo, requireContext())
         (activity as MainActivity?)!!.hideBottomNavigationView()
 
         //navigation back icon on click
         binding!!.topAppBar.setNavigationOnClickListener {
             findNavController().popBackStack()
+        }
+        
+        binding!!.emailEditText.doOnTextChanged { text, start, before, count ->
+
+            if (text!!.isNotEmpty()) {
+                binding!!.emailLayout.error = null
+
+                val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
+                val isValidEmail = text.matches(emailPattern.toRegex())
+
+                if (isValidEmail) {
+                    // Text is a valid email address
+                    // Your further logic here
+                } else {
+                    binding!!.emailLayout.error = "Invalid email address"
+                }
+            } else {
+                binding!!.emailLayout.error = "Email is required"
+            }
+        }
+
+        binding!!.passwordEditText.doOnTextChanged { text, start, before, count ->
+            if (text!!.isNotEmpty()) {
+
+                if(text.length < 6){
+                    binding!!.password.error = "Password must be at least 6 characters"
+                }else{
+                    binding!!.password.error = null
+                }
+            } else {
+                binding!!.password.error = "Password is required"
+            }
         }
 
         binding!!.topAppBar.setOnMenuItemClickListener { menuItem ->
@@ -51,14 +85,44 @@ class LoginFragment : Fragment() {
             }
         }
         binding!!.loginBtn.setOnClickListener {
-            var  loin = LoginRequestBody(binding!!.emailEditText.text.toString(), binding!!.passwordEditText.text.toString())
-            Log.d("LOGD", binding!!.emailEditText.text.toString())
-            Log.d("LOGD", binding!!.passwordEditText.text.toString())
+            var  loginData = LoginRequestBody(binding!!.emailEditText.text.toString(), binding!!.passwordEditText.text.toString())
 
-            loginViewModel.login(loin)
+            binding!!.errorText.visibility = View.GONE
+            binding!!.errorText.error = ""
+            if (binding!!.emailEditText.text.toString().isEmpty() ) {
+                binding!!.emailLayout.error = "Email is required"
+                return@setOnClickListener
+            }
+            if (binding!!.passwordEditText.text.toString().isEmpty()) {
+                binding!!.password.error = "Password is required"
+                return@setOnClickListener
+            }
+            loginViewModel.login(loginData)
         }
 
+        loginViewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
+            if (isLoading) {
+                binding!!.loginBtn.isEnabled = false
+                binding!!.loginBtn.text = ""
+                binding!!.btnCircleProgress.visibility = View.VISIBLE
+            } else {
+                binding!!.loginBtn.isEnabled = true
+                binding!!.loginBtn.text = "Login"
+                binding!!.btnCircleProgress.visibility = View.GONE
+            }
+        })
 
+        loginViewModel.loginResponse.observe(viewLifecycleOwner, Observer { loginResponse ->
+            if (loginResponse != null) {
+                Log.d("ggview", loginResponse.status.toString())
+                if(loginResponse.status === true){
+                    findNavController().popBackStack(R.id.action_loginFragment_to_profileFragment, false)
+                }else{
+                    binding!!.errorText.visibility = View.VISIBLE
+                    binding!!.errorText.error = loginResponse.message
+                }
+            }
+        })
         return binding!!.root
     }
 

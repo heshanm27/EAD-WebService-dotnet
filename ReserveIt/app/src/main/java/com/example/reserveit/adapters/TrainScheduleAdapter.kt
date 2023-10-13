@@ -9,16 +9,19 @@ import androidx.cardview.widget.CardView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reserveit.R
-import com.example.reserveit.models.train_schedule.TrainSchedule
+import com.example.reserveit.models.train_schedule.TrainData
+import com.example.reserveit.models.train_schedule.TrainScheduleModel
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.TimeZone
 
-class TrainScheduleAdapter(private var trainScheduleList: List<TrainSchedule>) :RecyclerView.Adapter<TrainScheduleAdapter.ReservationViewHolder>() {
+class TrainScheduleAdapter(private var trainScheduleList: List<TrainData>) :RecyclerView.Adapter<TrainScheduleAdapter.ReservationViewHolder>() {
 
         inner class ReservationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val start = itemView.findViewById<TextView>(R.id.from_station)
             val end = itemView.findViewById<TextView>(R.id.to_station)
             val departTime = itemView.findViewById<TextView>(R.id.depart_time)
             val arriveTime = itemView.findViewById<TextView>(R.id.arrive_time)
-            val price = itemView.findViewById<TextView>(R.id.ticket_price)
             val card = itemView.findViewById<CardView>(R.id.card_main_item)
         }
 
@@ -33,16 +36,18 @@ class TrainScheduleAdapter(private var trainScheduleList: List<TrainSchedule>) :
     }
 
     override fun onBindViewHolder(holder: ReservationViewHolder, position: Int) {
-        val reservation = trainScheduleList[position]
-        Log.d("reservation", reservation.toString())
-        holder.start?.text = reservation.startStation
-        holder.end?.text = reservation.endStation
-        holder.departTime?.text = reservation.departTime
-        holder.arriveTime?.text = reservation.arriveTime
-        holder.price?.text = reservation.price
+        val trainData = trainScheduleList[position]
+        Log.d("reservation", trainData.toString())
+        holder.start?.text = trainData.startStation
+        holder.end?.text = trainData.endStation
+
+        holder.departTime?.text = trainData.trainStartTime
+        holder.arriveTime?.text = trainData.trainEndTime
+
         holder.card.setOnClickListener {
-//            val action = HomeFragmentDirections.actionHomeFragmentToReservationDetailsFragment(reservation)
             holder.card.findNavController().navigate(R.id.action_homeFragment_to_reservation_details_Fragment)
         }
+
+
     }
 }

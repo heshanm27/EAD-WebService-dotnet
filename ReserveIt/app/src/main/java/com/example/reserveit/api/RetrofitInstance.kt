@@ -10,6 +10,9 @@ object RetrofitInstance {
         private val retrofit by lazy {
             val logging = HttpLoggingInterceptor()
             logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+            logging.setLevel(HttpLoggingInterceptor.Level.HEADERS);
+
             Retrofit.Builder()
                 .baseUrl("http://10.0.2.2:5238/api/v1/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -19,6 +22,10 @@ object RetrofitInstance {
 
         val authApi: AuthApi by lazy {
             retrofit.create(AuthApi::class.java)
+        }
+
+        val trainScheduleApi: TrainScheduleApi by lazy {
+            retrofit.create(TrainScheduleApi::class.java)
         }
 
 }

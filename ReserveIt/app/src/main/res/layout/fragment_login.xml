@@ -52,16 +52,18 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_gravity="center"
-        android:gravity="center_vertical"
+        android:gravity="top"
+
         >
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/emailLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
         app:endIconMode="clear_text"
+        app:errorEnabled="true"
         android:hint="Email">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -69,6 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
+
             />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -80,6 +83,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         app:endIconMode="password_toggle"
+        app:errorEnabled="true"
         android:hint="Password">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -91,19 +95,42 @@
             />
 
     </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/design_default_color_error"
+            android:textSize="12sp"
+            android:layout_marginTop="8dp"
+            android:id="@+id/error_text"
+            android:visibility="gone"
 
+            />
 
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
     <Button
         style="@style/Widget.Material3.Button.TonalButton"
-
         android:id="@+id/login_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
         android:textAppearance="?attr/textAppearanceButton"
         android:text="Login"
+        android:visibility="visible"
 
-        />
+    />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/btn_circle_progress"
+        android:layout_width="2dp"
+        android:layout_height="2dp"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:visibility="invisible"
+
+        app:indicatorColor="@color/md_theme_dark_inverseOnSurface"
+    />
+</FrameLayout>
     </LinearLayout>
 <!--    <Button-->
 <!--        style="@style/Widget.Material3.Button.TextButton"-->

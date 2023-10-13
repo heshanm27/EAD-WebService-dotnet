@@ -2,7 +2,7 @@ package com.example.reserveit.screens.resrevation
 
 import androidx.lifecycle.ViewModel
 import com.example.reserveit.models.reservation.Reservation
-import com.example.reserveit.models.train_schedule.TrainSchedule
+
 
 class ResrevationViewModel : ViewModel() {
 

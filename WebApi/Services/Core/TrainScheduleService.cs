@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Reflection.Metadata;
+using EAD_WebService.Dto.Train;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -70,7 +71,7 @@ namespace EAD_WebService.Services.Core
             }
         }
 
-        public async Task<ServiceResponse<List<Train>>> getTrainSchedule(TrainFilters filters)
+        public async Task<ServiceResponse<List<TrainGetReponseDto>>> getTrainSchedule(TrainFilters filters)
         {
 
             try
@@ -105,17 +106,36 @@ namespace EAD_WebService.Services.Core
                 }
                 var trains = await _train.Find(filter).Sort(sort).Skip((filters.Page - 1) * filters.PageSize).Limit(filters.PageSize).ToListAsync();
 
-                return new ServiceResponse<List<Train>>
+                List<TrainGetReponseDto> formattedTrains = trains.Select(train => new TrainGetReponseDto
+                {
+                    Id = train.Id,
+                    TrainName = train.TrainName,
+                    TrainNumber = train.TrainNumber,
+                    StartStation = train.StartStation,
+                    EndStation = train.EndStation,
+                    DepartureDate = train.DepartureDate.ToString("yyyy-MM-dd"),
+                    TrainStartTime = train.TrainStartTime.ToString("HH:mm tt"),
+                    TrainEndTime = train.TrainEndTime.ToString("HH:mm tt"),
+                    Tickets = train.Tickets,
+                    Reservations = train.Reservations,
+                    IsActive = train.IsActive,
+                    IsPublished = train.IsPublished,
+
+
+                    // ... other properties
+                }).ToList();
+
+                return new ServiceResponse<List<TrainGetReponseDto>>
                 {
                     Message = "Trains retrieved successfully",
                     Status = true,
-                    Data = trains
+                    Data = formattedTrains
                 };
 
             }
             catch (MongoException)
             {
-                return new ServiceResponse<List<Train>>
+                return new ServiceResponse<List<TrainGetReponseDto>>
                 {
                     Data = null,
                     Message = "Train retrive failed",
@@ -124,7 +144,7 @@ namespace EAD_WebService.Services.Core
             }
             catch (Exception e)
             {
-                return new ServiceResponse<List<Train>>
+                return new ServiceResponse<List<TrainGetReponseDto>>
                 {
                     Message = e.Message,
                     Status = false,

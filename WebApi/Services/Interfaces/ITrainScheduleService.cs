@@ -5,6 +5,8 @@
 */
 
 
+using EAD_WebService.Dto.Train;
+
 namespace EAD_WebService.Services.Interfaces
 {
     public interface ITrainScheduleService
@@ -15,7 +17,7 @@ namespace EAD_WebService.Services.Interfaces
         //get one train schedule service method
         Task<ServiceResponse<Train>> getTrainSchedule(string id);
         //get all train schedules service method
-        Task<ServiceResponse<List<Train>>> getTrainSchedule(TrainFilters filters);
+        Task<ServiceResponse<List<TrainGetReponseDto>>> getTrainSchedule(TrainFilters filters);
         //update train schedule service method
         Task<ServiceResponse<EmptyData>> updateTrainSchedule(string id, Train trainIn);
         //remove train schedule service method

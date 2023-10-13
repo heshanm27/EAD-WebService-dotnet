@@ -24,9 +24,9 @@ namespace EAD_WebService.Controllers
 
         //This API provides all train shedules
         [HttpGet]
-        public async Task<ActionResult<List<Train>>> Get([FromQuery] TrainFilters filters)
+        public async Task<ActionResult<List<TrainGetReponseDto>>> Get([FromQuery] TrainFilters filters)
         {
-            ServiceResponse<List<Train>> response = await _trainService.getTrainSchedule(filters);
+            ServiceResponse<List<TrainGetReponseDto>> response = await _trainService.getTrainSchedule(filters);
 
             if (!response.Status) return BadRequest(response);
             return Ok(response);
