@@ -11,6 +11,11 @@ import com.example.reserveit.MainActivity
 import com.example.reserveit.R
 import com.example.reserveit.databinding.FragmentReservationDetailsBinding
 
+/*
+* File: ReservationDetailsFragment.kt
+* Author:
+* Description: This class is used to display reservation details.
+* */
 
 class ReservationDetailsFragment : Fragment() {
 

@@ -7,6 +7,12 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
+/*
+* File: TrainScheduleAPI.kt
+* Author:
+* Description: This class is used to call APIs for Reservations.
+* */
+
 interface TrainScheduleApi {
     @GET("/reservation")
     fun getTrainSchedule(@Query("Page") page: Int = 1,

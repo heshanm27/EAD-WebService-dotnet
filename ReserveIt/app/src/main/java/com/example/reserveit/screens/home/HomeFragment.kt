@@ -17,6 +17,11 @@ import com.google.android.material.datepicker.*
 import com.google.android.material.datepicker.CalendarConstraints.DateValidator
 import java.util.*
 
+/*
+* File: HomeFragment.kt
+* Author:
+* Description: This class is used to display Home Screen.
+* */
 
 class HomeFragment : Fragment() {
     private var binding: FragmentHomeBinding? = null

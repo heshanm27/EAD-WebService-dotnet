@@ -2,6 +2,11 @@ package com.example.reserveit.models.login
 
 import com.google.gson.annotations.SerializedName
 
+/*
+* File: LoginModel.kt
+* Author:
+* Description: This class is used to store login information.
+* */
 
 data class LoginModel (
     val data: Data,

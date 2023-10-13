@@ -8,6 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.reserveit.R
 
+/*
+* File: PaymentFragment.kt
+* Author:
+* Description: This class is used to display payment screen.
+* */
+
 class PaymentFragment : Fragment() {
 
     companion object {

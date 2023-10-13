@@ -8,6 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.reserveit.R
 
+/*
+* File: SignUpFragment.kt
+* Author:
+* Description: This class is used to display sign up screen.
+* */
+
 class SignUpFragment : Fragment() {
 
     companion object {

@@ -14,7 +14,11 @@ import com.example.reserveit.databinding.FragmentLoginBinding
 import com.example.reserveit.dto.auth.LoginRequestBody
 import com.example.reserveit.repo.AuthRepo
 
-
+/*
+* File: BookedDetailsFragment.kt
+* Author:
+* Description: This class is used to display Login screen.
+* */
 
 
 class LoginFragment : Fragment() {

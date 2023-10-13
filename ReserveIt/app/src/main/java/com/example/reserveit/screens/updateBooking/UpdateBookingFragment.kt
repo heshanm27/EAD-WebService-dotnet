@@ -13,6 +13,12 @@ import com.example.reserveit.databinding.FragmentReservationDetailsBinding
 import com.example.reserveit.databinding.FragmentUpdateBookingBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
+/*
+* File: UpdateBookingFragment.kt
+* Author:
+* Description: This class is used to display "Update booking" screen.
+* */
+
 class UpdateBookingFragment : Fragment() {
 
     private var binding : FragmentUpdateBookingBinding? = null

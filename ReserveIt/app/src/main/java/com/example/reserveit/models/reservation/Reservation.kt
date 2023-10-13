@@ -1,5 +1,11 @@
 package com.example.reserveit.models.reservation
 
+/*
+* File: Reservation.kt
+* Author:
+* Description: This model is used to store reservation information.
+* */
+
 data class Reservation(
     val id: String,
     val trainScheduleId: String,

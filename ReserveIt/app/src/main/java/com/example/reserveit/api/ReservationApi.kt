@@ -10,6 +10,13 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
+
+/*
+* File: ReservationAPI.kt
+* Author:
+* Description: This class is used to call APIs for Reservations.
+* */
+
 interface ReservationApi {
 
     @GET("/reservation")
