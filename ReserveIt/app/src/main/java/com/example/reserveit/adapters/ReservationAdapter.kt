@@ -11,6 +11,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.reserveit.R
 import com.example.reserveit.models.reservation.Reservation
 
+/*
+* File: ReservationAdapter.kt
+* Author:
+* Description: This adapter is used to render the reservation list.
+* */
+
+
 class ReservationAdapter(
     private var bookedList: List<Reservation>,
 ):RecyclerView.Adapter<ReservationAdapter.ReservationViewHolder>() {

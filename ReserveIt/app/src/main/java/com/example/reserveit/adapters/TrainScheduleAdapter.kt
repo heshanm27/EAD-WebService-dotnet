@@ -11,6 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.reserveit.R
 import com.example.reserveit.models.train_schedule.TrainSchedule
 
+/*
+* File: TrainScheduleAdapter.kt
+* Author:
+* Description: This adapter is used to render the train schedule list.
+* */
+
 class TrainScheduleAdapter(private var trainScheduleList: List<TrainSchedule>) :RecyclerView.Adapter<TrainScheduleAdapter.ReservationViewHolder>() {
 
         inner class ReservationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
