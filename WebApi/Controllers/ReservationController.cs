@@ -25,17 +25,27 @@ namespace EAD_WebService.Controllers
             _reservationService = reservationService;
         }
 
-        [HttpGet("all/{id}")]
-
-        public async Task<ActionResult<List<Reservation>>> Get([FromQuery] BasicFilters filters, string id)
+        [HttpGet("upcoming/{id}")]
+        public async Task<ActionResult<ServiceResponse<List<ReservationSuceessResponse>>>> UpcomingReservation([FromQuery] BasicFilters filters, string id)
         {
+            Console.WriteLine(filters.Order);
+            ServiceResponse<List<ReservationSuceessResponse>> response = await _reservationService.GetUpcomingReservation(filters, id);
 
-            ServiceResponse<List<Reservation>> response = await _reservationService.GetReservation(filters, id);
             if (!response.Status) return BadRequest(response);
+
             return Ok(response);
         }
 
-        //API endpoint for getting one reservation for given reservation id
+        [HttpGet("past/{id}")]
+        public async Task<ActionResult<ServiceResponse<List<ReservationSuceessResponse>>>> GetPastReservation([FromQuery] BasicFilters filters, string id)
+        {
+            ServiceResponse<List<ReservationSuceessResponse>> response = await _reservationService.GetPastReservation(filters, id);
+
+            if (!response.Status) return BadRequest(response);
+
+            return Ok(response);
+        }
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Reservation>> Get(string id)
@@ -61,9 +71,8 @@ namespace EAD_WebService.Controllers
                 ReservedTrainId = reservationDto.ReservedTrainId,
                 ReservedSeatCount = reservationDto.ReservationSeatCount,
                 ReservedUserId = reservationDto.ReservedUserId,
-                ReservationPrice = reservationDto.ReservationPrice,
                 ReservedDate = ReservationDate.AddHours(5).AddMinutes(30),
-                TicketType = reservationDto.TicketType
+                Ticket = reservationDto.Ticket
             };
 
             // Console.WriteLine(reservation.ReservedUserId);
@@ -89,9 +98,9 @@ namespace EAD_WebService.Controllers
                 ReservedTrainId = reservationIn.ReservedTrainId,
                 ReservedSeatCount = reservationIn.ReservationSeatCount,
                 ReservedUserId = reservationIn.ReservedUserId,
-                ReservationPrice = reservationIn.ReservationPrice,
                 ReservedDate = ReservationDate.AddHours(5).AddMinutes(30),
-                TicketType = reservationIn.TicketType
+                Ticket = reservationIn.Ticket
+
             };
             ServiceResponse<EmptyData> response = await _reservationService.UpdateReservation(id, reservation);
 
