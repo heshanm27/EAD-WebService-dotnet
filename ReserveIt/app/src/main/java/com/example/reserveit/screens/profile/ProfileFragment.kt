@@ -11,6 +11,12 @@ import com.example.reserveit.R
 import com.example.reserveit.databinding.FragmentLoginBinding
 import com.example.reserveit.databinding.FragmentProfileBinding
 
+/*
+* File: ProfileFragment.kt
+* Author:
+* Description: This class is used to display user profile.
+* */
+
 class ProfileFragment : Fragment() {
 
     private var binding: FragmentProfileBinding ?= null

@@ -11,6 +11,12 @@ import com.example.reserveit.MainActivity
 import com.example.reserveit.databinding.FragmentBookedDetailsBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
+/*
+* File: BookedDetailsFragment.kt
+* Author:
+* Description: This class is used to display all bookings.
+* */
+
 class BookedDetailsFragment : Fragment() {
 
 

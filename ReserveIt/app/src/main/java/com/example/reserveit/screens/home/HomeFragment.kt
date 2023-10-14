@@ -25,6 +25,11 @@ import java.time.LocalDate
 import java.util.Calendar
 import java.util.TimeZone
 
+/*
+* File: HomeFragment.kt
+* Author:
+* Description: This class is used to display Home Screen.
+* */
 
 class HomeFragment : Fragment() {
     private var binding: FragmentHomeBinding? = null

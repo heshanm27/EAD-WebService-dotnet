@@ -10,6 +10,12 @@ import com.example.reserveit.MainActivity
 import com.example.reserveit.databinding.FragmentUpdateBookingBinding
 
 
+/*
+* File: UpdateBookingFragment.kt
+* Author:
+* Description: This class is used to display "Update booking" screen.
+* */
+
 class UpdateBookingFragment : Fragment() {
 
     private var binding : FragmentUpdateBookingBinding? = null

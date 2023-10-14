@@ -7,6 +7,12 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
 
+/*
+* File: AuthAPI.kt
+* Author:
+* Description: This class is used to call APIs for authorization.
+* */
+
 interface AuthApi {
 
     @POST("auth/login")

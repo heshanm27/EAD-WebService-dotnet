@@ -13,6 +13,11 @@ import com.example.reserveit.databinding.FragmentResrevationBinding
 
 import com.example.reserveit.models.reservation.Reservation
 
+/*
+* File: ReservationFragment.kt
+* Author:
+* Description: This class is used to display all reservations.
+* */
 
 class ResrevationFragment : Fragment() {
 
