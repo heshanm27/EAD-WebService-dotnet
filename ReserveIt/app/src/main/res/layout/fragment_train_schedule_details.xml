@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".screens.reservationDetails.ReservationDetailsFragment"
+    tools:context=".screens.trainScheduleDetails.TrainScheduleDetailsFragment"
     android:orientation="vertical">
 
 <com.google.android.material.appbar.AppBarLayout
@@ -48,18 +48,18 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/textView_booked_1"
+                android:id="@+id/start_end_station"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:fontFamily="sans-serif-black"
-                android:text="Kandy - Badulla"
+                android:text="@string/start_end_station_default_value"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView_booked_2"
+                android:id="@+id/train_departure_date"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
@@ -68,7 +68,7 @@
                 android:text="2023/10/08"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView_booked_1" />
+                app:layout_constraintTop_toBottomOf="@+id/start_end_station" />
 
             <ImageView
                 android:id="@+id/imageView6"
@@ -106,10 +106,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:fontFamily="sans-serif-light"
-                android:text="Train Name"
+                android:text="Train Details"
                 />
             <TextView
-                android:id="@+id/train_name"
+                android:id="@+id/train_basic_details"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -145,7 +145,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-
+                            android:textColor="@color/md_theme_light_primary"
                         android:text="12:45PM"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -173,6 +173,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:text="15:09PM"
+                        android:textColor="@color/md_theme_light_primary"
                         android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
@@ -227,28 +228,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:singleLine="true"
+                    app:singleSelection="true"
                     >
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chip1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Ac"/>
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chip2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Non A/C"/>
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chip3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="First Class"/>
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chip4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Second Class"/>
-                    <!-- Chips can be declared here, or added dynamically. -->
+
+
 
                 </com.google.android.material.chip.ChipGroup>
             </HorizontalScrollView>
@@ -257,17 +240,22 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/total_price_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="14dp"
         android:layout_marginEnd="8dp"
         app:cardCornerRadius="8dp"
-        app:contentPadding="10dp">
+        app:contentPadding="10dp"
+        android:visibility="gone"
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+
+            >
 
             <TextView
                 android:id="@+id/textView_booked_9"
@@ -280,13 +268,13 @@
                 android:text="Total"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/textView_booked_16"
+                app:layout_constraintEnd_toStartOf="@+id/total_price"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
-                android:id="@+id/textView_booked_16"
+                android:id="@+id/total_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -298,7 +286,9 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintVertical_bias="0.0"
+
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
@@ -315,13 +305,14 @@
 
         <Button
             style="@style/Widget.Material3.Button.IconButton.Filled"
-            android:id="@+id/checkOut_action"
+            android:id="@+id/checkOut_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginLeft="10dp"
             android:text="Check Out"
             android:padding="15dp"
+
             />
     </LinearLayout>
 

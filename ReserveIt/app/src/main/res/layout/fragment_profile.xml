@@ -17,12 +17,13 @@
 
         <com.airbnb.lottie.LottieAnimationView
             android:layout_width="match_parent"
-            android:layout_height="400dp"
-            app:lottie_rawRes="@raw/profile"
+            android:layout_height="300dp"
+            app:lottie_rawRes="@raw/avatar"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
 
             />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -35,6 +36,7 @@
             />
         <Button
             style="@style/Widget.Material3.Button.OutlinedButton"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"

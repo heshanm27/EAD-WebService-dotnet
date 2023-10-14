@@ -6,12 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
 import com.example.reserveit.MainActivity
-import com.example.reserveit.R
-import com.example.reserveit.databinding.FragmentReservationDetailsBinding
 import com.example.reserveit.databinding.FragmentUpdateBookingBinding
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+
 
 class UpdateBookingFragment : Fragment() {
 

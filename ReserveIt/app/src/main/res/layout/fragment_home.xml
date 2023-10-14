@@ -145,12 +145,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+            android:gravity="center"
             android:layout_gravity="center"
+            android:orientation="vertical"
 
             >
 
-
-<!--             Bottom sheet contents. -->
+                <!--             Bottom sheet contents. -->
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/bottom_sheet_reservations_recycler_view"
@@ -160,7 +161,51 @@
                 android:orientation="vertical"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
+                android:visibility="gone"
                 />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="20dp"
+                android:id="@+id/bottom_sheet_no_reservations_layout"
+                >
+            <TextView
+                android:id="@+id/bottom_sheet_no_reservations_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Use the search to find schedules"
+                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                android:gravity="center"
+                android:layout_marginTop="20dp"
+
+                />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottie_no_reservations_animation_view"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                app:lottie_rawRes="@raw/location"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                android:layout_gravity="top"
+                android:layout_marginTop="20dp"
+                />
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/lottie_search_animation_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    app:lottie_rawRes="@raw/search"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    android:layout_gravity="top"
+                    android:layout_marginTop="20dp"
+                    android:visibility="gone"
+
+
+                    />
+            </LinearLayout>
 
             <com.google.android.material.bottomsheet.BottomSheetDragHandleView
                 android:id="@+id/drag_handle"

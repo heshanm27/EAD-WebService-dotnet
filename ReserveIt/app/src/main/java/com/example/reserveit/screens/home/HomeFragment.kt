@@ -132,9 +132,32 @@ class HomeFragment : Fragment() {
 
 
     viewModel.trainScheduleList.observe(viewLifecycleOwner, Observer { trainScheduleList ->
+        Log.d("HomeFragment", "trainScheduleList: $trainScheduleList")
+        if(trainScheduleList.isEmpty()) {
+            binding!!.bottomSheetNoReservationsLayout.visibility = View.VISIBLE
+            binding!!.bottomSheetReservationsRecyclerView.visibility = View.GONE
+        } else {
+            binding!!.bottomSheetNoReservationsLayout.visibility = View.VISIBLE
+            binding!!.bottomSheetReservationsRecyclerView.visibility = View.VISIBLE
+        }
 
         val adapter = TrainScheduleAdapter(trainScheduleList)
         recyclerView.adapter = adapter
+    })
+
+    viewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
+
+        if(isLoading) {
+            binding!!.bottomSheetNoReservationsTextView.visibility = View.GONE
+            binding!!.lottieNoReservationsAnimationView.visibility = View.GONE
+            binding!!.lottieSearchAnimationView.visibility = View.VISIBLE
+        } else {
+            binding!!.lottieSearchAnimationView.visibility = View.GONE
+            if(viewModel.trainScheduleList.value!!.isEmpty()) {
+                binding!!.bottomSheetNoReservationsTextView.visibility = View.VISIBLE
+                binding!!.lottieNoReservationsAnimationView.visibility = View.VISIBLE
+            }
+        }
     })
         // Observe the train schedule list
 //        viewModel.trainScheduleList.observe(viewLifecycleOwner, Observer { trainScheduleList ->

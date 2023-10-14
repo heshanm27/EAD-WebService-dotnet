@@ -14,12 +14,8 @@
             android:id="@+id/action_homeFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_reservation_details_Fragment"
-            app:destination="@id/reservation_details_Fragment"
-            app:enterAnim="@android:anim/fade_in"
-            app:exitAnim="@android:anim/fade_out"
-            app:popEnterAnim="@android:anim/fade_in"
-            app:popExitAnim="@android:anim/fade_out" />
+            android:id="@+id/action_homeFragment_to_trainScheduleDetailsFragment"
+            app:destination="@id/trainScheduleDetailsFragment" />
 
     </fragment>
     <fragment
@@ -74,15 +70,6 @@
             app:destination="@id/profileFragment" />
     </fragment>
     <fragment
-        android:id="@+id/reservation_details_Fragment"
-        android:name="com.example.reserveit.screens.reservationDetails.ReservationDetailsFragment"
-        android:label="fragment_reservation_details"
-        tools:layout="@layout/fragment_reservation_details" >
-        <action
-            android:id="@+id/action_reservation_details_Fragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/bookedDetailsFragment"
         android:name="com.example.reserveit.screens.bookedDetails.BookedDetailsFragment"
         android:label="fragment_booked_details"
@@ -102,5 +89,17 @@
         <action
             android:id="@+id/action_updateBookingFragment_to_bookedDetailsFragment"
             app:destination="@id/bookedDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/trainScheduleDetailsFragment"
+        android:name="com.example.reserveit.screens.trainScheduleDetails.TrainScheduleDetailsFragment"
+        android:label="fragment_train_schedule_details"
+        tools:layout="@layout/fragment_train_schedule_details" >
+        <action
+            android:id="@+id/action_trainScheduleDetailsFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <argument
+            android:name="train_details"
+            app:argType="com.example.reserveit.models.train_schedule.TrainData" />
     </fragment>
 </navigation>

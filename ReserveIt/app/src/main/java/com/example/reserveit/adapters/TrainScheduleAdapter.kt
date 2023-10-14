@@ -9,8 +9,11 @@ import androidx.cardview.widget.CardView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reserveit.R
+import com.example.reserveit.models.train_schedule.Ticket
 import com.example.reserveit.models.train_schedule.TrainData
 import com.example.reserveit.models.train_schedule.TrainScheduleModel
+import com.example.reserveit.screens.home.HomeFragment
+import com.example.reserveit.screens.home.HomeFragmentDirections
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.TimeZone
@@ -37,7 +40,7 @@ class TrainScheduleAdapter(private var trainScheduleList: List<TrainData>) :Recy
 
     override fun onBindViewHolder(holder: ReservationViewHolder, position: Int) {
         val trainData = trainScheduleList[position]
-        Log.d("reservation", trainData.toString())
+
         holder.start?.text = trainData.startStation
         holder.end?.text = trainData.endStation
 
@@ -45,7 +48,15 @@ class TrainScheduleAdapter(private var trainScheduleList: List<TrainData>) :Recy
         holder.arriveTime?.text = trainData.trainEndTime
 
         holder.card.setOnClickListener {
-            holder.card.findNavController().navigate(R.id.action_homeFragment_to_reservation_details_Fragment)
+
+            if(trainData != null) {
+                val action =
+                    HomeFragmentDirections.actionHomeFragmentToTrainScheduleDetailsFragment(
+                        trainData
+                    )
+
+                holder.card.findNavController().navigate(action)
+            }
         }
 
 

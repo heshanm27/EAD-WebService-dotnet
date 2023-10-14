@@ -14,10 +14,14 @@ class HomeViewModel(
 ): ViewModel() {
 
     private  val _trainScheduleList = MutableLiveData<List<TrainData>>()
+    private val _isLoading = MutableLiveData<Boolean>()
 
 
     val trainScheduleList: MutableLiveData<List<TrainData>>
         get() = _trainScheduleList
+
+    val isLoading: MutableLiveData<Boolean>
+        get() = _isLoading
 
 
      fun getTrainSchedule(
@@ -31,6 +35,7 @@ class HomeViewModel(
         viewModelScope.launch {
 
             try {
+                _isLoading.value = true
                 val response = trainSchedule.getTrainSchedules(
                     page,
                     pageSize,
@@ -51,6 +56,8 @@ class HomeViewModel(
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+            }finally {
+                _isLoading.value = false
             }
 
         }

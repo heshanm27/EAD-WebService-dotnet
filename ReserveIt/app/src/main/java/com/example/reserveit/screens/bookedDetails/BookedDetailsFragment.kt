@@ -8,9 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.reserveit.MainActivity
-import com.example.reserveit.R
 import com.example.reserveit.databinding.FragmentBookedDetailsBinding
-import com.example.reserveit.databinding.FragmentReservationDetailsBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class BookedDetailsFragment : Fragment() {

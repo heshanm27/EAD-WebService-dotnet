@@ -1,5 +1,9 @@
 package com.example.reserveit.models.train_schedule
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.RawValue
+
 
 data class TrainScheduleModel (
     val data: List<TrainData>,
@@ -7,6 +11,7 @@ data class TrainScheduleModel (
     val message: String
 )
 
+@Parcelize
 data class TrainData (
     val id: String,
     val trainName: String,
@@ -17,17 +22,16 @@ data class TrainData (
     val trainEndTime: String,
     val departureDate: String,
     val tickets: List<Ticket?>,
-    val reservations: List<Any?>,
+    val reservations: List<String?>,
     val isActive: Boolean,
     val isPublished: Boolean,
-    val createdAt: String,
-    val updatedAt: String
-)
+):Parcelable
 
+@Parcelize
 data class Ticket (
     val id: String,
     val ticketType: String,
     val ticketPrice: Long,
     val ticketCount: Long,
     val ticketBooked: Long
-)
+):Parcelable

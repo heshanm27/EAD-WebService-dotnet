@@ -28,4 +28,8 @@ object RetrofitInstance {
             retrofit.create(TrainScheduleApi::class.java)
         }
 
+     val reservationApi: ReservationApi by lazy {
+        retrofit.create(ReservationApi::class.java)
+    }
+
 }
