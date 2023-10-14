@@ -83,13 +83,23 @@ namespace EAD_WebService.Services.Core
             try
             {
 
-                var isExists = await _reservation.Find(Reservation => Reservation.Id == id).AnyAsync();
+                Reservation exitsReservation = await _reservation.Find(Reservation => Reservation.Id == id).FirstOrDefaultAsync();
 
-                if (!isExists)
+                if (exitsReservation == null)
                 {
                     return new ServiceResponse<EmptyData>
                     {
                         Message = "Booking not found",
+                        Status = false
+                    };
+                }
+                TimeSpan difference = exitsReservation.ReservedDate - DateTime.UtcNow;
+                Console.WriteLine(difference);
+                if (difference.TotalDays < 5)
+                {
+                    return new ServiceResponse<EmptyData>
+                    {
+                        Message = "You can't remove your booking if there are only 5 days or fewer left to the reservation date. ",
                         Status = false
                     };
                 }
@@ -117,16 +127,6 @@ namespace EAD_WebService.Services.Core
         {
             try
             {
-                // var Reservation = new Reservation
-                // {
-
-                //     ReservedTrainId = reservation.ReservedTrainId,
-                //     ReservedUserId = reservation.ReservedUserId,
-                //     ReservationPrice = reservation.ReservationPrice,
-                //     ReservedDate = reservation.ReservedDate,
-                //     ReservedSeatCount = reservation.ReservedSeatCount,
-
-                // };
 
                 var isExists = await _reservation.Find(Reservation => Reservation.Id == id).AnyAsync();
 
@@ -138,12 +138,17 @@ namespace EAD_WebService.Services.Core
                         Status = false
                     };
                 }
+
+                DateTime dateTime = DateTime.UtcNow;
                 var filter = Builders<Reservation>.Filter.Eq(Reservation => Reservation.Id, id);
                 var update = Builders<Reservation>.Update
                     .Set(Reservation => Reservation.ReservedDate, reservation.ReservedDate)
                     .Set(Reservation => Reservation.ReservedTrainId, reservation.ReservedTrainId)
                     .Set(Reservation => Reservation.ReservedUserId, reservation.ReservedUserId)
-                    .Set(Reservation => Reservation.ReservedSeatCount, reservation.ReservedSeatCount);
+                    .Set(Reservation => Reservation.ReservedSeatCount, reservation.ReservedSeatCount)
+                    .Set(Reservation => Reservation.Ticket, reservation.Ticket)
+                    .Set(Reservation => Reservation.UpdatedAt, dateTime.Date)
+                    ;
 
 
 
