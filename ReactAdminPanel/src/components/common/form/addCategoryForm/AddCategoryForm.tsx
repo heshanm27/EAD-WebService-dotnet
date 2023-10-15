@@ -16,7 +16,6 @@ import {
 import React, { useState } from "react";
 import { useFormik, FormikHelpers, FormikValues } from "formik";
 import * as Yup from "yup";
-import { addCategory } from "../../../../api/categoryApi";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import CustomSnackBar from "../../snackbar/Snackbar";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -40,46 +39,46 @@ export default function AddCategoryForm({ setOpen }: Props) {
     title: "",
   });
 
-  const { errors, values, handleChange, handleBlur, handleSubmit, resetForm } = useFormik<FormValues>({
-    initialValues: {
-      name: "",
-    },
-    validationSchema: Yup.object({
-      name: Yup.string().required("Category name is required"),
-    }),
-    onSubmit: hadnleFormSubmit,
-  });
+  // const { errors, values, handleChange, handleBlur, handleSubmit, resetForm } = useFormik<FormValues>({
+  //   initialValues: {
+  //     name: "",
+  //   },
+  //   validationSchema: Yup.object({
+  //     name: Yup.string().required("Category name is required"),
+  //   }),
+  //   onSubmit: hadnleFormSubmit,
+  // });
 
-  const { mutate, isLoading, error } = useMutation({
-    mutationFn: addCategory,
+  // const { mutate, isLoading, error } = useMutation({
+  //   mutationFn: addCategory,
 
-    onSuccess: (data) => {
-      queryClient.invalidateQueries(["categories"]);
-      setNotify({
-        isOpen: true,
-        message: data.message,
-        type: "success",
-        title: "Success",
-      });
-      resetForm();
-      setOpen(false);
-    },
-    onError: (error: any) => {
-      setNotify({
-        isOpen: true,
-        message: error.message,
-        type: "error",
-        title: "Error",
-      });
-    },
-  });
+  //   onSuccess: (data) => {
+  //     queryClient.invalidateQueries(["categories"]);
+  //     setNotify({
+  //       isOpen: true,
+  //       message: data.message,
+  //       type: "success",
+  //       title: "Success",
+  //     });
+  //     resetForm();
+  //     setOpen(false);
+  //   },
+  //   onError: (error: any) => {
+  //     setNotify({
+  //       isOpen: true,
+  //       message: error.message,
+  //       type: "error",
+  //       title: "Error",
+  //     });
+  //   },
+  // });
 
-  async function hadnleFormSubmit(values: FormValues, formikHelpers: FormikHelpers<FormValues>) {
-    await mutate({
-      name: values.name,
-      subCategory,
-    });
-  }
+  // async function hadnleFormSubmit(values: FormValues, formikHelpers: FormikHelpers<FormValues>) {
+  //   await mutate({
+  //     name: values.name,
+  //     subCategory,
+  //   });
+  // }
 
   const handleAddSubCategory = () => {
     if (subCategoryValue && !subCategory.includes(subCategoryValue)) {
@@ -92,8 +91,8 @@ export default function AddCategoryForm({ setOpen }: Props) {
     setSubCategory((prev) => prev.filter((item) => item !== subCategory));
   };
   return (
-    <Box component={"form"} onSubmit={handleSubmit}>
-      <TextField
+    <Box component={"form"} onSubmit={() => {}}>
+      {/* <TextField
         fullWidth
         label="Categorey Name"
         value={values.name}
@@ -139,7 +138,7 @@ export default function AddCategoryForm({ setOpen }: Props) {
             {error.message}
           </Typography>
         )}
-      </FormLabel>
+      </FormLabel> */}
       <CustomSnackBar notify={notify} setNotify={setNotify} />
     </Box>
   );
