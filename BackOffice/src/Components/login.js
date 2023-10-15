@@ -31,7 +31,7 @@ const Login = () => {
         draggable: true,
         progress: undefined,
       });
-      navigate("/sidebar2");
+      navigate("/sidebar");
     } else {
       // Display an error toast message
       toast.error("Invalid email or password. Please try again.", {
@@ -50,16 +50,12 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center ">
       <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-6 space-y-8">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Admin Login
-          </h2>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Admin Login</h2>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div>
             <div className="mb-6">
-              <label className="block text-gray-700 text-sm font-semibold mb-2">
-                Email Address
-              </label>
+              <label className="block text-gray-700 text-sm font-semibold mb-2">Email Address</label>
               <input
                 type="email"
                 value={email}
@@ -69,9 +65,7 @@ const Login = () => {
               />
             </div>
             <div className="mb-6">
-              <label className="block text-gray-700 text-sm font-semibold mb-2">
-                Password
-              </label>
+              <label className="block text-gray-700 text-sm font-semibold mb-2">Password</label>
               <input
                 type="password"
                 value={password}
@@ -81,10 +75,7 @@ const Login = () => {
               />
             </div>
             <div className="text-center">
-              <button
-                type="submit"
-                className="px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:bg-blue-400"
-              >
+              <button type="submit" className="px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-400 focus:outline-none focus:bg-blue-400">
                 Login
               </button>
             </div>

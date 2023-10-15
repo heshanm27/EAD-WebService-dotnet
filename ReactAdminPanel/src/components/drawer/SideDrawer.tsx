@@ -13,14 +13,14 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { green } from "@mui/material/colors";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-import { ADMIN_ROUTES, SELLER_ROUTES, USER_ROUTES } from "./link-routes/link-Routes";
+import { ADMIN_ROUTES, TRAVELER_ROUTES } from "./link-routes/link-Routes";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import { useAppDispatch, useAppSelector } from "../../redux/redux-hooks";
 import NavBarMenu from "../common/NavBarMenu/NavBarMenu";
 import { Logout } from "@mui/icons-material";
 import { logOut } from "../../redux/auth/authslice";
 import HomeIcon from "@mui/icons-material/Home";
-const drawerWidth = 240;
+const drawerWidth = 280;
 const drawerWidthClose = 60;
 interface ICollection {
   id: string | number;
@@ -136,7 +136,7 @@ export default function SideDrawer() {
           >
             {open ? (
               <Typography align="left" variant="h6" noWrap component="div">
-                Nature Ayur
+                ReserveIT
               </Typography>
             ) : null}
             <IconButton onClick={handleDrawerClose}>
@@ -148,14 +148,11 @@ export default function SideDrawer() {
               {(() => {
                 let routes;
                 switch (role) {
-                  case "admin":
-                    routes = ADMIN_ROUTES;
-                    break;
                   case "seller":
-                    routes = SELLER_ROUTES;
+                    routes = TRAVELER_ROUTES;
                     break;
                   default:
-                    routes = USER_ROUTES;
+                    routes = ADMIN_ROUTES;
                 }
                 return routes.map((item, index) => (
                   <CustomLink drawerStatus={open} label={item.name} path={item.path} activeIcon={item.activeIcon} key={item.path} icon={item.icon} />

@@ -6,17 +6,8 @@ import { Delete, Edit } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { fetchAllProductsForSeller } from "../../../api/productApi";
 import { useAppSelector } from "../../../redux/redux-hooks";
-type Person = {
-  name: {
-    firstName: string;
-    lastName: string;
-  };
-  address: string;
-  city: string;
-  state: string;
-};
 
-export default function ProductsPage() {
+export default function TrainManagment() {
   const navigate = useNavigate();
   const { data, error, isLoading, isError } = useQuery({ queryKey: ["products"], queryFn: fetchAllProductsForSeller });
 

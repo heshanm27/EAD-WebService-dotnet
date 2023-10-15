@@ -11,17 +11,15 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { FormHelperText, Paper } from "@mui/material";
+import { Paper } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import CustomSnackBar from "../../components/common/snackbar/Snackbar";
-import Navbar from "../../components/common/navbar/navbar";
-import Footer from "../../components/common/footer/Footer";
 import { useFormik, FormikHelpers } from "formik";
 import * as Yup from "yup";
 import apiClient from "../../api/axios";
 import { useAppDispatch, useAppSelector } from "../../redux/redux-hooks";
 import { login } from "../../redux/auth/authslice";
+import { ROUTE_CONSTANT } from "../../routes/Constatnt";
 function Copyright(props: any) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -112,7 +110,6 @@ export default function SignIn() {
   }, [isLoggedIn]);
   return (
     <>
-      <Navbar />
       <Container component="main" maxWidth="xs">
         <Box
           sx={{
@@ -181,7 +178,7 @@ export default function SignIn() {
                     </Link>
                   </Grid>
                   <Grid item>
-                    <Link href="#" variant="body2">
+                    <Link href={ROUTE_CONSTANT.REGISTER} variant="body2">
                       {"Don't have an account? Sign Up"}
                     </Link>
                   </Grid>
@@ -193,7 +190,6 @@ export default function SignIn() {
         </Box>
         <CustomSnackBar notify={notify} setNotify={setNotify} />
       </Container>
-      <Footer />
     </>
   );
 }
