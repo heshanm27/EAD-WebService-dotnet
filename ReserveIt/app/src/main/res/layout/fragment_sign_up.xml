@@ -46,11 +46,13 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/firstName"
+            android:id="@+id/firstName_text_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="First Name"
             android:layout_marginTop="8dp"
+            app:errorEnabled="true"
+            app:endIconMode="clear_text"
             >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -61,11 +63,14 @@
 
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/lastName"
+            android:id="@+id/lastName_text_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:hint="Last Name">
+            android:hint="Last Name"
+            app:errorEnabled="true"
+            app:endIconMode="clear_text"
+            >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/lastNameEditText"
@@ -76,41 +81,54 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/email"
+            android:id="@+id/email_edit_text_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:hint="Email">
+            android:hint="Email"
+            app:errorEnabled="true"
+            app:endIconMode="clear_text"
+
+            >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/emailEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
 
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/nic"
+            android:id="@+id/nic_edit_text_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:hint="NIC">
+            android:hint="NIC"
+            app:errorEnabled="true"
+            app:endIconMode="clear_text"
+
+            >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/nicEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/password"
+            android:id="@+id/password_edit_text_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:hint="Password">
+            android:hint="Password"
+            app:errorEnabled="true"
+            app:endIconMode="password_toggle"
+            >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/passwordEditText"
@@ -121,11 +139,14 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/confirmPassword"
+            android:id="@+id/confirmPassword_edit_text_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:hint="Confirm Password">
+            android:hint="Confirm Password"
+            app:errorEnabled="true"
+            app:endIconMode="password_toggle"
+            >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/confirmPasswordEditText"

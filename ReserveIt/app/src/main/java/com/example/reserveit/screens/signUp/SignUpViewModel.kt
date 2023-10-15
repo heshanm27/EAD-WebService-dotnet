@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.reserveit.dto.auth.SignUpRequestBody
 import com.example.reserveit.repo.AuthRepo
 import com.example.reserveit.util.SharedPreferenceService
+import com.example.reserveit.utill.AppConstants
+import com.google.gson.Gson
 import kotlinx.coroutines.launch
 
 class SignUpViewModel(
@@ -28,7 +30,27 @@ class SignUpViewModel(
         viewModelScope.launch {
             try{
                 _isLoading.value = true
-                authRepo.register(signup)
+               var response =  authRepo.register(signup)
+                // Handle the response here
+                if (response.isSuccessful) {
+                    // Handle successful response
+                    val data = response.body()
+
+
+                    if (data != null) {
+                        if (data.status === true) {
+                            SharedPreferenceService.saveValue(
+                                AppConstants.TOKEN_KEY,
+                                data.data?.token ?: ""
+                            )
+                            //convert data to json
+                            val gson = Gson()
+                            val json = gson.toJson(data)
+                            SharedPreferenceService.saveValue(AppConstants.USER_DATA, json)
+
+                        }
+                    }
+                }
             }catch (e: Exception){
 
                 _error.value = e.message

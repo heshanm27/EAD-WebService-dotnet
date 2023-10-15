@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.reserveit.MainActivity
 import com.example.reserveit.databinding.FragmentBookedDetailsBinding
+import com.example.reserveit.repo.ReservationRepo
 import com.example.reserveit.screens.trainScheduleDetails.TrainScheduleDetailsFragmentArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
@@ -34,6 +35,9 @@ class BookedDetailsFragment : Fragment() {
     ): View? {
         binding = FragmentBookedDetailsBinding.inflate(inflater, container, false)
         (activity as MainActivity?)!!.hideBottomNavigationView()
+
+        val repo = ReservationRepo()
+        viewModel = BookedDetailsViewModel(repo)
 
 
 

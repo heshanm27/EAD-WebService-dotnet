@@ -12,8 +12,10 @@ import androidx.navigation.fragment.findNavController
 import com.example.reserveit.R
 import com.example.reserveit.databinding.FragmentLoginBinding
 import com.example.reserveit.databinding.FragmentProfileBinding
+import com.example.reserveit.models.login.LoginModel
 import com.example.reserveit.util.SharedPreferenceService
 import com.example.reserveit.utill.AppConstants
+import com.google.gson.Gson
 
 /*
 * File: ProfileFragment.kt
@@ -37,12 +39,15 @@ class ProfileFragment : Fragment() {
         }
         SharedPreferenceService.initialize(requireContext())
         val sharedPreferences =  SharedPreferenceService.getString(AppConstants.TOKEN_KEY, "")
-
-        if (sharedPreferences != null) {
-            if (sharedPreferences.isNotEmpty()){
-            Log.d("ggtoken", sharedPreferences)
-            }
-        }
+//        val jsonString = SharedPreferenceService.getString(AppConstants.USER_DATA_KEY, "")
+//        val gson = Gson()
+//        val user = gson.fromJson(jsonString, LoginModel::class.java)
+//
+//        if (sharedPreferences != null) {
+//            if (sharedPreferences.isNotEmpty()){
+//            Log.d("ggtoken", user.data?.token.toString())
+//            }
+//        }
 
         if (sharedPreferences != null) {
             if (sharedPreferences.isNotEmpty()){

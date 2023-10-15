@@ -16,6 +16,13 @@ class AuthRepo{
     }
 
     suspend fun register(registerBody: SignUpRequestBody): Response<LoginModel> {
-        return RetrofitInstance.authApi.register(registerBody);
+        return RetrofitInstance.authApi.register(
+            registerBody.firstName,
+            registerBody.lastName,
+            registerBody.email,
+            registerBody.password,
+            registerBody.confirmPassword,
+            registerBody.nic
+        );
     }
 }
