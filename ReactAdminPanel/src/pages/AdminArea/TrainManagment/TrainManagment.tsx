@@ -1,4 +1,12 @@
-import { Box, Button, Container, IconButton, Stack, Tooltip, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  IconButton,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import React, { useMemo, useState } from "react";
 import MaterialReactTable, { MRT_ColumnDef } from "material-react-table";
 import { useQuery } from "@tanstack/react-query";
@@ -6,36 +14,40 @@ import { Delete, Edit } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { fetchAllProductsForSeller } from "../../../api/productApi";
 import { useAppSelector } from "../../../redux/redux-hooks";
+import { fetchAllTrains } from "../../../api/trainManagmentApi";
 
 export default function TrainManagment() {
   const navigate = useNavigate();
-  const { data, error, isLoading, isError } = useQuery({ queryKey: ["products"], queryFn: fetchAllProductsForSeller });
+  const { data, error, isLoading, isError } = useQuery({
+    queryKey: ["trains"],
+    queryFn: fetchAllTrains,
+  });
+
+  console.log("Train Data", data);
 
   const [open, setOpen] = useState(false);
   const columns = useMemo<MRT_ColumnDef[]>(
     () => [
       {
-        accessorKey: "productCode", //access nested data with dot notation
-        header: "Product Code",
+        accessorKey: "trainNumber", //access nested data with dot notation
+        header: "Train Number",
         enableGlobalFilter: false,
       },
       {
-        accessorKey: "name",
-        header: "Product Name",
+        accessorKey: "trainName",
+        header: "Train Name",
       },
       {
-        accessorKey: "price",
-        header: "Product Price",
-        Cell: ({ renderedCellValue, row }: any) => {
-          return "$" + row.original.price.toFixed(2);
-        },
+        accessorKey: "departureDate",
+        header: "Date",
       },
       {
-        accessorKey: "stock",
-        header: "Product Stock",
-        Cell: ({ renderedCellValue, row }: any) => {
-          return row.original.stock + " units";
-        },
+        accessorFn: (row: any) => row.startStation + " / " + row.trainStartTime,
+        header: "Start Place / Time",
+      },
+      {
+        accessorFn: (row: any) => row.endStation + " / " + row.trainEndTime,
+        header: "Destination / Time",
       },
     ],
     []
@@ -44,7 +56,7 @@ export default function TrainManagment() {
   return (
     <Container maxWidth="xl" sx={{ p: 2 }}>
       <Typography variant="h3" sx={{ mt: 5, mb: 5 }} fontWeight={"bold"}>
-        Your Products
+        Train Schedules
       </Typography>
 
       <MaterialReactTable
@@ -65,9 +77,9 @@ export default function TrainManagment() {
           isLoading,
           showAlertBanner: isError,
         }}
-        rowCount={data?.products?.length ?? 0}
+        rowCount={data?.data.length ?? 0}
         columns={columns}
-        data={data?.products ?? []}
+        data={data?.data ?? []}
         muiToolbarAlertBannerProps={
           isError
             ? {
@@ -91,8 +103,12 @@ export default function TrainManagment() {
           </Box>
         )}
         renderTopToolbarCustomActions={() => (
-          <Button color="secondary" onClick={() => navigate("/seller/products/add")} variant="contained">
-            Add Product
+          <Button
+            color="secondary"
+            onClick={() => navigate("/seller/products/add")}
+            variant="contained"
+          >
+            New Schedule
           </Button>
         )}
       />
