@@ -1,5 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 
+/*
+    File: LoginUserDto.cs
+    Author:
+    Description: This file is the model for getting email and password when login.
+ */
 
 namespace EAD_WebService.Dto.Auth
 {

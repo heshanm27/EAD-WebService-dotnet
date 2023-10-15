@@ -1,7 +1,10 @@
+using System.Globalization;
 using EAD_WebService.Dto.Reservation;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
+using MongoDB.Driver.Linq;
 
 
 namespace EAD_WebService.Services.Core
@@ -34,7 +37,7 @@ namespace EAD_WebService.Services.Core
             await _reservation.InsertOneAsync(booking);
 
 
-            await _trainScheduleService.addReservation(booking.ReservedTrainId, booking.Id);
+            _ = await _trainScheduleService.addReservation(booking.ReservedTrainId, booking.Id, booking.Ticket.Id, booking.ReservedSeatCount);
             await _trainScheduleService.updateTicketsAvailability(booking.ReservedTrainId, booking.ReservedTrainId, booking.ReservedSeatCount);
 
 
@@ -52,6 +55,8 @@ namespace EAD_WebService.Services.Core
             try
             {
                 var Reservation = await _reservation.Find(Reservation => Reservation.Id == id).FirstOrDefaultAsync();
+
+
 
                 return new ServiceResponse<Reservation>
                 {
@@ -71,54 +76,6 @@ namespace EAD_WebService.Services.Core
 
         }
 
-        async Task<ServiceResponse<List<Reservation>>> IReservationService.GetReservation(BasicFilters filters)
-        {
-            try
-            {
-
-
-                //get all the reservations
-                var reservations = await _reservation.Find(Reservation => true).ToListAsync();
-                //limit the reservations to the number of records specified in the filters
-                //reservations = reservations.Skip(filters.Page).Take(filters.PageSize).ToList();
-                //return the reservations make order by the sortby field and order specified in the filters
-
-
-                var pipeline = new BsonDocument[]
-{
-    BsonDocument.Parse("{ $lookup: { from: 'train', localField: 'reserved_train', foreignField: '_id', as: 'reserved_train' } }"),
-    BsonDocument.Parse("{ $lookup: { from: 'user', localField: 'reserved_user', foreignField: '_id', as: 'reserved_train' } }"),
-    // BsonDocument.Parse("{ $lookup: { from: 'users.', localField: 'TicketType', foreignField: '_id', as: 'TicketType' } }"),
-
-};
-
-                var results = _reservation.Aggregate<Reservation>(pipeline).ToList();
-
-                return new ServiceResponse<List<Reservation>>
-                {
-                    Message = "Bookings retrieved successfully",
-                    Status = true,
-                    Data = results
-                };
-
-                // return new ServiceResponse<List<Reservation>>
-                // {
-                //     Message = "Bookings retrieved successfully",
-                //     Status = true,
-                //     Data = reservations
-                // };
-            }
-            catch (Exception ex)
-            {
-                return new ServiceResponse<List<Reservation>>
-                {
-
-                    Message = ex.Message,
-                    Status = false
-
-                };
-            }
-        }
 
         async Task<ServiceResponse<EmptyData>> IReservationService.RemoveReservation(string id)
         {
@@ -126,13 +83,23 @@ namespace EAD_WebService.Services.Core
             try
             {
 
-                var isExists = await _reservation.Find(Reservation => Reservation.Id == id).AnyAsync();
+                Reservation exitsReservation = await _reservation.Find(Reservation => Reservation.Id == id).FirstOrDefaultAsync();
 
-                if (!isExists)
+                if (exitsReservation == null)
                 {
                     return new ServiceResponse<EmptyData>
                     {
                         Message = "Booking not found",
+                        Status = false
+                    };
+                }
+                TimeSpan difference = exitsReservation.ReservedDate - DateTime.UtcNow;
+                Console.WriteLine(difference);
+                if (difference.TotalDays < 5)
+                {
+                    return new ServiceResponse<EmptyData>
+                    {
+                        Message = "You can't remove your booking if there are only 5 days or fewer left to the reservation date. ",
                         Status = false
                     };
                 }
@@ -160,16 +127,6 @@ namespace EAD_WebService.Services.Core
         {
             try
             {
-                // var Reservation = new Reservation
-                // {
-
-                //     ReservedTrainId = reservation.ReservedTrainId,
-                //     ReservedUserId = reservation.ReservedUserId,
-                //     ReservationPrice = reservation.ReservationPrice,
-                //     ReservedDate = reservation.ReservedDate,
-                //     ReservedSeatCount = reservation.ReservedSeatCount,
-
-                // };
 
                 var isExists = await _reservation.Find(Reservation => Reservation.Id == id).AnyAsync();
 
@@ -181,14 +138,18 @@ namespace EAD_WebService.Services.Core
                         Status = false
                     };
                 }
+
+                DateTime dateTime = DateTime.UtcNow;
                 var filter = Builders<Reservation>.Filter.Eq(Reservation => Reservation.Id, id);
                 var update = Builders<Reservation>.Update
                     .Set(Reservation => Reservation.ReservedDate, reservation.ReservedDate)
                     .Set(Reservation => Reservation.ReservedTrainId, reservation.ReservedTrainId)
                     .Set(Reservation => Reservation.ReservedUserId, reservation.ReservedUserId)
                     .Set(Reservation => Reservation.ReservedSeatCount, reservation.ReservedSeatCount)
-                    .Set(Reservation => Reservation.ReservationPrice, reservation.ReservationPrice)
-                    .Set(Reservation => Reservation.TicketType, reservation.TicketType);
+                    .Set(Reservation => Reservation.Ticket, reservation.Ticket)
+                    .Set(Reservation => Reservation.UpdatedAt, dateTime.Date)
+                    ;
+
 
 
                 await _reservation.UpdateOneAsync(filter, update);
@@ -208,6 +169,260 @@ namespace EAD_WebService.Services.Core
                     Status = false
                 };
             }
+        }
+
+        public async Task<ServiceResponse<List<ReservationFormatedResponse>>> GetUpcomingReservation(BasicFilters filters, string userId)
+        {
+            try
+            {
+
+                DateTime dateTime = DateTime.UtcNow;
+
+                var pipeline = new BsonDocument[]
+                {
+    new BsonDocument("$match", new BsonDocument
+    {
+        {
+            "$and", new BsonArray
+            {
+                new BsonDocument("reserved_user", new ObjectId(userId)),
+               new BsonDocument("reserved_date", new BsonDocument("$gte", BsonDateTime.Create(dateTime)))
+            }
+        }
+    }),
+    new BsonDocument("$lookup", new BsonDocument
+    {
+        { "from", "train" },
+        { "localField", "reserved_train" },
+        { "foreignField", "_id" },
+        { "as", "train" }
+    }),
+    new BsonDocument("$lookup", new BsonDocument
+    {
+        { "from", "user" },
+        { "localField", "reserved_user" },
+        { "foreignField", "_id" },
+        { "as", "user" }
+    }),
+    new BsonDocument("$unwind", "$train"),
+    new BsonDocument("$unwind", "$user"),
+    new BsonDocument("$project", new BsonDocument
+    {
+        {"_id",1},
+        {"reserved_date",1},
+        {"reserved_seat_count",1},
+        {"reservation_price",1},
+        {"created_at",1},
+        {"ticket",1},
+        {"user",new BsonDocument
+        {
+            {"_id",1},
+            {"first_name",1},
+            {"last_name",1}
+        }},
+        {
+            "train",new BsonDocument
+            {
+                {"train_name",1},
+                {"_id",1},
+                {"train_number",1},
+                {"train_start_time",1},
+                {"end_station",1},
+                {"start_station",1},
+                {"train_end_time",1},
+                {"departure_date",1}
+            }
+        }
+    })
+                };
+
+                List<BsonDocument> bsonReservations = _reservation.Aggregate<BsonDocument>(pipeline).ToList();
+                foreach (BsonDocument item in bsonReservations)
+                {
+                    Console.WriteLine(item);
+                }
+
+
+
+                List<ReservationSuceessResponse> reservations = bsonReservations.Select(bsonDoc => BsonSerializer.Deserialize<ReservationSuceessResponse>(bsonDoc)).ToList();
+
+                List<ReservationSuceessResponse> sortedReservations = reservations.OrderBy(reservation => reservation.ReservedDate).ToList();
+
+                List<ReservationSuceessResponse> filteredReservations = sortedReservations.Skip(filters.PageSize).Take(filters.Page).ToList();
+
+                List<ReservationFormatedResponse> formattedTrains = reservations.Select(item => new ReservationFormatedResponse
+                {
+                    CreatedAt = item.CreatedAt.ToString("yyyy-MM-dd"),
+                    Id = item.Id,
+                    IsActive = item.IsActive,
+                    ReservedDate = item.ReservedDate.ToString("yyyy-MM-dd"),
+                    ReservedSeatCount = item.ReservedSeatCount,
+                    ReservationPrice = item.ReservationPrice,
+                    Ticket = item.Ticket,
+                    trainResponse = new TrainDtoResponse
+                    {
+                        DepartureDate = item.trainResponse.DepartureDate.ToString("yyyy-MM-dd"),
+                        EndStation = item.trainResponse.EndStation,
+                        Id = item.trainResponse.Id,
+                        StartStation = item.trainResponse.StartStation,
+                        TrainEndTime = item.trainResponse.TrainEndTime.ToString("HH:mm tt"),
+                        TrainName = item.trainResponse.TrainName,
+                        TrainNumber = item.trainResponse.TrainNumber,
+                        TrainStartTime = item.trainResponse.TrainStartTime.ToString("HH:mm tt")
+                    },
+                    userResponse = new UserDtoResponse
+                    {
+                        Id = item.userResponse.Id,
+                        FirstName = item.userResponse.FirstName,
+                        LastName = item.userResponse.LastName
+                    }
+                }).ToList();
+
+                return new ServiceResponse<List<ReservationFormatedResponse>>
+                {
+                    Message = "Booking retrieved successfully",
+                    Status = true,
+                    Data = formattedTrains
+                };
+
+            }
+            catch (Exception ex)
+            {
+
+                return new ServiceResponse<List<ReservationFormatedResponse>>
+                {
+                    Message = ex.Message,
+                    Status = false
+                };
+
+            }
+
+
+        }
+
+        public async Task<ServiceResponse<List<ReservationFormatedResponse>>> GetPastReservation(BasicFilters filters, string userId)
+        {
+            try
+            {
+
+                DateTime dateTime = DateTime.UtcNow;
+
+
+                Console.WriteLine(BsonDateTime.Create(dateTime.Date));
+
+                var pipeline = new BsonDocument[]
+                {
+                            new BsonDocument("$match", new BsonDocument
+                            {
+                                {
+                                    "$and", new BsonArray
+                                    {
+                                        new BsonDocument("reserved_user", new ObjectId(userId)),
+                                    new BsonDocument("reserved_date", new BsonDocument("$lt", BsonDateTime.Create(dateTime.Date.AddHours(-1))))
+                                    }
+                                }
+                            }),
+                            new BsonDocument("$lookup", new BsonDocument
+                            {
+                                { "from", "train" },
+                                { "localField", "reserved_train" },
+                                { "foreignField", "_id" },
+                                { "as", "train" }
+                            }),
+                            new BsonDocument("$lookup", new BsonDocument
+                            {
+                                { "from", "user" },
+                                { "localField", "reserved_user" },
+                                { "foreignField", "_id" },
+                                { "as", "user" }
+                            }),
+                            new BsonDocument("$unwind", "$train"),
+                            new BsonDocument("$unwind", "$user"),
+                            new BsonDocument("$project", new BsonDocument
+                            {
+                                {"_id",1},
+                                {"reserved_date",1},
+                                {"reserved_seat_count",1},
+                                {"reservation_price",1},
+                                {"created_at",1},
+                                {"ticket",1},
+                                {"user",new BsonDocument
+                                {
+                                    {"_id",1},
+                                    {"first_name",1},
+                                    {"last_name",1}
+                                }},
+                                {
+                                    "train",new BsonDocument
+                                    {
+                                        {"train_name",1},
+                                        {"_id",1},
+                                        {"train_number",1},
+                                        {"train_start_time",1},
+                                        {"end_station",1},
+                                        {"start_station",1},
+                                        {"train_end_time",1},
+                                        {"departure_date",1}
+                                    }
+                                }
+                            })
+                                        };
+
+                List<BsonDocument> bsonReservations = _reservation.Aggregate<BsonDocument>(pipeline).ToList();
+                List<ReservationSuceessResponse> reservations = bsonReservations.Select(bsonDoc => BsonSerializer.Deserialize<ReservationSuceessResponse>(bsonDoc)).ToList();
+
+                List<ReservationSuceessResponse> sortedReservations = reservations.OrderBy(reservation => reservation.ReservedDate).ToList();
+
+                List<ReservationSuceessResponse> filteredReservations = sortedReservations.Skip(filters.PageSize).Take(filters.Page).ToList();
+
+                List<ReservationFormatedResponse> formattedTrains = reservations.Select(item => new ReservationFormatedResponse
+                {
+                    CreatedAt = item.CreatedAt.ToString("yyyy-MM-dd"),
+                    Id = item.Id,
+                    IsActive = item.IsActive,
+                    ReservedDate = item.ReservedDate.ToString("yyyy-MM-dd"),
+                    ReservedSeatCount = item.ReservedSeatCount,
+                    ReservationPrice = item.ReservationPrice,
+                    Ticket = item.Ticket,
+                    trainResponse = new TrainDtoResponse
+                    {
+                        DepartureDate = item.trainResponse.DepartureDate.ToString("yyyy-MM-dd"),
+                        EndStation = item.trainResponse.EndStation,
+                        Id = item.trainResponse.Id,
+                        StartStation = item.trainResponse.StartStation,
+                        TrainEndTime = item.trainResponse.TrainEndTime.ToString("HH:mm tt"),
+                        TrainName = item.trainResponse.TrainName,
+                        TrainNumber = item.trainResponse.TrainNumber,
+                        TrainStartTime = item.trainResponse.TrainStartTime.ToString("HH:mm tt")
+                    },
+                    userResponse = new UserDtoResponse
+                    {
+                        Id = item.userResponse.Id,
+                        FirstName = item.userResponse.FirstName,
+                        LastName = item.userResponse.LastName
+                    }
+                }).ToList();
+
+                return new ServiceResponse<List<ReservationFormatedResponse>>
+                {
+                    Message = "Booking retrieved successfully",
+                    Status = true,
+                    Data = formattedTrains
+                };
+            }
+            catch (Exception ex)
+            {
+
+
+                return new ServiceResponse<List<ReservationFormatedResponse>>
+                {
+                    Message = ex.Message,
+                    Status = false
+                };
+
+            }
+
+
         }
     }
 }

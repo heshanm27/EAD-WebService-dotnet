@@ -1,4 +1,8 @@
-
+/*
+    File: Login Success.cs
+    Author:
+    Description: This is the model for providing authentication information when successfull login.
+ */
 
 namespace EAD_WebService.Dto.Auth
 {

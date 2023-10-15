@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
@@ -13,6 +14,7 @@ namespace EAD_WebService.Models
 
         [BsonElement("train_name")]
         [BsonRequired]
+
         public string TrainName { get; set; } = null!;
 
 
@@ -54,9 +56,9 @@ namespace EAD_WebService.Models
         public bool IsPublished { get; set; } = false;
 
         [BsonElement("created_at")]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow.AddHours(5).AddMinutes(30);
 
         [BsonElement("updated_at")]
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow.AddHours(5).AddMinutes(30);
     }
 }

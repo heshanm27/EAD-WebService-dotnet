@@ -1,6 +1,12 @@
 using EAD_WebService.Dto.Auth;
 using Microsoft.AspNetCore.Mvc;
 
+/*
+    File: AuthController.cs
+    Author:
+    Description: This file is used to authorize the users.
+*/
+
 namespace EAD_WebService.Controllers
 {
     [ApiController]
@@ -15,6 +21,8 @@ namespace EAD_WebService.Controllers
             _authService = authService;
         }
 
+        //Verifies the user by using username and password
+
         [HttpPost("login")]
         public async Task<ActionResult<ServiceResponse<LoginSuccessDto>>> Login(LoginUserDto loginUserDto)
         {
@@ -22,6 +30,8 @@ namespace EAD_WebService.Controllers
             if (!response.Status) return BadRequest(response);
             return Ok(response);
         }
+
+        //Api for create new account
 
         [HttpPost("register")]
         public async Task<ActionResult<ServiceResponse<LoginSuccessDto>>> Register([FromForm] RegisterUserDto registerUserDto)

@@ -8,6 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.reserveit.R
 
+/*
+* File: SignUpFragment.kt
+* Author:
+* Description: This class is used to display sign up screen.
+* */
+
 class SignUpFragment : Fragment() {
 
     companion object {
@@ -23,10 +29,6 @@ class SignUpFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_sign_up, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(SignUpViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
+
 
 }

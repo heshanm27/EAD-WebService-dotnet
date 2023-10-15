@@ -23,7 +23,9 @@
     <string name="add_reservation_to">To</string>
     <string name="add_reservation_no_of_ticket">Number of tickets</string>
     <string name="add_reservation_btn_reserve">Book Now!</string>
-
+    <string name="update_Reservation">Update Reservation</string>
+    <string name="update_reservation_btn">Update Now!</string>
+    <string name="start_end_station_default_value">Kandy - Badulla</string>
 
     <string-array name="station_arr">
         <item>Ahangama</item>
@@ -113,7 +115,15 @@
         <item>Wellawa</item>
         <item>Wellawatte</item>
     </string-array>
+    <string-array name="no_seats" >
 
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+
+    </string-array>
 
 
 </resources>

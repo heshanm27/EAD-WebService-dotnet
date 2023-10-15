@@ -6,27 +6,35 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.example.reserveit.R
+import com.example.reserveit.databinding.FragmentLoginBinding
+import com.example.reserveit.databinding.FragmentProfileBinding
+
+/*
+* File: ProfileFragment.kt
+* Author:
+* Description: This class is used to display user profile.
+* */
 
 class ProfileFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = ProfileFragment()
-    }
-
+    private var binding: FragmentProfileBinding ?= null
     private lateinit var viewModel: ProfileViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+        binding = FragmentProfileBinding.inflate(inflater, container, false)
+
+        binding!!.signInButton.setOnClickListener {
+                findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
+        }
+
+        return binding!!.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
+
 
 }

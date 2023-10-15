@@ -3,6 +3,12 @@ using EAD_WebService.Dto.Reservation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+/*
+    File: Resrvation Controller.cs
+    Author:
+    Description: This file is used to manage the reservations/bookings.
+ */
+
 namespace EAD_WebService.Controllers
 {
 
@@ -19,15 +25,27 @@ namespace EAD_WebService.Controllers
             _reservationService = reservationService;
         }
 
-        [HttpGet()]
-
-        public async Task<ActionResult<List<Reservation>>> Get([FromQuery] BasicFilters filters)
+        [HttpGet("upcoming/{id}")]
+        public async Task<ActionResult<ServiceResponse<List<ReservationFormatedResponse>>>> UpcomingReservation([FromQuery] BasicFilters filters, string id)
         {
+            Console.WriteLine(filters.Order);
+            ServiceResponse<List<ReservationFormatedResponse>> response = await _reservationService.GetUpcomingReservation(filters, id);
 
-            ServiceResponse<List<Reservation>> response = await _reservationService.GetReservation(filters);
             if (!response.Status) return BadRequest(response);
+
             return Ok(response);
         }
+
+        [HttpGet("past/{id}")]
+        public async Task<ActionResult<ServiceResponse<List<ReservationFormatedResponse>>>> GetPastReservation([FromQuery] BasicFilters filters, string id)
+        {
+            ServiceResponse<List<ReservationFormatedResponse>> response = await _reservationService.GetPastReservation(filters, id);
+
+            if (!response.Status) return BadRequest(response);
+
+            return Ok(response);
+        }
+
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Reservation>> Get(string id)
@@ -40,6 +58,8 @@ namespace EAD_WebService.Controllers
         }
 
 
+        //API endpoit for add new reservation
+
         [HttpPost]
         public async Task<ActionResult<ServiceResponse<Reservation>>> Post(ReservationDto reservationDto)
         {
@@ -51,9 +71,8 @@ namespace EAD_WebService.Controllers
                 ReservedTrainId = reservationDto.ReservedTrainId,
                 ReservedSeatCount = reservationDto.ReservationSeatCount,
                 ReservedUserId = reservationDto.ReservedUserId,
-                ReservationPrice = reservationDto.ReservationPrice,
-                ReservedDate = ReservationDate,
-                TicketType = reservationDto.TicketType
+                ReservedDate = ReservationDate.AddHours(5).AddMinutes(30),
+                Ticket = reservationDto.Ticket
             };
 
             // Console.WriteLine(reservation.ReservedUserId);
@@ -62,6 +81,8 @@ namespace EAD_WebService.Controllers
             return Ok(response);
 
         }
+
+        //API Endpoint for updating the reservation
 
         [HttpPatch("{id}")]
 
@@ -77,15 +98,17 @@ namespace EAD_WebService.Controllers
                 ReservedTrainId = reservationIn.ReservedTrainId,
                 ReservedSeatCount = reservationIn.ReservationSeatCount,
                 ReservedUserId = reservationIn.ReservedUserId,
-                ReservationPrice = reservationIn.ReservationPrice,
-                ReservedDate = ReservationDate,
-                TicketType = reservationIn.TicketType
+                ReservedDate = ReservationDate.AddHours(5).AddMinutes(30),
+                Ticket = reservationIn.Ticket
+
             };
             ServiceResponse<EmptyData> response = await _reservationService.UpdateReservation(id, reservation);
 
             if (!response.Status) return BadRequest(response);
             return Ok(response);
         }
+
+        //API endpoint for deleting reservations.
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<ServiceResponse<EmptyData>>> Delete(string id)

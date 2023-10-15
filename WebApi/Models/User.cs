@@ -2,6 +2,12 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
+/*
+    File: User.cs
+    Author:
+    Description: This file is used to store the model for user information.
+ */
+
 namespace EAD_WebService.Models
 {
     public class User
@@ -47,10 +53,10 @@ namespace EAD_WebService.Models
 
 
         [BsonElement("created_at")]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow.AddHours(5).AddMinutes(30);
 
         [BsonElement("updated_at")]
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow.AddHours(5).AddMinutes(30);
 
 
     }

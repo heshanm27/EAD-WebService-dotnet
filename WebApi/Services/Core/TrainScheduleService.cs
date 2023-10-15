@@ -1,7 +1,10 @@
+using System.Globalization;
 using System.Reflection.Metadata;
+using EAD_WebService.Dto.Train;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using Newtonsoft.Json.Converters;
 
 
 namespace EAD_WebService.Services.Core
@@ -68,24 +71,71 @@ namespace EAD_WebService.Services.Core
             }
         }
 
-        public async Task<ServiceResponse<List<Train>>> getTrainSchedule()
+        public async Task<ServiceResponse<List<TrainGetReponseDto>>> getTrainSchedule(TrainFilters filters)
         {
 
             try
             {
-                var trains = await _train.Find(Train => true).ToListAsync();
+                // var trains = await _train.Find(Train => true).ToListAsync();
 
 
-                return new ServiceResponse<List<Train>>
+                // return new ServiceResponse<List<Train>>
+                // {
+                //     Message = "Trains retrieved successfully",
+                //     Status = true,
+                //     Data = trains
+                // };
+                DateTime ReservationDate = DateTime.Parse(filters.date);
+                // ReservationDate = ReservationDate.AddHours(5).AddMinutes(30);
+
+                // DateTime SriLankanUtcDate = new DateTime(ReservationDate.Ticks, DateTimeKind.Utc).AddHours(5).AddMinutes(30);
+                Console.WriteLine(new BsonDateTime(ReservationDate.AddHours(5).AddMinutes(30)));
+
+                var filter = Builders<Train>.Filter.AnyEq("start_station", filters.start)
+                & Builders<Train>.Filter.AnyEq("end_station", filters.end)
+                & Builders<Train>.Filter.Eq("departure_date", new BsonDateTime(ReservationDate.AddHours(5).AddMinutes(30)))
+                ;
+                // & Builders<Train>.Filter.Lte("departure_date", new BsonDateTime(ReservationDate))
+                ;
+                var sort = Builders<Train>.Sort.Descending("train_start_time");
+
+                Console.WriteLine(filter);
+                if (filters.Order == "asc")
+                {
+                    sort = Builders<Train>.Sort.Ascending(filters.Order);
+                }
+                var trains = await _train.Find(filter).Sort(sort).Skip((filters.Page - 1) * filters.PageSize).Limit(filters.PageSize).ToListAsync();
+
+                List<TrainGetReponseDto> formattedTrains = trains.Select(train => new TrainGetReponseDto
+                {
+                    Id = train.Id,
+                    TrainName = train.TrainName,
+                    TrainNumber = train.TrainNumber,
+                    StartStation = train.StartStation,
+                    EndStation = train.EndStation,
+                    DepartureDate = train.DepartureDate.ToString("yyyy-MM-dd"),
+                    TrainStartTime = train.TrainStartTime.ToString("HH:mm tt"),
+                    TrainEndTime = train.TrainEndTime.ToString("HH:mm tt"),
+                    Tickets = train.Tickets,
+                    Reservations = train.Reservations,
+                    IsActive = train.IsActive,
+                    IsPublished = train.IsPublished,
+
+
+                    // ... other properties
+                }).ToList();
+
+                return new ServiceResponse<List<TrainGetReponseDto>>
                 {
                     Message = "Trains retrieved successfully",
                     Status = true,
-                    Data = trains
+                    Data = formattedTrains
                 };
+
             }
             catch (MongoException)
             {
-                return new ServiceResponse<List<Train>>
+                return new ServiceResponse<List<TrainGetReponseDto>>
                 {
                     Data = null,
                     Message = "Train retrive failed",
@@ -94,7 +144,7 @@ namespace EAD_WebService.Services.Core
             }
             catch (Exception e)
             {
-                return new ServiceResponse<List<Train>>
+                return new ServiceResponse<List<TrainGetReponseDto>>
                 {
                     Message = e.Message,
                     Status = false,
@@ -194,7 +244,7 @@ namespace EAD_WebService.Services.Core
                               .Set("train_start_time", trainIn.TrainStartTime)
                               .Set("train_end_time", trainIn.TrainEndTime)
                               .Set("departure_date", trainIn.DepartureDate)
-                              .Set("updated_at", DateTime.UtcNow);
+                              .Set("updated_at", DateTime.UtcNow.AddHours(5).AddMinutes(30));
 
 
                 await _train.UpdateOneAsync(filter, update);
@@ -225,12 +275,15 @@ namespace EAD_WebService.Services.Core
             }
         }
 
-        public async Task<bool> addReservation(string trainId, string reservationId)
+        public async Task<bool> addReservation(string trainId, string reservationId, string ticketId, int ticketCount)
         {
             try
             {
                 var filter = Builders<Train>.Filter.Eq(Train => Train.Id, trainId);
                 var update = Builders<Train>.Update.Push(Train => Train.Reservations, reservationId);
+                Console.WriteLine("Add reservation called");
+                await updateTicketsAvailability(trainId, ticketId, ticketCount);
+
 
                 await _train.UpdateOneAsync(filter, update);
 
@@ -558,7 +611,7 @@ namespace EAD_WebService.Services.Core
                 {
                     // Update the booked_count property of the specific ticket
                     ticket.TicketBooked = ticket.TicketBooked + count;
-
+                    Console.WriteLine(ticket.TicketBooked);
                     // Save the changes back to the database
                     var updateFilter = Builders<Train>.Filter.Eq("_id", trainSchedule.Id);
                     var updateDefinition = Builders<Train>.Update.Set("Tickets", trainSchedule.Tickets);
@@ -580,5 +633,7 @@ namespace EAD_WebService.Services.Core
                 };
             }
         }
+
+
     }
 }

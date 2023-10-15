@@ -14,8 +14,8 @@ namespace EAD_WebService.Dto.Reservation
 
         public required int ReservationSeatCount { get; set; }
 
-        public required string TicketType { get; set; }
+        public required Tickets Ticket { get; set; }
 
-        public required double ReservationPrice { get; set; }
+
     }
 }

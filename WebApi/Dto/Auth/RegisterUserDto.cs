@@ -1,6 +1,12 @@
 
 using System.ComponentModel.DataAnnotations;
 
+/*
+    File: RegisterUserDto.cs
+    Author:
+    Description: This is the model file for creating a new user.
+*/
+
 namespace EAD_WebService.Dto.Auth
 {
     public class RegisterUserDto

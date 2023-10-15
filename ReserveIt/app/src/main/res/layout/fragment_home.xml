@@ -8,16 +8,36 @@
 
     tools:context=".screens.home.HomeFragment">
 
-    <com.google.android.material.card.MaterialCardView
-        style="@style/Widget.Material3.CardView.Filled"
-        android:id="@+id/card2"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="32dp"
-        app:cardCornerRadius="8dp"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            app:subtitle="Search for a schedule"
+            app:title="Schedules" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card2"
+        style="@style/Widget.Material3.CardView.Filled"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="32dp"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -45,6 +65,7 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                android:id="@+id/start_station_edit_text_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
@@ -124,26 +145,74 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+            android:gravity="center"
             android:layout_gravity="center"
+            android:orientation="vertical"
 
             >
 
-
-            <!-- Bottom sheet contents. -->
-            <com.google.android.material.bottomsheet.BottomSheetDragHandleView
-                android:id="@+id/drag_handle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-         />
+                <!--             Bottom sheet contents. -->
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/bottom_sheet_reservations_recycler_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:orientation="vertical" />
+                android:orientation="vertical"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:visibility="gone"
+                />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="20dp"
+                android:id="@+id/bottom_sheet_no_reservations_layout"
+                >
+            <TextView
+                android:id="@+id/bottom_sheet_no_reservations_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Use the search to find schedules"
+                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                android:gravity="center"
+                android:layout_marginTop="20dp"
+
+                />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottie_no_reservations_animation_view"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                app:lottie_rawRes="@raw/location"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                android:layout_gravity="top"
+                android:layout_marginTop="20dp"
+                />
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/lottie_search_animation_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    app:lottie_rawRes="@raw/search"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    android:layout_gravity="top"
+                    android:layout_marginTop="20dp"
+                    android:visibility="gone"
+
+
+                    />
+            </LinearLayout>
+
+            <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+                android:id="@+id/drag_handle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                />
 
         </FrameLayout>
 

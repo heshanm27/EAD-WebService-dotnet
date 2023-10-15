@@ -8,14 +8,28 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.example.reserveit.R
+import com.example.reserveit.adapters.TrainScheduleAdapter
 import com.example.reserveit.databinding.FragmentHomeBinding
-import com.example.reserveit.models.reservation.Reservation
+import com.example.reserveit.repo.TrainScheduleRepo
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.datepicker.*
+import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.CalendarConstraints.DateValidator
-import java.util.*
+import com.google.android.material.datepicker.CompositeDateValidator
+import com.google.android.material.datepicker.DateValidatorPointBackward
+import com.google.android.material.datepicker.DateValidatorPointForward
+import com.google.android.material.datepicker.MaterialDatePicker
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.util.Calendar
+import java.util.TimeZone
 
+/*
+* File: HomeFragment.kt
+* Author:
+* Description: This class is used to display Home Screen.
+* */
 
 class HomeFragment : Fragment() {
     private var binding: FragmentHomeBinding? = null
@@ -38,19 +52,17 @@ class HomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(inflater, container, false)
-
-        viewModel = HomeViewModel()
+        val trainScheduleRepo = TrainScheduleRepo()
+        viewModel = HomeViewModel(trainScheduleRepo)
 
         val bottomSheet = binding!!.standardBottomSheet
         val standardBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
 
-        val displayMetrics = context!!.resources.displayMetrics
+
+        //get the height of the screen and set the peek height of the bottom sheet to 30% of the screen height
+        val displayMetrics = requireContext().resources.displayMetrics
         val dpHeight = displayMetrics.heightPixels
-
-        Log.d("dpHeight", dpHeight.toString())
-        Log.d("dpHeight", displayMetrics.widthPixels.toString())
-
-        val peekHeightRatio = 0.4 // Set the ratio as needed (0.5 means the peek height is half of the screen height)
+        val peekHeightRatio = 0.3
         val peekHeight = (dpHeight * peekHeightRatio).toInt()
 
         standardBottomSheetBehavior.peekHeight = peekHeight
@@ -64,11 +76,103 @@ class HomeFragment : Fragment() {
         val recyclerView = binding!!.bottomSheetReservationsRecyclerView
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
-        viewModel.addReservation(Reservation("start", "end", "depart", "arrive", "price"))
 
-        val list = viewModel.reservationList
-        val adapter = ReservationAdapter(list)
+        binding!!.startStation.addTextChangedListener(object : android.text.TextWatcher {
+            override fun afterTextChanged(s: android.text.Editable?) {
+                performSearchIfAllFieldsFilled()
+            }
+
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+                Log.d("HomeFragment", "startStation beforeTextChanged: $s")
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                Log.d("HomeFragment", "startStation onTextChanged: $s")
+            }
+        })
+
+        binding!!.endStation.addTextChangedListener(object : android.text.TextWatcher {
+            override fun afterTextChanged(s: android.text.Editable?) {
+                performSearchIfAllFieldsFilled()
+            }
+
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+                Log.d("HomeFragment", "endStation beforeTextChanged: $s")
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                Log.d("HomeFragment", "endStation onTextChanged: $s")
+            }
+        })
+
+
+        binding!!.datePicker.addTextChangedListener(object : android.text.TextWatcher {
+            override fun afterTextChanged(s: android.text.Editable?) {
+                performSearchIfAllFieldsFilled()
+            }
+
+            override fun beforeTextChanged(
+                s: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+                Log.d("HomeFragment", "endStation beforeTextChanged: $s")
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                Log.d("HomeFragment", "endStation onTextChanged: $s")
+            }
+        })
+
+
+    viewModel.trainScheduleList.observe(viewLifecycleOwner, Observer { trainScheduleList ->
+        Log.d("HomeFragment", "trainScheduleList: $trainScheduleList")
+        if(trainScheduleList.isEmpty()) {
+            binding!!.bottomSheetNoReservationsLayout.visibility = View.VISIBLE
+            binding!!.bottomSheetReservationsRecyclerView.visibility = View.GONE
+        } else {
+            binding!!.bottomSheetNoReservationsLayout.visibility = View.VISIBLE
+            binding!!.bottomSheetReservationsRecyclerView.visibility = View.VISIBLE
+        }
+
+        val adapter = TrainScheduleAdapter(trainScheduleList)
         recyclerView.adapter = adapter
+    })
+
+    viewModel.isLoading.observe(viewLifecycleOwner, Observer { isLoading ->
+
+        if(isLoading) {
+            binding!!.bottomSheetNoReservationsTextView.visibility = View.GONE
+            binding!!.lottieNoReservationsAnimationView.visibility = View.GONE
+            binding!!.lottieSearchAnimationView.visibility = View.VISIBLE
+        } else {
+            binding!!.lottieSearchAnimationView.visibility = View.GONE
+            if(viewModel.trainScheduleList.value!!.isEmpty()) {
+                binding!!.bottomSheetNoReservationsTextView.visibility = View.VISIBLE
+                binding!!.lottieNoReservationsAnimationView.visibility = View.VISIBLE
+            }
+        }
+    })
+        // Observe the train schedule list
+//        viewModel.trainScheduleList.observe(viewLifecycleOwner, Observer { trainScheduleList ->
+//            // Update UI with the new train schedule list
+//            // trainScheduleList contains the latest data from the ViewModel
+//        })
+
+//        val list = viewModel.trainScheduleList
+//        val adapter = TrainScheduleAdapter(list)
+//        recyclerView.adapter = adapter
 
 
         return binding?.root
@@ -79,6 +183,7 @@ class HomeFragment : Fragment() {
         val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
 
         calendar.add(Calendar.MONTH, 1)
+
 
         // Set the minimum and maximum dates of the date picker.
         val constraintsBuilder =
@@ -93,6 +198,7 @@ class HomeFragment : Fragment() {
                 ))
                 .setOpenAt(today)
                 .build()
+
         val datePicker =
             MaterialDatePicker.Builder.datePicker()
                 .setTitleText("Select date")
@@ -101,12 +207,37 @@ class HomeFragment : Fragment() {
 
         datePicker.show(childFragmentManager, "datePicker")
         datePicker.addOnPositiveButtonClickListener { selection ->
-            Log.d("HomeFragment", "datePickerLayout clicked ${datePicker.headerText}")
-            datePickerView!!.setText(datePicker.headerText)
+            val utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+            utc.timeInMillis = selection;
+
+            val format = SimpleDateFormat("yyyy MM dd")
+            val formattedDate = format.format(utc.time)
+
+            Log.d("HomeFragment", "showDatePicker: ${formattedDate}")
+            datePickerView!!.setText(formattedDate)
         }
 
 //        datePickerView!!.setText(datePicker.headerText)
     }
 
+
+    private  fun performSearchIfAllFieldsFilled() {
+        val startStation = binding!!.startStation.text.toString()
+        val endStation = binding!!.endStation.text.toString()
+        val date = binding!!.datePicker.text.toString()
+
+
+
+//        Log.d("HomeFragment", "startStation: ${date.getMonth()}")
+////
+//        Log.d("HomeFragment", "startStation: $startStation")
+//        Log.d("HomeFragment", "endStation: $endStation")
+//        Log.d("HomeFragment", "date: ${CommonUtil.formatDateToDesiredFormat(date)})}")
+
+        if (startStation.isNotEmpty() && endStation.isNotEmpty() && date.isNotEmpty()) {
+//            Log.d("HomeFragment", "Performing search: $startStation $endStation $date")
+            viewModel.getTrainSchedule(1, 10, "asc", endStation, startStation, date)
+        }
+    }
 
 }

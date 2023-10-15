@@ -1,36 +1,68 @@
 package com.example.reserveit.screens.home
 
+
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.reserveit.models.reservation.Reservation
+import androidx.lifecycle.viewModelScope
+import com.example.reserveit.models.train_schedule.TrainData
+import com.example.reserveit.models.train_schedule.TrainScheduleModel
+import com.example.reserveit.repo.TrainScheduleRepo
+import kotlinx.coroutines.launch
 
-class HomeViewModel: ViewModel() {
+class HomeViewModel(
+    private val trainSchedule: TrainScheduleRepo
+): ViewModel() {
 
-    private  val _reservationList = mutableListOf<Reservation>()
+    private  val _trainScheduleList = MutableLiveData<List<TrainData>>()
+    private val _isLoading = MutableLiveData<Boolean>()
 
 
-    val reservationList: List<Reservation>
-        get() = _reservationList
+    val trainScheduleList: MutableLiveData<List<TrainData>>
+        get() = _trainScheduleList
+
+    val isLoading: MutableLiveData<Boolean>
+        get() = _isLoading
 
 
-    fun addReservation(reservation: Reservation){
-        _reservationList.addAll(listOf(    Reservation("Colombo", "Kandy", "08:00", "10:00", "Rs. 1100"),
-            Reservation("Galle", "Kandy", "09:30", "11:30", "Rs. 1200"),
-            Reservation("Jaffna", "Kandy", "10:45", "12:45", "Rs. 1300"),
-            Reservation("Matara", "Kandy", "11:15", "13:15", "Rs. 950"),
-            Reservation("Anuradhapura", "Kandy", "07:30", "09:30", "Rs. 1300"),
-            Reservation("Kandy", "Colombo", "13:00", "15:00", "Rs. 1000"),
-            Reservation("Kandy", "Galle", "14:30", "16:30", "Rs. 1100"),
-            Reservation("Kandy", "Jaffna", "15:45", "17:45", "Rs. 1250"),
-            Reservation("Kandy", "Matara", "16:15", "18:15", "Rs. 970"),
-            Reservation("Kandy", "Anuradhapura", "12:30", "14:30", "Rs. 1200")))
-    }
+     fun getTrainSchedule(
+        page: Int = 1,
+        pageSize: Int = 10,
+        order: String = "asc",
+        end : String = "",
+        start : String = "",
+        date : String = ""
+    ){
+        viewModelScope.launch {
 
-    fun removeReservation(reservation: Reservation){
-        _reservationList.remove(reservation)
-    }
+            try {
+                _isLoading.value = true
+                val response = trainSchedule.getTrainSchedules(
+                    page,
+                    pageSize,
+                    order,
+                    end,
+                    start,
+                    date
+                )
+                if (response.isSuccessful) {
+                    val data = response.body()
+//                    _trainScheduleList.clear()
+//                    data?.get(0)?.data?.get(0)?.let { Log.d("gg", it.trainName) }
+                    if (data != null) {
+                        _trainScheduleList.value = data.data
+                    }
 
-    fun clearReservation(){
-        _reservationList.clear()
+
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }finally {
+                _isLoading.value = false
+            }
+
+        }
+
+
     }
 
 

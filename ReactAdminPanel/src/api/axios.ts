@@ -30,9 +30,6 @@ apiClient.interceptors.response.use(
       // Remove the current token from the Redux store by dispatching a Redux action
       store.dispatch(logOut("Unauthorized,Please Sign Again")); // Dispatch your Redux action to remove the token
       window.location.href = "/signin";
-      // // Retry the original request with the new token
-      // error.config.headers['Authorization'] = `Bearer ${newToken}`;
-      // return axios.request(error.config);
     }
 
     // If the error is not related to token expiration, return it as is

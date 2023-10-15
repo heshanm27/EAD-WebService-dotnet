@@ -16,8 +16,6 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useRef, useState } from "react";
-import Navbar from "../../../components/common/navbar/navbar";
-import Footer from "../../../components/common/footer/Footer";
 
 import "react-image-gallery/styles/css/image-gallery.css";
 import ImageGallery from "react-image-gallery";
@@ -218,7 +216,6 @@ export default function ProductView() {
   console.log("reviews", reviews);
   return (
     <>
-      <Navbar />
       <Container maxWidth="xl">
         <Grid container spacing={2}>
           <Grid item xs={12} md={4} order={{ xs: 2, sm: 1 }}>
@@ -360,7 +357,6 @@ export default function ProductView() {
         <ProductReview ratings={reviews?.review?.rateData} reviews={reviews?.review?.reviews} avgRating={reviews?.review?.avgRating} />
       </Container>
       <CustomSnackBar notify={notify} setNotify={setNotify} />
-      <Footer />
     </>
   );
 }

@@ -9,19 +9,16 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { Paper, useTheme } from "@mui/material";
 import { useFormik, FormikHelpers } from "formik";
 import * as Yup from "yup";
-import Select from "react-select";
-import { ProvincesInSriLanka } from "../../assets/cosntant/constatn";
 import { useNavigate } from "react-router-dom";
 import FormLabel from "@mui/material/FormLabel";
 import CircularProgress from "@mui/material/CircularProgress";
 import { SignUpApiCall } from "../../api/authApi";
 import CustomSnackBar from "../../components/common/snackbar/Snackbar";
-import Navbar from "../../components/common/navbar/navbar";
-import Footer from "../../components/common/footer/Footer";
+
+import { ROUTE_CONSTANT } from "../../routes/Constatnt";
 function Copyright(props: any) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -117,7 +114,6 @@ export default function SignUp() {
 
   return (
     <>
-      <Navbar />
       <Container component="main" maxWidth="sm">
         <Box
           sx={{
@@ -140,12 +136,12 @@ export default function SignUp() {
               <Typography component="h1" variant="h5" color={theme.palette.primary.main}>
                 Sign up
               </Typography>
-              <label htmlFor="image-input">
+              {/* <label htmlFor="image-input">
                 <Avatar src={avatar ? URL.createObjectURL(avatar) : ""} sx={{ width: 120, height: 120 }}>
                   {!avatar && <CameraAltIcon />}
                 </Avatar>
               </label>
-              <input type="file" accept="image/*" onChange={handleImageChange} style={{ display: "none" }} id="image-input" />
+              <input type="file" accept="image/*" onChange={handleImageChange} style={{ display: "none" }} id="image-input" /> */}
               <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
@@ -329,13 +325,9 @@ export default function SignUp() {
                   {!isLoading ? "Sign Up" : <CircularProgress color="inherit" />}
                 </Button>
                 <Grid container justifyContent="space-between">
+                  <Grid item></Grid>
                   <Grid item>
-                    <Link href="/register/seller" variant="body2">
-                      Register as Seller
-                    </Link>
-                  </Grid>
-                  <Grid item>
-                    <Link href="/signin" variant="body2">
+                    <Link href={ROUTE_CONSTANT.LOGIN} variant="body2">
                       Already have an account? Sign in
                     </Link>
                   </Grid>
@@ -347,7 +339,6 @@ export default function SignUp() {
         </Box>
         <CustomSnackBar notify={notify} setNotify={setNotify} />
       </Container>
-      <Footer />
     </>
   );
 }
