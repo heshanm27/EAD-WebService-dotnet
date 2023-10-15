@@ -16,7 +16,7 @@ export default function UserManagmentPage() {
 
   useEffect(() => {
     if (isSuccess) {
-      setTableData(data);
+      setTableData(data.data);
     }
   }, [data]);
   const columns = useMemo<MRT_ColumnDef<any>[]>(
@@ -114,9 +114,9 @@ export default function UserManagmentPage() {
           isLoading,
           showAlertBanner: isError,
         }}
-        rowCount={tableData?.users?.length ?? 0}
+        rowCount={tableData?.length ?? 0}
         columns={columns}
-        data={tableData?.users ?? []}
+        data={tableData ?? []}
         muiToolbarAlertBannerProps={
           isError
             ? {

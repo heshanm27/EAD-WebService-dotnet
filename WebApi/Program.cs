@@ -56,7 +56,13 @@ internal class Program
 
         app.UseHttpsRedirection();
 
-        app.UseAuthorization();
+        app.UseAuthorization(); app.UseCors(builder =>
+{
+    builder
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader();
+});
         app.MapGet("/", () => "Server is running");
 
         app.MapControllers();
