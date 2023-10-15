@@ -54,7 +54,13 @@ class BookedDetailsFragment : Fragment() {
         binding!!.numberOfTicket.text = args.bookedDetails.reservedSeatCount.toString()+" Tickets"
 
 
-
+            if(args.isUpoming){
+                binding!!.bookCancelAction.visibility = View.VISIBLE
+                binding!!.bookUpdateAction.visibility = View.VISIBLE
+            }else{
+                binding!!.bookCancelAction.visibility = View.GONE
+                binding!!.bookUpdateAction.visibility = View.GONE
+            }
         binding?.bookCancelAction?.setOnClickListener {
             context?.let {
                 MaterialAlertDialogBuilder(it)

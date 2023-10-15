@@ -310,7 +310,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginLeft="10dp"
-            android:text="Check Out"
+            android:text="Reserve Tickets"
             android:padding="15dp"
 
             />

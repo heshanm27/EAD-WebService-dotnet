@@ -13,6 +13,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.reserveit.MainActivity
 
 import com.example.reserveit.databinding.FragmentTrainScheduleDetailsBinding
+import com.example.reserveit.models.reservation.Reservation
 import com.example.reserveit.repo.ReservationRepo
 import com.google.android.material.chip.Chip
 import kotlin.random.Random
@@ -90,6 +91,18 @@ class TrainScheduleDetailsFragment : Fragment() {
             binding!!.totalPriceCard.visibility = View.VISIBLE
             binding!!.totalPrice.text = "LKR $it.00"
             binding!!.checkOutBtn.isEnabled = true
+        }
+
+        binding!!.checkOutBtn.setOnClickListener {
+            val reservation = Reservation(
+                args.trainDetails.departureDate,
+                args.trainDetails.id,
+                "65238be46b014b079674d9a7",
+                binding!!.noSeats.text.toString().toLong(),
+                viewModel.selectedTicket.value!!
+            )
+         viewModel.addReservation(reservation)
+            findNavController().popBackStack()
         }
         return binding?.root
     }

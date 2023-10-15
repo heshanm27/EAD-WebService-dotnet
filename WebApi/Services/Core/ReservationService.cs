@@ -31,7 +31,9 @@ namespace EAD_WebService.Services.Core
                     Status = false
                 };
 
+
             }
+            booking.ReservationPrice = booking.ReservedSeatCount * booking.Ticket.TicketPrice;
 
 
             await _reservation.InsertOneAsync(booking);
@@ -138,7 +140,8 @@ namespace EAD_WebService.Services.Core
                         Status = false
                     };
                 }
-
+                Console.WriteLine(reservation.Ticket.TicketType);
+                Console.WriteLine(reservation.Ticket.TicketPrice);
                 DateTime dateTime = DateTime.UtcNow;
                 var filter = Builders<Reservation>.Filter.Eq(Reservation => Reservation.Id, id);
                 var update = Builders<Reservation>.Update
@@ -148,6 +151,7 @@ namespace EAD_WebService.Services.Core
                     .Set(Reservation => Reservation.ReservedSeatCount, reservation.ReservedSeatCount)
                     .Set(Reservation => Reservation.Ticket, reservation.Ticket)
                     .Set(Reservation => Reservation.UpdatedAt, dateTime.Date)
+                    .Set(Reservation => Reservation.ReservationPrice, reservation.Ticket.TicketPrice * reservation.ReservedSeatCount)
                     ;
 
 
@@ -237,10 +241,10 @@ namespace EAD_WebService.Services.Core
                 };
 
                 List<BsonDocument> bsonReservations = _reservation.Aggregate<BsonDocument>(pipeline).ToList();
-                foreach (BsonDocument item in bsonReservations)
-                {
-                    Console.WriteLine(item);
-                }
+                // foreach (BsonDocument item in bsonReservations)
+                // {
+                //     Console.WriteLine(item);
+                // }
 
 
 
