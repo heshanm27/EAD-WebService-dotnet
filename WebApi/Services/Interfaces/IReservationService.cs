@@ -17,10 +17,10 @@ namespace EAD_WebService.Services.Interfaces
         Task<ServiceResponse<Reservation>> GetOneReservation(string id);
 
         //get all upcoming reservation  for a user service method
-        Task<ServiceResponse<List<ReservationSuceessResponse>>> GetUpcomingReservation(BasicFilters filters, string userId);
+        Task<ServiceResponse<List<ReservationFormatedResponse>>> GetUpcomingReservation(BasicFilters filters, string userId);
 
         //get all past reservation  for a user service method
-        Task<ServiceResponse<List<ReservationSuceessResponse>>> GetPastReservation(BasicFilters filters, string userId);
+        Task<ServiceResponse<List<ReservationFormatedResponse>>> GetPastReservation(BasicFilters filters, string userId);
 
         //update reservation service method
         Task<ServiceResponse<EmptyData>> UpdateReservation(string id, Reservation reservation);

@@ -26,24 +26,10 @@
         <action
             android:id="@+id/action_profileFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_pastReservationFragment"
+            app:destination="@id/pastReservationFragment" />
 
-    </fragment>
-    <fragment
-        android:id="@+id/resrevationFragment"
-        android:name="com.example.reserveit.screens.resrevation.ResrevationFragment"
-        android:label="fragment_resrevation"
-        tools:layout="@layout/fragment_resrevation" >
-        <action
-            android:id="@+id/action_resrevationFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
-        <action
-            android:id="@+id/action_resrevationFragment_to_bookedDetailsFragment"
-            app:destination="@id/bookedDetailsFragment"
-            app:enterAnim="@android:anim/fade_in"
-            app:exitAnim="@android:anim/fade_out"
-            app:popEnterAnim="@android:anim/fade_in"
-            app:popExitAnim="@android:anim/fade_out"
-            app:popUpTo="@id/resrevationFragment" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
@@ -75,20 +61,24 @@
         android:label="fragment_booked_details"
         tools:layout="@layout/fragment_booked_details" >
         <action
-            android:id="@+id/action_bookedDetailsFragment_to_resrevationFragment"
-            app:destination="@id/resrevationFragment" />
-        <action
             android:id="@+id/action_bookedDetailsFragment_to_updateBookingFragment"
             app:destination="@id/updateBookingFragment" />
+        <argument
+            android:name="bookedDetails"
+            app:argType="com.example.reserveit.models.booked.BookedData" />
+        <argument
+            android:name="isUpoming"
+            app:argType="boolean"
+            android:defaultValue="true" />
     </fragment>
     <fragment
         android:id="@+id/updateBookingFragment"
         android:name="com.example.reserveit.screens.updateBooking.UpdateBookingFragment"
         android:label="fragment_update_booking"
         tools:layout="@layout/fragment_update_booking" >
-        <action
-            android:id="@+id/action_updateBookingFragment_to_bookedDetailsFragment"
-            app:destination="@id/bookedDetailsFragment" />
+        <argument
+            android:name="editDetails"
+            app:argType="com.example.reserveit.models.booked.BookedData" />
     </fragment>
     <fragment
         android:id="@+id/trainScheduleDetailsFragment"
@@ -101,5 +91,23 @@
         <argument
             android:name="train_details"
             app:argType="com.example.reserveit.models.train_schedule.TrainData" />
+    </fragment>
+    <fragment
+        android:id="@+id/pastReservationFragment"
+        android:name="com.example.reserveit.screens.pastReservation.PastReservationFragment"
+        android:label="fragment_past_reservation"
+        tools:layout="@layout/fragment_past_reservation" >
+        <action
+            android:id="@+id/action_pastReservationFragment_to_bookedDetailsFragment"
+            app:destination="@id/bookedDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/resrevationFragment"
+        android:name="com.example.reserveit.screens.resrevation.ResrevationFragment"
+        android:label="Upoming Reservation"
+        tools:layout="@layout/fragment_resrevation">
+        <action
+            android:id="@+id/action_resrevationFragment_to_bookedDetailsFragment3"
+            app:destination="@id/bookedDetailsFragment" />
     </fragment>
 </navigation>

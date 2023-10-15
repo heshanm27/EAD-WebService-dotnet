@@ -1,94 +1,60 @@
 package com.example.reserveit.screens.resrevation
 
+import android.content.Context
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.reserveit.models.booked.Booked
+import com.example.reserveit.models.booked.BookedData
 import com.example.reserveit.models.reservation.Reservation
+import com.example.reserveit.repo.ReservationRepo
+import com.example.reserveit.utill.AppConstants
+import kotlinx.coroutines.launch
 
 
-class ResrevationViewModel : ViewModel() {
-
-    private  val _reservationList = mutableListOf<Reservation>()
-
-
-    val reservationList: List<Reservation>
-        get() = _reservationList
+class ResrevationViewModel(
+    private val reservation: ReservationRepo,
+    private val context: Context
+) : ViewModel() {
 
 
-    fun addReservation(reservation: Reservation){
-        _reservationList.addAll(
-            listOf(
-                Reservation(
-                    arriveTime = "10:00",
-                    departTime = "08:00",
-                    endStation = "Kandy",
-                    id = "1",
-                    seatNumber = "1",
-                    startStation = "Colombo",
-                    status = "Pending",
-                    totalPrice = "Rs. 1100",
-                    trainScheduleId = "1",
-                    userId = "1",
-                    date = "2021-09-01"
-                ),
-                Reservation(
-                    arriveTime = "11:30",
-                    departTime = "09:30",
-                    endStation = "Kandy",
-                    id = "2",
-                    seatNumber = "2",
-                    startStation = "Galle",
-                    status = "Pending",
-                    totalPrice = "Rs. 1200",
-                    trainScheduleId = "2",
-                    userId = "2",
-                    date = "2021-09-01"
-                ),
-                Reservation(
-                    arriveTime = "11:30",
-                    departTime = "09:30",
-                    endStation = "Kandy",
-                    id = "2",
-                    seatNumber = "2",
-                    startStation = "Galle",
-                    status = "Pending",
-                    totalPrice = "Rs. 1200",
-                    trainScheduleId = "2",
-                    userId = "2",
-                    date = "2021-09-01"
-                ),Reservation(
-                    arriveTime = "11:30",
-                    departTime = "09:30",
-                    endStation = "Kandy",
-                    id = "2",
-                    seatNumber = "2",
-                    startStation = "Galle",
-                    status = "Pending",
-                    totalPrice = "Rs. 1200",
-                    trainScheduleId = "2",
-                    userId = "2",
-                    date = "2021-09-01"
-                ),Reservation(
-                    arriveTime = "11:30",
-                    departTime = "09:30",
-                    endStation = "Kandy",
-                    id = "2",
-                    seatNumber = "2",
-                    startStation = "Galle",
-                    status = "Pending",
-                    totalPrice = "Rs. 1200",
-                    trainScheduleId = "2",
-                    userId = "2",
-                    date = "2021-09-01"
-                ),
-            )
-        )
-    }
+    private val  _bookedDataList = MutableLiveData<List<BookedData>>()
+    private val _isLoading = MutableLiveData<Boolean>()
+    private val _isError = MutableLiveData<Boolean>()
 
-    fun removeReservation(reservation: Reservation){
-        _reservationList.remove(reservation)
-    }
 
-    fun clearReservation(){
-        _reservationList.clear()
-    }
+     val bookedDataList: MutableLiveData<List<BookedData>>
+        get() = _bookedDataList
+
+    val isLoading: MutableLiveData<Boolean>
+        get() = _isLoading
+
+    val isError: MutableLiveData<Boolean>
+        get() = _isError
+
+     fun getUpcomingReservations(){
+         viewModelScope.launch {
+             try {
+                 _isLoading.value = true
+                 _isError.value =false
+                 val userId = "65238be46b014b079674d9a7"
+                 val response = reservation.getUpcomingReservations(id = userId)
+                 if (response.isSuccessful) {
+                     val response = response.body()
+                     if (response != null) {
+                         if (response.status) {
+                             _bookedDataList.value = response.data
+                         }
+                     }
+                 }
+             }catch (e: Exception){
+                    e.printStackTrace()
+                _isError.value = true
+             }finally {
+                    _isLoading.value = false
+             }
+         }
+
+     }
 
 }

@@ -24,7 +24,7 @@ namespace EAD_WebService.Services.Interfaces
         Task<ServiceResponse<EmptyData>> removeTrainSchedule(string id);
 
         //add reservation service method
-        Task<bool> addReservation(string trainId, string reservationId);
+        Task<bool> addReservation(string trainId, string reservationId, string ticketId, int ticketCount);
         //remove reservation service method
         Task<bool> removeReservation(string trainId, string reservationId);
         //updatet train schedule status service method

@@ -26,10 +26,10 @@ namespace EAD_WebService.Controllers
         }
 
         [HttpGet("upcoming/{id}")]
-        public async Task<ActionResult<ServiceResponse<List<ReservationSuceessResponse>>>> UpcomingReservation([FromQuery] BasicFilters filters, string id)
+        public async Task<ActionResult<ServiceResponse<List<ReservationFormatedResponse>>>> UpcomingReservation([FromQuery] BasicFilters filters, string id)
         {
             Console.WriteLine(filters.Order);
-            ServiceResponse<List<ReservationSuceessResponse>> response = await _reservationService.GetUpcomingReservation(filters, id);
+            ServiceResponse<List<ReservationFormatedResponse>> response = await _reservationService.GetUpcomingReservation(filters, id);
 
             if (!response.Status) return BadRequest(response);
 
@@ -37,9 +37,9 @@ namespace EAD_WebService.Controllers
         }
 
         [HttpGet("past/{id}")]
-        public async Task<ActionResult<ServiceResponse<List<ReservationSuceessResponse>>>> GetPastReservation([FromQuery] BasicFilters filters, string id)
+        public async Task<ActionResult<ServiceResponse<List<ReservationFormatedResponse>>>> GetPastReservation([FromQuery] BasicFilters filters, string id)
         {
-            ServiceResponse<List<ReservationSuceessResponse>> response = await _reservationService.GetPastReservation(filters, id);
+            ServiceResponse<List<ReservationFormatedResponse>> response = await _reservationService.GetPastReservation(filters, id);
 
             if (!response.Status) return BadRequest(response);
 

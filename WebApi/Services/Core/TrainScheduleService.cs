@@ -275,12 +275,15 @@ namespace EAD_WebService.Services.Core
             }
         }
 
-        public async Task<bool> addReservation(string trainId, string reservationId)
+        public async Task<bool> addReservation(string trainId, string reservationId, string ticketId, int ticketCount)
         {
             try
             {
                 var filter = Builders<Train>.Filter.Eq(Train => Train.Id, trainId);
                 var update = Builders<Train>.Update.Push(Train => Train.Reservations, reservationId);
+                Console.WriteLine("Add reservation called");
+                await updateTicketsAvailability(trainId, ticketId, ticketCount);
+
 
                 await _train.UpdateOneAsync(filter, update);
 
@@ -608,7 +611,7 @@ namespace EAD_WebService.Services.Core
                 {
                     // Update the booked_count property of the specific ticket
                     ticket.TicketBooked = ticket.TicketBooked + count;
-
+                    Console.WriteLine(ticket.TicketBooked);
                     // Save the changes back to the database
                     var updateFilter = Builders<Train>.Filter.Eq("_id", trainSchedule.Id);
                     var updateDefinition = Builders<Train>.Update.Set("Tickets", trainSchedule.Tickets);
@@ -630,5 +633,7 @@ namespace EAD_WebService.Services.Core
                 };
             }
         }
+
+
     }
 }

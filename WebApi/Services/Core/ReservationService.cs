@@ -37,7 +37,7 @@ namespace EAD_WebService.Services.Core
             await _reservation.InsertOneAsync(booking);
 
 
-            _ = await _trainScheduleService.addReservation(booking.ReservedTrainId, booking.Id);
+            _ = await _trainScheduleService.addReservation(booking.ReservedTrainId, booking.Id, booking.Ticket.Id, booking.ReservedSeatCount);
             await _trainScheduleService.updateTicketsAvailability(booking.ReservedTrainId, booking.ReservedTrainId, booking.ReservedSeatCount);
 
 
@@ -171,7 +171,7 @@ namespace EAD_WebService.Services.Core
             }
         }
 
-        public async Task<ServiceResponse<List<ReservationSuceessResponse>>> GetUpcomingReservation(BasicFilters filters, string userId)
+        public async Task<ServiceResponse<List<ReservationFormatedResponse>>> GetUpcomingReservation(BasicFilters filters, string userId)
         {
             try
             {
@@ -246,18 +246,50 @@ namespace EAD_WebService.Services.Core
 
                 List<ReservationSuceessResponse> reservations = bsonReservations.Select(bsonDoc => BsonSerializer.Deserialize<ReservationSuceessResponse>(bsonDoc)).ToList();
 
-                return new ServiceResponse<List<ReservationSuceessResponse>>
+                List<ReservationSuceessResponse> sortedReservations = reservations.OrderBy(reservation => reservation.ReservedDate).ToList();
+
+                List<ReservationSuceessResponse> filteredReservations = sortedReservations.Skip(filters.PageSize).Take(filters.Page).ToList();
+
+                List<ReservationFormatedResponse> formattedTrains = reservations.Select(item => new ReservationFormatedResponse
+                {
+                    CreatedAt = item.CreatedAt.ToString("yyyy-MM-dd"),
+                    Id = item.Id,
+                    IsActive = item.IsActive,
+                    ReservedDate = item.ReservedDate.ToString("yyyy-MM-dd"),
+                    ReservedSeatCount = item.ReservedSeatCount,
+                    ReservationPrice = item.ReservationPrice,
+                    Ticket = item.Ticket,
+                    trainResponse = new TrainDtoResponse
+                    {
+                        DepartureDate = item.trainResponse.DepartureDate.ToString("yyyy-MM-dd"),
+                        EndStation = item.trainResponse.EndStation,
+                        Id = item.trainResponse.Id,
+                        StartStation = item.trainResponse.StartStation,
+                        TrainEndTime = item.trainResponse.TrainEndTime.ToString("HH:mm tt"),
+                        TrainName = item.trainResponse.TrainName,
+                        TrainNumber = item.trainResponse.TrainNumber,
+                        TrainStartTime = item.trainResponse.TrainStartTime.ToString("HH:mm tt")
+                    },
+                    userResponse = new UserDtoResponse
+                    {
+                        Id = item.userResponse.Id,
+                        FirstName = item.userResponse.FirstName,
+                        LastName = item.userResponse.LastName
+                    }
+                }).ToList();
+
+                return new ServiceResponse<List<ReservationFormatedResponse>>
                 {
                     Message = "Booking retrieved successfully",
                     Status = true,
-                    Data = reservations
+                    Data = formattedTrains
                 };
 
             }
             catch (Exception ex)
             {
 
-                return new ServiceResponse<List<ReservationSuceessResponse>>
+                return new ServiceResponse<List<ReservationFormatedResponse>>
                 {
                     Message = ex.Message,
                     Status = false
@@ -268,7 +300,7 @@ namespace EAD_WebService.Services.Core
 
         }
 
-        public async Task<ServiceResponse<List<ReservationSuceessResponse>>> GetPastReservation(BasicFilters filters, string userId)
+        public async Task<ServiceResponse<List<ReservationFormatedResponse>>> GetPastReservation(BasicFilters filters, string userId)
         {
             try
             {
@@ -339,19 +371,50 @@ namespace EAD_WebService.Services.Core
                 List<BsonDocument> bsonReservations = _reservation.Aggregate<BsonDocument>(pipeline).ToList();
                 List<ReservationSuceessResponse> reservations = bsonReservations.Select(bsonDoc => BsonSerializer.Deserialize<ReservationSuceessResponse>(bsonDoc)).ToList();
 
+                List<ReservationSuceessResponse> sortedReservations = reservations.OrderBy(reservation => reservation.ReservedDate).ToList();
 
-                return new ServiceResponse<List<ReservationSuceessResponse>>
+                List<ReservationSuceessResponse> filteredReservations = sortedReservations.Skip(filters.PageSize).Take(filters.Page).ToList();
+
+                List<ReservationFormatedResponse> formattedTrains = reservations.Select(item => new ReservationFormatedResponse
+                {
+                    CreatedAt = item.CreatedAt.ToString("yyyy-MM-dd"),
+                    Id = item.Id,
+                    IsActive = item.IsActive,
+                    ReservedDate = item.ReservedDate.ToString("yyyy-MM-dd"),
+                    ReservedSeatCount = item.ReservedSeatCount,
+                    ReservationPrice = item.ReservationPrice,
+                    Ticket = item.Ticket,
+                    trainResponse = new TrainDtoResponse
+                    {
+                        DepartureDate = item.trainResponse.DepartureDate.ToString("yyyy-MM-dd"),
+                        EndStation = item.trainResponse.EndStation,
+                        Id = item.trainResponse.Id,
+                        StartStation = item.trainResponse.StartStation,
+                        TrainEndTime = item.trainResponse.TrainEndTime.ToString("HH:mm tt"),
+                        TrainName = item.trainResponse.TrainName,
+                        TrainNumber = item.trainResponse.TrainNumber,
+                        TrainStartTime = item.trainResponse.TrainStartTime.ToString("HH:mm tt")
+                    },
+                    userResponse = new UserDtoResponse
+                    {
+                        Id = item.userResponse.Id,
+                        FirstName = item.userResponse.FirstName,
+                        LastName = item.userResponse.LastName
+                    }
+                }).ToList();
+
+                return new ServiceResponse<List<ReservationFormatedResponse>>
                 {
                     Message = "Booking retrieved successfully",
                     Status = true,
-                    Data = reservations
+                    Data = formattedTrains
                 };
             }
             catch (Exception ex)
             {
 
 
-                return new ServiceResponse<List<ReservationSuceessResponse>>
+                return new ServiceResponse<List<ReservationFormatedResponse>>
                 {
                     Message = ex.Message,
                     Status = false

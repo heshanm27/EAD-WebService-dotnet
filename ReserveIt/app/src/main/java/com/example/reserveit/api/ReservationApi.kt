@@ -1,5 +1,7 @@
 package com.example.reserveit.api
 
+import com.example.reserveit.models.booked.Booked
+import com.example.reserveit.models.booked.BookedData
 import com.example.reserveit.models.reservation.Reservation
 import retrofit2.Response
 import retrofit2.http.Body
@@ -19,18 +21,25 @@ import retrofit2.http.Query
 
 interface ReservationApi {
 
-    @GET("/reservation")
-    fun getReservations(@Query("Page") page: Int = 1,
+    @GET("reservation/upcoming/{id}")
+    suspend fun getUpcomingReservations(
+        @Path("id") id: String,
+        @Query("Page") page: Int = 1,
                         @Query("PageSize") pageSize: Int = 10,
                         @Query("SortBy") sortBy: String? = null,
                         @Query("Order") order: String = "asc",
-                        @Query("Search") search: String? = null
-    ): Response<List<Reservation>>
 
-    @GET("/reservation/{id}")
-    suspend fun getReservationById(
-        @Path("id") id: Long
-    ): Reservation
+    ): Response<Booked>
+
+    @GET("reservation/past/{id}")
+    suspend fun getPastReservations(
+        @Path("id") id: String,
+        @Query("Page") page: Int = 1,
+                        @Query("PageSize") pageSize: Int = 10,
+                        @Query("SortBy") sortBy: String? = null,
+                        @Query("Order") order: String = "asc",
+
+    ): Response<Booked>
 
     @POST("/reservation")
     suspend fun addReservation(
@@ -39,13 +48,13 @@ interface ReservationApi {
 
     @PATCH("/reservation/{id}")
     suspend fun updateReservation(
-        @Path("id") id: Long,
+        @Path("id") id: String,
         @Body reservation: Reservation
     ): Reservation
 
     @DELETE("/reservation/{id}")
     suspend fun deleteReservation(
-        @Path("id") id: Long
+        @Path("id") id: String
     ): Reservation
 
 }
