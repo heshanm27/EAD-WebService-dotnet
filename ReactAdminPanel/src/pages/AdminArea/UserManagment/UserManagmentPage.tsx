@@ -34,12 +34,12 @@ export default function UserManagmentPage() {
         enableEditing: false,
       },
       {
-        accessorKey: "isVerified", //access nested data with dot notation
-        header: "Verified",
+        accessorKey: "isActive", //access nested data with dot notation
+        header: "IsAcvtive",
         enableGlobalFilter: true,
         enableEditing: false,
         Cell: ({ renderedCellValue, row }: any) => {
-          return row.original.isVerified ? <Chip label="Verified" color="primary" /> : <Chip label="Unverified" color="warning" />;
+          return row.original.isVerified ? <Chip label="Active" color="primary" /> : <Chip label="DeActive" color="warning" />;
         },
       },
       {
