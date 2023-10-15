@@ -7,26 +7,80 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.reserveit.R
+import com.example.reserveit.adapters.UpComingReservationAdapter
+import com.example.reserveit.databinding.FragmentPastReservationBinding
+import com.example.reserveit.databinding.FragmentResrevationBinding
+import com.example.reserveit.repo.ReservationRepo
+import com.example.reserveit.screens.resrevation.ResrevationViewModel
 
 class PastReservationFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = PastReservationFragment()
-    }
-
+    private var binding : FragmentPastReservationBinding?= null
     private lateinit var viewModel: PastReservationViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_past_reservation, container, false)
+        binding = FragmentPastReservationBinding.inflate(inflater, container, false)
+
+        viewModel = PastReservationViewModel(ReservationRepo(), requireContext())
+        viewModel.getUPastReservations()
+
+        val recyclerView = binding!!.reservationRecyclerView
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context)
+
+        viewModel.bookedDataList.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+
+            if(it.isEmpty()){
+                binding!!.loaderLayout.visibility = View.VISIBLE
+                binding!!.noReservationsTextView.visibility = View.VISIBLE
+                binding!!.reservationRecyclerView.visibility = View.GONE
+                binding!!.lottieNoDocAnimationView.visibility = View.VISIBLE
+            }else {
+                val adapter = UpComingReservationAdapter(it)
+                recyclerView.adapter = adapter
+                recyclerView.adapter?.notifyDataSetChanged()
+                binding!!.noReservationsTextView.visibility = View.GONE
+                binding!!.reservationRecyclerView.visibility = View.VISIBLE
+                binding!!.lottieNoDocAnimationView.visibility = View.GONE
+                binding!!.loaderLayout.visibility = View.GONE
+            }
+        })
+
+        binding!!.refreshLayout.setOnRefreshListener {
+            viewModel.getUPastReservations()
+            binding!!.refreshLayout.isRefreshing = false
+        }
+
+        viewModel.isLoading.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+//            if (it){
+//                binding!!.loaderLayout.visibility = View.VISIBLE
+//                binding!!.lottieSearchAnimationView.visibility = View.VISIBLE
+//                binding!!.refreshLayout.visibility = View.GONE
+//            }else{
+//                binding!!.loaderLayout.visibility = View.GONE
+//                binding!!.refreshLayout.visibility = View.VISIBLE
+//            }
+        })
+
+        viewModel.isError.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+//            if (it){
+//                Snackbar.make(binding!!.reservationRelativeLayout, "Something went wrong while retrieving data", Snackbar.LENGTH_SHORT,)
+//                    .show();
+//                binding!!.loaderLayout.visibility = View.VISIBLE
+//                binding!!.lottieErrorAnimationView.visibility = View.VISIBLE
+//            }else{
+//                binding!!.loaderLayout.visibility = View.GONE
+//                binding!!.lottieErrorAnimationView.visibility = View.GONE
+//            }
+        })
+
+
+        return binding?.root;
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(PastReservationViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
+
 
 }

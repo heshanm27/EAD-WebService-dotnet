@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.reserveit.MainActivity
 import com.example.reserveit.databinding.FragmentBookedDetailsBinding
+import com.example.reserveit.repo.ReservationRepo
 import com.example.reserveit.screens.trainScheduleDetails.TrainScheduleDetailsFragmentArgs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
@@ -35,6 +36,9 @@ class BookedDetailsFragment : Fragment() {
         binding = FragmentBookedDetailsBinding.inflate(inflater, container, false)
         (activity as MainActivity?)!!.hideBottomNavigationView()
 
+        val repo = ReservationRepo()
+        viewModel = BookedDetailsViewModel(repo)
+
 
 
         binding!!.topAppBar.setNavigationOnClickListener {
@@ -54,7 +58,13 @@ class BookedDetailsFragment : Fragment() {
         binding!!.numberOfTicket.text = args.bookedDetails.reservedSeatCount.toString()+" Tickets"
 
 
-
+            if(args.isUpoming){
+                binding!!.bookCancelAction.visibility = View.VISIBLE
+                binding!!.bookUpdateAction.visibility = View.VISIBLE
+            }else{
+                binding!!.bookCancelAction.visibility = View.GONE
+                binding!!.bookUpdateAction.visibility = View.GONE
+            }
         binding?.bookCancelAction?.setOnClickListener {
             context?.let {
                 MaterialAlertDialogBuilder(it)

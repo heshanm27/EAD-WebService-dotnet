@@ -47,7 +47,15 @@ object SharedPreferenceService {
     fun edit(): SharedPreferences.Editor {
         return sharedPreferences.edit()
     }
+    fun cleatvalue(){
+        sharedPreferences.edit().clear().apply()
+    }
 
+    fun saveObject(key: String, jsonString: String, context: Context,sharedPrefKey: String) {
+        val editor = context.getSharedPreferences(sharedPrefKey, Context.MODE_PRIVATE).edit()
+        editor.putString(key, jsonString)
+        editor.apply()
+    }
     fun saveValue(key: String, value: Any) {
         val editor = sharedPreferences.edit()
         when (value) {

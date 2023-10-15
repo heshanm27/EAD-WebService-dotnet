@@ -95,19 +95,19 @@ export default function SignIn() {
     }
   }, [location]);
 
-  useEffect(() => {
-    switch (role) {
-      case "admin":
-        navigate("/admin/orders/live", { replace: true, preventScrollReset: true });
-        return;
-      case "seller":
-        navigate("/seller/orders/live", { replace: true, preventScrollReset: true });
-        return;
-      case "user":
-        navigate("/", { replace: true });
-        return;
-    }
-  }, [isLoggedIn]);
+  // useEffect(() => {
+  //   switch (role) {
+  //     case "admin":
+  //       navigate("/admin/orders/live", { replace: true, preventScrollReset: true });
+  //       return;
+  //     case "seller":
+  //       navigate("/seller/orders/live", { replace: true, preventScrollReset: true });
+  //       return;
+  //     case "user":
+  //       navigate("/", { replace: true });
+  //       return;
+  //   }
+  // }, [isLoggedIn]);
   return (
     <>
       <Container component="main" maxWidth="xs">

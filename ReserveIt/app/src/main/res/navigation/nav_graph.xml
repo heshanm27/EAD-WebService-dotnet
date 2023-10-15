@@ -79,6 +79,12 @@
         <argument
             android:name="editDetails"
             app:argType="com.example.reserveit.models.booked.BookedData" />
+        <action
+            android:id="@+id/action_updateBookingFragment_to_resrevationFragment"
+            app:destination="@id/resrevationFragment" />
+        <action
+            android:id="@+id/action_updateBookingFragment_to_pastReservationFragment"
+            app:destination="@id/pastReservationFragment" />
     </fragment>
     <fragment
         android:id="@+id/trainScheduleDetailsFragment"

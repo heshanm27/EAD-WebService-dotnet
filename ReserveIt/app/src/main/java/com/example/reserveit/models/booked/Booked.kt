@@ -16,7 +16,7 @@ data class BookedData (
     val id: String,
     val reservedDate: String,
     val isActive: Boolean,
-    val reservedSeatCount: Long,
+    var reservedSeatCount: Long,
     val ticket: BookedTicket,
     val reservationPrice: Long,
     val createdAt: String,

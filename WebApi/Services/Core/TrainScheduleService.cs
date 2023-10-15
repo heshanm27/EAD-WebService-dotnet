@@ -634,6 +634,65 @@ namespace EAD_WebService.Services.Core
             }
         }
 
+        public async Task<ServiceResponse<List<TrainGetReponseDto>>> getAllTrainSchedule(BasicFilters filters)
+        {
+            try
+            {
 
+
+                ;
+                var sort = Builders<Train>.Sort.Descending("train_start_time");
+                var filter = Builders<Train>.Filter.Empty;
+                if (filters.Order == "asc")
+                {
+                    sort = Builders<Train>.Sort.Ascending(filters.Order);
+                }
+                var trains = await _train.Find(filter).Sort(sort).Skip((filters.Page - 1) * filters.PageSize).Limit(filters.PageSize).ToListAsync();
+
+                List<TrainGetReponseDto> formattedTrains = trains.Select(train => new TrainGetReponseDto
+                {
+                    Id = train.Id,
+                    TrainName = train.TrainName,
+                    TrainNumber = train.TrainNumber,
+                    StartStation = train.StartStation,
+                    EndStation = train.EndStation,
+                    DepartureDate = train.DepartureDate.ToString("yyyy-MM-dd"),
+                    TrainStartTime = train.TrainStartTime.ToString("HH:mm tt"),
+                    TrainEndTime = train.TrainEndTime.ToString("HH:mm tt"),
+                    Tickets = train.Tickets,
+                    Reservations = train.Reservations,
+                    IsActive = train.IsActive,
+                    IsPublished = train.IsPublished,
+                    // ... other properties
+                }).ToList();
+
+                return new ServiceResponse<List<TrainGetReponseDto>>
+                {
+                    Message = "Trains retrieved successfully",
+                    Status = true,
+                    Data = formattedTrains
+
+                };
+
+            }
+            catch (MongoException)
+            {
+                return new ServiceResponse<List<TrainGetReponseDto>>
+                {
+                    Data = null,
+                    Message = "Train retrive failed",
+                    Status = false
+                };
+            }
+            catch (Exception e)
+            {
+                return new ServiceResponse<List<TrainGetReponseDto>>
+                {
+                    Message = e.Message,
+                    Status = false,
+                    Data = null
+                };
+            }
+        }
     }
 }

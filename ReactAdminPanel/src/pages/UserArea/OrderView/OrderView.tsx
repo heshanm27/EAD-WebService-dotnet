@@ -3,7 +3,6 @@ import { Box, Stack, useTheme, Typography, Button, Container, CircularProgress, 
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { fetchOneOrder } from "../../../api/orderApi";
 import ProductTable from "../../../components/common/table/ProductTable/ProductTable";
 import StatusChips from "../../../components/common/StatusChips/StatusChips";
 import CustomSnackBar from "../../../components/common/snackbar/Snackbar";
@@ -20,35 +19,35 @@ export default function UserOrderView() {
     title: "",
   });
 
-  const { data, isLoading, error, isError } = useQuery({
-    queryKey: ["order-view", docID],
-    queryFn: () => fetchOneOrder(docID),
-  });
+  // const { data, isLoading, error, isError } = useQuery({
+  //   queryKey: ["order-view", docID],
+  //   queryFn: () => fetchOneOrder(docID),
+  // });
 
-  useEffect(() => {
-    setDocID(id!);
-  }, [id]);
+  // useEffect(() => {
+  //   setDocID(id!);
+  // }, [id]);
 
-  console.log("id", data);
-  if (isLoading) {
-    return (
-      <Container maxWidth="xl" sx={{ mt: 5 }}>
-        <SkeltonLoader />
-      </Container>
-    );
-  }
+  // console.log("id", data);
+  // if (isLoading) {
+  //   return (
+  //     <Container maxWidth="xl" sx={{ mt: 5 }}>
+  //       <SkeltonLoader />
+  //     </Container>
+  //   );
+  // }
 
-  if (isError) {
-    setNotify({
-      isOpen: true,
-      message: "Error occured while data loading",
-      type: "error",
-      title: "Error",
-    });
-  }
+  // if (isError) {
+  //   setNotify({
+  //     isOpen: true,
+  //     message: "Error occured while data loading",
+  //     type: "error",
+  //     title: "Error",
+  //   });
+  // }
   return (
     <Container maxWidth="xl">
-      <Stack sx={{ mt: 3, mb: 3 }} direction={"row"} justifyContent={"space-between"} alignContent={"baseline"}>
+      {/* <Stack sx={{ mt: 3, mb: 3 }} direction={"row"} justifyContent={"space-between"} alignContent={"baseline"}>
         <Typography variant="h4" fontWeight={"bold"}>
           Order Number #{data?.orderId}
         </Typography>
@@ -96,7 +95,7 @@ export default function UserOrderView() {
             />
           </Stack>
         </Grid>
-      </Grid>
+      </Grid> */}
       <CustomSnackBar notify={notify} setNotify={setNotify} />
     </Container>
   );

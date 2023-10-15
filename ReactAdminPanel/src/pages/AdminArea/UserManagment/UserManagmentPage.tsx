@@ -1,6 +1,21 @@
-import { Box, Button, Container, IconButton, Tooltip, Typography, Chip, Select, FormControl, InputLabel, MenuItem } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  IconButton,
+  Tooltip,
+  Typography,
+  Chip,
+  Select,
+  FormControl,
+  InputLabel,
+  MenuItem,
+} from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
-import MaterialReactTable, { MRT_ColumnDef, MaterialReactTableProps } from "material-react-table";
+import MaterialReactTable, {
+  MRT_ColumnDef,
+  MaterialReactTableProps,
+} from "material-react-table";
 import { Edit } from "@mui/icons-material";
 import { useQuery } from "@tanstack/react-query";
 import CustomeDialog from "../../../components/common/CustomDialog/CustomDialog";
@@ -10,13 +25,16 @@ import UpdateUserForm from "../../../components/common/form/updateUserForm/Updat
 export default function UserManagmentPage() {
   const [open, setOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<any>();
-  const { data, error, isLoading, isError, isSuccess } = useQuery({ queryKey: ["users"], queryFn: fetchAllUsers });
+  const { data, error, isLoading, isError, isSuccess } = useQuery({
+    queryKey: ["users"],
+    queryFn: fetchAllUsers,
+  });
   const [tableData, setTableData] = useState<any>();
-  console.log(data);
+  console.log("User data", data);
 
   useEffect(() => {
     if (isSuccess) {
-      setTableData(data);
+      setTableData(data.data);
     }
   }, [data]);
   const columns = useMemo<MRT_ColumnDef<any>[]>(
@@ -34,12 +52,16 @@ export default function UserManagmentPage() {
         enableEditing: false,
       },
       {
-        accessorKey: "isVerified", //access nested data with dot notation
-        header: "Verified",
+        accessorKey: "isActive", //access nested data with dot notation
+        header: "IsAcvtive",
         enableGlobalFilter: true,
         enableEditing: false,
         Cell: ({ renderedCellValue, row }: any) => {
-          return row.original.isVerified ? <Chip label="Verified" color="primary" /> : <Chip label="Unverified" color="warning" />;
+          return row.original.isVerified ? (
+            <Chip label="Active" color="primary" />
+          ) : (
+            <Chip label="DeActive" color="warning" />
+          );
         },
       },
       {
@@ -82,14 +104,15 @@ export default function UserManagmentPage() {
     ],
     []
   );
-  const handleSaveRowEdits: MaterialReactTableProps<any>["onEditingRowSave"] = async ({ exitEditingMode, row, values }) => {
-    //if using flat data and simple accessorKeys/ids, you can just do a simple assignment here.
-    tableData[row.index] = values;
-    //send/receive api updates here
-    setTableData([...tableData]);
+  const handleSaveRowEdits: MaterialReactTableProps<any>["onEditingRowSave"] =
+    async ({ exitEditingMode, row, values }) => {
+      //if using flat data and simple accessorKeys/ids, you can just do a simple assignment here.
+      tableData[row.index] = values;
+      //send/receive api updates here
+      setTableData([...tableData]);
 
-    exitEditingMode();
-  };
+      exitEditingMode();
+    };
   console.log("tableData", tableData);
   return (
     <Container maxWidth="xl" sx={{ p: 2 }}>
@@ -114,9 +137,9 @@ export default function UserManagmentPage() {
           isLoading,
           showAlertBanner: isError,
         }}
-        rowCount={tableData?.users?.length ?? 0}
+        rowCount={tableData?.length ?? 0}
         columns={columns}
-        data={tableData?.users ?? []}
+        data={tableData ?? []}
         muiToolbarAlertBannerProps={
           isError
             ? {

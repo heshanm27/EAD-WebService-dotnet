@@ -304,12 +304,12 @@
 
             <Button
                 style="@style/Widget.Material3.Button.IconButton.Filled"
-                android:id="@+id/checkOut_btn"
+                android:id="@+id/updatebooking_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginLeft="10dp"
-                android:text="Check Out"
+                android:text="Update Booking"
                 android:padding="15dp"
 
                 />

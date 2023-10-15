@@ -1,6 +1,27 @@
 import apiClient from "./axios";
 
-export const fetchAllUsers = async () => {
+
+export interface UserData {
+  data:    User[];
+  status:  boolean;
+  message: string;
+}
+
+export interface User {
+  id:        string;
+  email:     string;
+  nic:       string;
+  firstName: string;
+  lastName:  string;
+  password:  string;
+  avatarUrl: string;
+  role:      string;
+  isActive:  boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export const fetchAllUsers = async ():Promise<UserData> => {
   try {
     const response = await apiClient.get("/user");
     return response.data;

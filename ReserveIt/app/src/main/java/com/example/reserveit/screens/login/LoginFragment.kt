@@ -46,6 +46,16 @@ class LoginFragment : Fragment() {
         binding!!.topAppBar.setNavigationOnClickListener {
             findNavController().popBackStack()
         }
+
+        binding!!.topAppBar.setOnMenuItemClickListener() { menuItem ->
+            when (menuItem.itemId) {
+                R.id.sign_up -> {
+                    findNavController().navigate(R.id.action_loginFragment_to_signUpFragment)
+                    true
+                }
+                else -> false
+            }
+        }
         
         binding!!.emailEditText.doOnTextChanged { text, start, before, count ->
 
