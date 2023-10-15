@@ -20,13 +20,13 @@ internal class Program
         builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddCors(options =>
 {
-options.AddPolicy("AllowSpecificOrigin", builder =>
-   {
-builder.WithOrigins("*")
-       .AllowAnyHeader()
-       .AllowAnyMethod()
-       .AllowCredentials(); // Allow credentials if needed
-});
+    options.AddPolicy("AllowAllOrigins",
+            builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyHeader()
+                       .AllowAnyMethod();
+            });
 });
         // Add services to the container.
 
