@@ -6,6 +6,7 @@ import { Delete, Edit } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { fetchAllProductsForSeller } from "../../../api/productApi";
 import { useAppSelector } from "../../../redux/redux-hooks";
+import { ROUTE_CONSTANT } from "../../../routes/Constatnt";
 
 export default function Booking() {
   const navigate = useNavigate();
@@ -91,7 +92,7 @@ export default function Booking() {
           </Box>
         )}
         renderTopToolbarCustomActions={() => (
-          <Button color="secondary" onClick={() => navigate("/seller/products/add")} variant="contained">
+          <Button color="secondary" onClick={() => navigate(ROUTE_CONSTANT.ADD_BOOKING_DASHBOARD)} variant="contained">
             Add Product
           </Button>
         )}

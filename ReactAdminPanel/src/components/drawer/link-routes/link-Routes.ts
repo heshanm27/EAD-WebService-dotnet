@@ -42,6 +42,12 @@ export const TRAVELER_ROUTES: LinkRoute[] = [
     icon: createElement(WorkHistoryOutlinedIcon),
     activeIcon: createElement(WorkHistoryIcon),
   },
+  {
+    path: ROUTE_CONSTANT.BOOKING_DASHBOARD,
+    name: "Booking Management",
+    icon: createElement(WorkHistoryOutlinedIcon),
+    activeIcon: createElement(WorkHistoryIcon),
+  },
 ];
 
 // export const USER_ROUTES: LinkRoute[] = [
