@@ -18,7 +18,16 @@ internal class Program
         builder.Services.AddScoped<IReservationService, ReservationService>();
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IAuthService, AuthService>();
-
+        builder.Services.AddCors(options =>
+{
+options.AddPolicy("AllowSpecificOrigin", builder =>
+   {
+builder.WithOrigins("*")
+       .AllowAnyHeader()
+       .AllowAnyMethod()
+       .AllowCredentials(); // Allow credentials if needed
+});
+});
         // Add services to the container.
 
         builder.Services.AddControllers();
