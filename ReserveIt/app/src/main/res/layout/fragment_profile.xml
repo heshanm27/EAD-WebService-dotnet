@@ -8,13 +8,13 @@
     tools:context=".screens.profile.ProfileFragment">
 
     <LinearLayout
+        android:id="@+id/sign_in_required_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="visible"
         >
-
         <com.airbnb.lottie.LottieAnimationView
             android:layout_width="match_parent"
             android:layout_height="300dp"
@@ -47,6 +47,7 @@
             />
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/profile_layout"
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" android:orientation="vertical">
@@ -89,7 +90,6 @@
         android:layout_height="100dp"
         app:cardCornerRadius="8dp"
         android:clickable="true"
-
 
         android:layout_below="@+id/name_tag_layout" >
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -206,7 +206,7 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         app:cardCornerRadius="8dp"
-
+        android:clickable="true"
         android:layout_below="@+id/settings" >
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

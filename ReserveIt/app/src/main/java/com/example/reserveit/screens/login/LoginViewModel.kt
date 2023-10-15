@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private  val authRepo: AuthRepo,
-    private  val context: Context
+    private  val context: Context,
 ) : ViewModel() {
 
 

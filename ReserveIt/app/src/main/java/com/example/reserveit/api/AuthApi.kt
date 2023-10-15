@@ -1,6 +1,7 @@
 package com.example.reserveit.api
 
 import com.example.reserveit.dto.auth.LoginRequestBody
+import com.example.reserveit.dto.auth.SignUpRequestBody
 import com.example.reserveit.models.login.LoginModel
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -18,7 +19,7 @@ interface AuthApi {
     @POST("auth/login")
     suspend  fun login(@Body loginRequestBody: LoginRequestBody): Response<LoginModel>
     @POST("auth/register")
-    suspend fun register(@Body registerBody: RequestBody): Response<LoginModel>
+    suspend fun register(@Body registerBody: SignUpRequestBody): Response<LoginModel>
 
 
 }

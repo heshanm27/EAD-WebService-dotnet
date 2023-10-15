@@ -33,6 +33,16 @@ namespace EAD_WebService.Controllers
 
         }
 
+        [HttpGet("all")]
+        public async Task<ActionResult<List<TrainGetReponseDto>>> GetAll([FromQuery] BasicFilters filters)
+        {
+            ServiceResponse<List<TrainGetReponseDto>> response = await _trainService.getAllTrainSchedule(filters);
+
+            if (!response.Status) return BadRequest(response);
+            return Ok(response);
+
+        }
+
         //This API provide train shedule for given shedule ID
         [HttpGet("{id}")]
         public async Task<ActionResult<Train>> Get(string id)
