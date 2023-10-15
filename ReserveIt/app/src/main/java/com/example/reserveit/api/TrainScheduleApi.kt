@@ -1,6 +1,7 @@
 package com.example.reserveit.api
 
 import com.example.reserveit.models.train_schedule.TrainScheduleModel
+import com.example.reserveit.models.train_schedule.TrainScheduleModelOne
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -27,6 +28,6 @@ interface TrainScheduleApi {
     @GET("train/{id}")
     suspend  fun getOneTrainSchedule(
         @Path("id") id: String
-    ): String
+    ): Response<TrainScheduleModelOne>
 
 }

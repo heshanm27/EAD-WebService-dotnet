@@ -11,6 +11,12 @@ data class TrainScheduleModel (
     val message: String
 )
 
+data class TrainScheduleModelOne (
+    val data: TrainData,
+    val status: Boolean,
+    val message: String
+)
+
 @Parcelize
 data class TrainData (
     val id: String,

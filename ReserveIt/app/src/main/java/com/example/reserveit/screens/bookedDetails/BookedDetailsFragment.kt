@@ -50,6 +50,8 @@ class BookedDetailsFragment : Fragment() {
         binding!!.arrivalTime.text = args.bookedDetails.trainResponse.trainStartTime
         binding!!.dropTime.text = args.bookedDetails.trainResponse.trainEndTime
         binding!!.trainDepartureDate.text = args.bookedDetails.trainResponse.departureDate
+        binding!!.totalPrice.text = args.bookedDetails.reservationPrice.toString()
+        binding!!.numberOfTicket.text = args.bookedDetails.reservedSeatCount.toString()+" Tickets"
 
 
 
@@ -63,13 +65,18 @@ class BookedDetailsFragment : Fragment() {
                         dialog.dismiss()
                     }
                     .setPositiveButton("Continue") { dialog, which ->
-                        // Respond to positive button press
 
+                        viewModel.cancelBooking(args.bookedDetails.id)
                         dialog.dismiss()
                         findNavController().popBackStack()
                     }
                     .show()
         }}
+
+        binding?.bookUpdateAction?.setOnClickListener {
+            val action = BookedDetailsFragmentDirections.actionBookedDetailsFragmentToUpdateBookingFragment(args.bookedDetails)
+            findNavController().navigate(action)
+        }
 
         return binding?.root
     }

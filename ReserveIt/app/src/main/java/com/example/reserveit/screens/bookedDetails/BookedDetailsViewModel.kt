@@ -8,9 +8,7 @@ import kotlinx.coroutines.launch
 class BookedDetailsViewModel(
     private val reservationRepo: ReservationRepo
 ) : ViewModel() {
-
-
-
+    
     fun cancelBooking(id: String) {
         viewModelScope.launch {
             try {
