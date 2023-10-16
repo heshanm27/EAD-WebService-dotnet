@@ -31,38 +31,31 @@ export interface TrainData {
 
 export const fetchAllTrains = async (): Promise<TrainData> => {
   try {
-    const response = await apiClient.get("/train", {
-      params: {
-        Page: 1,
-        PageSize: 10,
-        Order: "asc",
-        start: "Ahangama",
-        end: "Aluthgama",
-        date: "2023-10-23",
-      },
-    });
+    const response = await apiClient.get("/train/all");
     return response.data;
   } catch (error: any) {
     throw new Error(error.response.data.message);
   }
 };
 
-export const fetchUser = async (id: string) => {
+// interface prop {
+//   id: string;
+//   value: Train;
+// }
+
+export const updateTrain = async (train: any) => {
   try {
-    const response = await apiClient.get(`/user/${id}`);
+    console.log(train.id);
+    const response = await apiClient.patch(`/train/${train.id}`, train);
     return response.data;
   } catch (error: any) {
     throw new Error(error.response.data.message);
   }
 };
 
-interface prop {
-  id: string;
-  value: any;
-}
-export const updateUser = async ({ id, value }: prop) => {
+export const deteteTrain = async (train: any) => {
   try {
-    const response = await apiClient.patch(`/user/${id}`, value);
+    const response = await apiClient.delete(`/train/${train.id}`);
     return response.data;
   } catch (error: any) {
     throw new Error(error.response.data.message);

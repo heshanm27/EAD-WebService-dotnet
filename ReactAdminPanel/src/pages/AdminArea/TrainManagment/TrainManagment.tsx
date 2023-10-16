@@ -7,14 +7,17 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import MaterialReactTable, { MRT_ColumnDef } from "material-react-table";
 import { useQuery } from "@tanstack/react-query";
-import { Delete, Edit } from "@mui/icons-material";
+import { Delete, Edit, Train } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { fetchAllProductsForSeller } from "../../../api/productApi";
 import { useAppSelector } from "../../../redux/redux-hooks";
-import { fetchAllTrains } from "../../../api/trainManagmentApi";
+import {
+  deteteTrain,
+  fetchAllTrains,
+  updateTrain,
+} from "../../../api/trainManagmentApi";
 
 export default function TrainManagment() {
   const navigate = useNavigate();
@@ -71,7 +74,10 @@ export default function TrainManagment() {
           noRecordsToDisplay: "No records to display",
         }}
         enableEditing
-        onEditingRowSave={() => {}}
+        onEditingRowSave={(prop) => {
+          console.log("editing");
+          updateTrain(prop.row.original);
+        }}
         onEditingRowCancel={() => {}}
         state={{
           isLoading,
@@ -96,7 +102,14 @@ export default function TrainManagment() {
               </IconButton>
             </Tooltip>
             <Tooltip arrow placement="right" title="Delete">
-              <IconButton color="error" onClick={() => setOpen(true)}>
+              <IconButton
+                color="error"
+                onClick={() => {
+                  deteteTrain(row.original).then(() => {
+                    setOpen(true);
+                  });
+                }}
+              >
                 <Delete />
               </IconButton>
             </Tooltip>
