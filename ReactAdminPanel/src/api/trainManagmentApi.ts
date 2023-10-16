@@ -45,6 +45,7 @@ export const fetchAllTrains = async (): Promise<TrainData> => {
 
 export const updateTrain = async (train: any) => {
   try {
+    console.log(train.id);
     const response = await apiClient.patch(`/train/${train.id}`, train);
     return response.data;
   } catch (error: any) {
