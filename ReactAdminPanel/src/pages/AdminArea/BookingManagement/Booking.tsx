@@ -1,42 +1,72 @@
-import { Box, Button, Container, IconButton, Stack, Tooltip, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  IconButton,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import React, { useMemo, useState } from "react";
 import MaterialReactTable, { MRT_ColumnDef } from "material-react-table";
 import { useQuery } from "@tanstack/react-query";
 import { Delete, Edit } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { fetchAllProductsForSeller } from "../../../api/productApi";
-import { useAppSelector } from "../../../redux/redux-hooks";
 import { ROUTE_CONSTANT } from "../../../routes/Constatnt";
+import {
+  deleteBooking,
+  fetchAllBooking,
+} from "../../../api/bookingManagmentApi";
 
 export default function Booking() {
   const navigate = useNavigate();
-  const { data, error, isLoading, isError } = useQuery({ queryKey: ["products"], queryFn: fetchAllProductsForSeller });
+  const { data, error, isLoading, isError } = useQuery({
+    queryKey: ["booking"],
+    queryFn: fetchAllBooking,
+  });
+
+  console.log(data);
 
   const [open, setOpen] = useState(false);
   const columns = useMemo<MRT_ColumnDef[]>(
     () => [
       {
-        accessorKey: "productCode", //access nested data with dot notation
-        header: "Product Code",
+        accessorKey: "id", //access nested data with dot notation
+        header: "Ticket ID",
         enableGlobalFilter: false,
       },
       {
-        accessorKey: "name",
-        header: "Product Name",
+        accessorKey: "createdAt",
+        header: "Created Date",
       },
       {
-        accessorKey: "price",
-        header: "Product Price",
-        Cell: ({ renderedCellValue, row }: any) => {
-          return "$" + row.original.price.toFixed(2);
-        },
+        accessorKey: "reservedDate",
+        header: "Reservation Date",
       },
       {
-        accessorKey: "stock",
-        header: "Product Stock",
-        Cell: ({ renderedCellValue, row }: any) => {
-          return row.original.stock + " units";
-        },
+        accessorFn: (row: any) =>
+          row.userResponse.firstName + " " + row.userResponse.lastName,
+        header: "Name Of Reservation",
+      },
+      {
+        accessorKey: "trainResponse.startStation",
+        header: "Start Location",
+      },
+      {
+        accessorKey: "trainResponse.endStation",
+        header: "End Location",
+      },
+      {
+        accessorKey: "reservedSeatCount",
+        header: "Number Of Tickets",
+      },
+      {
+        accessorKey: "ticket.ticketType",
+        header: "Class",
+      },
+      {
+        accessorKey: "reservationPrice",
+        header: "Amount",
       },
     ],
     []
@@ -45,7 +75,7 @@ export default function Booking() {
   return (
     <Container maxWidth="xl" sx={{ p: 2 }}>
       <Typography variant="h3" sx={{ mt: 5, mb: 5 }} fontWeight={"bold"}>
-        Your Products
+        Booking Management
       </Typography>
 
       <MaterialReactTable
@@ -66,9 +96,9 @@ export default function Booking() {
           isLoading,
           showAlertBanner: isError,
         }}
-        rowCount={data?.products?.length ?? 0}
+        rowCount={data?.data?.length ?? 0}
         columns={columns}
-        data={data?.products ?? []}
+        data={data?.data ?? []}
         muiToolbarAlertBannerProps={
           isError
             ? {
@@ -85,15 +115,25 @@ export default function Booking() {
               </IconButton>
             </Tooltip>
             <Tooltip arrow placement="right" title="Delete">
-              <IconButton color="error" onClick={() => setOpen(true)}>
+              <IconButton
+                color="error"
+                onClick={() => {
+                  console.log(row.original);
+                  deleteBooking(row.original);
+                }}
+              >
                 <Delete />
               </IconButton>
             </Tooltip>
           </Box>
         )}
         renderTopToolbarCustomActions={() => (
-          <Button color="secondary" onClick={() => navigate(ROUTE_CONSTANT.ADD_BOOKING_DASHBOARD)} variant="contained">
-            Add Product
+          <Button
+            color="secondary"
+            onClick={() => navigate(ROUTE_CONSTANT.ADD_BOOKING_DASHBOARD)}
+            variant="contained"
+          >
+            Add New Booking
           </Button>
         )}
       />

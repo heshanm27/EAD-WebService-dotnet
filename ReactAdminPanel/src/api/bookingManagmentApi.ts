@@ -37,9 +37,14 @@ export interface Booking {
   trainResponse: TrainData;
 }
 
-export const fetchAllTrains = async (): Promise<Booking> => {
+interface BookingData {
+  data: Booking[];
+}
+
+export const fetchAllBooking = async (): Promise<BookingData> => {
   try {
     const response = await apiClient.get("/reservation");
+    console.log("Booking Data", response.data);
     return response.data;
   } catch (error: any) {
     throw new Error(error.response.data.message);
@@ -56,7 +61,7 @@ interface UpdateTrain {
   departureDate: string;
 }
 
-export const updateTrain = async (train: any) => {
+export const updateBooking = async (train: any) => {
   try {
     const updateData: UpdateTrain = {
       trainName: train.trainName,
@@ -75,9 +80,9 @@ export const updateTrain = async (train: any) => {
   }
 };
 
-export const deteteTrain = async (train: any) => {
+export const deleteBooking = async (booking: any) => {
   try {
-    const response = await apiClient.delete(`/train/${train.id}`);
+    const response = await apiClient.delete(`/reservation/${booking.id}`);
     return response.data;
   } catch (error: any) {
     throw new Error(error.response.data.message);
