@@ -1,6 +1,25 @@
-import { Box, Button, Container, IconButton, Tooltip, Typography, Chip, Select, FormControl, InputLabel, MenuItem, DialogContent, DialogActions, Dialog, DialogTitle } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  IconButton,
+  Tooltip,
+  Typography,
+  Chip,
+  Select,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  DialogContent,
+  DialogActions,
+  Dialog,
+  DialogTitle,
+} from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
-import MaterialReactTable, { MRT_ColumnDef, MaterialReactTableProps } from "material-react-table";
+import MaterialReactTable, {
+  MRT_ColumnDef,
+  MaterialReactTableProps,
+} from "material-react-table";
 import { Delete, Edit } from "@mui/icons-material";
 import { useQuery } from "@tanstack/react-query";
 import CustomeDialog from "../../../components/common/CustomDialog/CustomDialog";
@@ -12,9 +31,12 @@ import { updateUser } from "../../../api/userApi";
 export default function UserManagmentPage() {
   const [open, setOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<any>();
-  const [userStatusDialogOpen, setUserStatusDialogOpen] = useState(false); 
-  const [updatedUserStatus, setUpdatedUserStatus] = useState("active"); 
-  const { data, error, isLoading, isError, isSuccess } = useQuery({ queryKey: ["users"], queryFn: fetchAllUsers });
+  const [userStatusDialogOpen, setUserStatusDialogOpen] = useState(false);
+  const [updatedUserStatus, setUpdatedUserStatus] = useState("active");
+  const { data, error, isLoading, isError, isSuccess } = useQuery({
+    queryKey: ["users"],
+    queryFn: fetchAllUsers,
+  });
   const [tableData, setTableData] = useState<any>();
   console.log(data);
 
@@ -28,19 +50,19 @@ export default function UserManagmentPage() {
       value: { isActive: updatedUserStatus === "active" },
     })
       .then((response) => {
-        const updatedTableData = tableData.map((user: { id: any; }) =>
+        const updatedTableData = tableData.map((user: { id: any }) =>
           user.id === selectedUser.id
             ? { ...user, isActive: updatedUserStatus === "active" }
             : user
         );
-  
+
         setTableData(updatedTableData);
-        setUpdatedUserStatus("active"); 
+        setUpdatedUserStatus("active");
       })
       .catch((error) => {
         console.error("Error updating user status", error);
       });
-  
+
     setUserStatusDialogOpen(false);
   };
 
@@ -69,7 +91,11 @@ export default function UserManagmentPage() {
         enableGlobalFilter: true,
         enableEditing: false,
         Cell: ({ renderedCellValue, row }: any) => {
-          return row.original.isVerified ? <Chip label="Active" color="primary" /> : <Chip label="DeActive" color="warning" />;
+          return row.original.isVerified ? (
+            <Chip label="Active" color="primary" />
+          ) : (
+            <Chip label="DeActive" color="warning" />
+          );
         },
       },
       {
@@ -112,15 +138,15 @@ export default function UserManagmentPage() {
     ],
     []
   );
-  const handleSaveRowEdits: MaterialReactTableProps<any>["onEditingRowSave"] = async ({ exitEditingMode, row, values }) => {
-    //if using flat data and simple accessorKeys/ids, you can just do a simple assignment here.
-    tableData[row.index] = values;
-    //send/receive api updates here
-    setTableData([...tableData]);
+  const handleSaveRowEdits: MaterialReactTableProps<any>["onEditingRowSave"] =
+    async ({ exitEditingMode, row, values }) => {
+      //if using flat data and simple accessorKeys/ids, you can just do a simple assignment here.
+      tableData[row.index] = values;
+      //send/receive api updates here
+      setTableData([...tableData]);
 
-    exitEditingMode();
-  };
-
+      exitEditingMode();
+    };
 
   console.log("tableData", tableData);
   return (
@@ -161,10 +187,11 @@ export default function UserManagmentPage() {
           <Box sx={{ display: "flex", gap: "1rem" }}>
             <Tooltip arrow placement="left" title="Edit">
               <IconButton
-               onClick={() => {
-                setSelectedUser(row.original);
-                setOpen(true);
-              }}
+                onClick={() => {
+                  setSelectedUser(row.original);
+                  setOpen(true);
+                  setUserStatusDialogOpen(true);
+                }}
               >
                 <Edit />
               </IconButton>
@@ -182,7 +209,10 @@ export default function UserManagmentPage() {
           </Box>
         )}
       />
-      <Dialog open={userStatusDialogOpen} onClose={() => setUserStatusDialogOpen(false)}>
+      <Dialog
+        open={userStatusDialogOpen}
+        onClose={() => setUserStatusDialogOpen(false)}
+      >
         <DialogTitle>Update User Status</DialogTitle>
         <DialogContent>
           <p>Select the user status:</p>
@@ -201,7 +231,10 @@ export default function UserManagmentPage() {
           </FormControl>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setUserStatusDialogOpen(false)} color="primary">
+          <Button
+            onClick={() => setUserStatusDialogOpen(false)}
+            color="primary"
+          >
             Cancel
           </Button>
           <Button onClick={handleUpdateStatusConfirm} color="primary">
