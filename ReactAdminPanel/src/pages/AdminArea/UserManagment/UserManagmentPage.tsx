@@ -1,18 +1,48 @@
-import { Box, Button, Container, IconButton, Tooltip, Typography, Chip, Select, FormControl, InputLabel, MenuItem } from "@mui/material";
+import { Box, Button, Container, IconButton, Tooltip, Typography, Chip, Select, FormControl, InputLabel, MenuItem, DialogContent, DialogActions, Dialog, DialogTitle } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
 import MaterialReactTable, { MRT_ColumnDef, MaterialReactTableProps } from "material-react-table";
-import { Edit } from "@mui/icons-material";
+import { Delete, Edit } from "@mui/icons-material";
 import { useQuery } from "@tanstack/react-query";
 import CustomeDialog from "../../../components/common/CustomDialog/CustomDialog";
 import AddCategoryForm from "../../../components/common/form/addCategoryForm/AddCategoryForm";
 import { fetchAllUsers } from "../../../api/userApi";
 import UpdateUserForm from "../../../components/common/form/updateUserForm/UpdateUserForm";
+import { deleteUser } from "../../../api/userApi";
+import { updateUser } from "../../../api/userApi";
 export default function UserManagmentPage() {
   const [open, setOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<any>();
+  const [userStatusDialogOpen, setUserStatusDialogOpen] = useState(false); 
+  const [updatedUserStatus, setUpdatedUserStatus] = useState("active"); 
   const { data, error, isLoading, isError, isSuccess } = useQuery({ queryKey: ["users"], queryFn: fetchAllUsers });
   const [tableData, setTableData] = useState<any>();
   console.log(data);
+
+  const handleStatusChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setUpdatedUserStatus(event.target.value as string);
+  };
+
+  const handleUpdateStatusConfirm = () => {
+    updateUser({
+      id: selectedUser.id,
+      value: { isActive: updatedUserStatus === "active" },
+    })
+      .then((response) => {
+        const updatedTableData = tableData.map((user: { id: any; }) =>
+          user.id === selectedUser.id
+            ? { ...user, isActive: updatedUserStatus === "active" }
+            : user
+        );
+  
+        setTableData(updatedTableData);
+        setUpdatedUserStatus("active"); 
+      })
+      .catch((error) => {
+        console.error("Error updating user status", error);
+      });
+  
+    setUserStatusDialogOpen(false);
+  };
 
   useEffect(() => {
     if (isSuccess) {
@@ -90,6 +120,8 @@ export default function UserManagmentPage() {
 
     exitEditingMode();
   };
+
+
   console.log("tableData", tableData);
   return (
     <Container maxWidth="xl" sx={{ p: 2 }}>
@@ -129,20 +161,54 @@ export default function UserManagmentPage() {
           <Box sx={{ display: "flex", gap: "1rem" }}>
             <Tooltip arrow placement="left" title="Edit">
               <IconButton
-                onClick={() => {
-                  setSelectedUser(row.original);
-                  setOpen(true);
-                }}
+               onClick={() => {
+                setSelectedUser(row.original);
+                setOpen(true);
+              }}
               >
                 <Edit />
+              </IconButton>
+            </Tooltip>
+            <Tooltip arrow placement="left" title="Delete">
+              <IconButton
+                onClick={() => {
+                  deleteUser(row.original.id);
+                  //setOpen(true);
+                }}
+              >
+                <Delete />
               </IconButton>
             </Tooltip>
           </Box>
         )}
       />
-      <CustomeDialog open={open} setOpen={setOpen} title={"Update User Role"}>
-        <UpdateUserForm user={selectedUser} setOpen={setOpen} />
-      </CustomeDialog>
+      <Dialog open={userStatusDialogOpen} onClose={() => setUserStatusDialogOpen(false)}>
+        <DialogTitle>Update User Status</DialogTitle>
+        <DialogContent>
+          <p>Select the user status:</p>
+          <FormControl fullWidth>
+            <InputLabel id="user-status-label">User Status</InputLabel>
+            <Select
+              labelId="user-status-label"
+              id="user-status"
+              value={updatedUserStatus}
+              onChange={(e) => setUpdatedUserStatus(e.target.value as string)}
+              label="User Status"
+            >
+              <MenuItem value="active">Active</MenuItem>
+              <MenuItem value="deactivate">Deactivate</MenuItem>
+            </Select>
+          </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setUserStatusDialogOpen(false)} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleUpdateStatusConfirm} color="primary">
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }

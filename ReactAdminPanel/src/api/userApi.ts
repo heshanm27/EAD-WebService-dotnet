@@ -51,3 +51,12 @@ export const updateUser = async ({ id, value }: prop) => {
     throw new Error(error.response.data.message);
   }
 };
+
+export const deleteUser = async (id: string) => {
+  try {
+    const response = await apiClient.delete(`/user/${id}`);
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response.data.message);
+  }
+};
