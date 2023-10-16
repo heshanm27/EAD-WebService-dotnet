@@ -38,7 +38,7 @@ export default function UserManagmentPage() {
     queryFn: fetchAllUsers,
   });
   const [tableData, setTableData] = useState<any>();
-  console.log(data);
+  console.log("User data", data);
 
   const handleStatusChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setUpdatedUserStatus(event.target.value as string);

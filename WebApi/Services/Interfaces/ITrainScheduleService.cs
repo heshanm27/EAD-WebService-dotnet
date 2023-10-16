@@ -14,6 +14,9 @@ namespace EAD_WebService.Services.Interfaces
 
         //create train schedule service method
         Task<ServiceResponse<Train>> createTrainSchedule(Train train);
+
+        Task<ServiceResponse<List<TrainGetReponseDto>>> getAllTrainSchedule(BasicFilters filters);
+
         //get one train schedule service method
         Task<ServiceResponse<Train>> getTrainSchedule(string id);
         //get all train schedules service method

@@ -41,18 +41,18 @@ interface ReservationApi {
 
     ): Response<Booked>
 
-    @POST("/reservation")
+    @POST("reservation")
     suspend fun addReservation(
         @Body reservation: Reservation
     ): Reservation
 
-    @PATCH("/reservation/{id}")
+    @PATCH("reservation/{id}")
     suspend fun updateReservation(
         @Path("id") id: String,
         @Body reservation: Reservation
     ): Reservation
 
-    @DELETE("/reservation/{id}")
+    @DELETE("reservation/{id}")
     suspend fun deleteReservation(
         @Path("id") id: String
     ): Reservation

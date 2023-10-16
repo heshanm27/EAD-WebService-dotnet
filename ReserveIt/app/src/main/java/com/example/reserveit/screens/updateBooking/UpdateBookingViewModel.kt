@@ -35,6 +35,8 @@ class UpdateBookingViewModel(
         viewModelScope.launch{
             try {
                 reservationRepo.updateReservation(id,reservation)
+
+
             } catch (e: Exception) {
                 e.printStackTrace()
             }
