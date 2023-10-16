@@ -130,7 +130,8 @@ class LoginFragment : Fragment() {
             if (loginResponse != null) {
                 Log.d("ggview", loginResponse.status.toString())
                 if(loginResponse.status === true){
-                    findNavController().popBackStack(R.id.action_loginFragment_to_profileFragment, false)
+                    findNavController().popBackStack()
+                    findNavController().navigate(R.id.action_loginFragment_to_profileFragment)
                 }else{
                     binding!!.errorText.visibility = View.VISIBLE
                     binding!!.errorText.error = loginResponse.message

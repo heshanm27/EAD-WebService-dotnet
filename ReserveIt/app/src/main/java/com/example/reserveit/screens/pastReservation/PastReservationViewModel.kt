@@ -5,7 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.reserveit.models.booked.BookedData
+import com.example.reserveit.models.login.LoginModel
 import com.example.reserveit.repo.ReservationRepo
+import com.example.reserveit.util.SharedPreferenceService
+import com.example.reserveit.utill.AppConstants
 import kotlinx.coroutines.launch
 
 class PastReservationViewModel(
@@ -31,13 +34,22 @@ class PastReservationViewModel(
             try {
                 _isLoading.value = true
                 _isError.value =false
-                val userId = "65238be46b014b079674d9a72"
-                val response = reservation.getPastReservations(id = userId)
-                if (response.isSuccessful) {
-                    val response = response.body()
-                    if (response != null) {
-                        if (response.status) {
-                            _bookedDataList.value = response.data
+
+                SharedPreferenceService.initialize(context)
+                val sharedPreferences =  SharedPreferenceService.loadObject(AppConstants.USER_DATA, LoginModel::class.java)
+
+                if (sharedPreferences != null && sharedPreferences is LoginModel) {
+
+                    if(sharedPreferences.data != null) {
+                        val userId = sharedPreferences.data.userId
+                        val response = reservation.getPastReservations(id = userId)
+                        if (response.isSuccessful) {
+                            val response = response.body()
+                            if (response != null) {
+                                if (response.status) {
+                                    _bookedDataList.value = response.data
+                                }
+                            }
                         }
                     }
                 }

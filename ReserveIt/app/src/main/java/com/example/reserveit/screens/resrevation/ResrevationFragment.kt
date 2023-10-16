@@ -55,20 +55,17 @@ class ResrevationFragment : Fragment() {
                 val adapter = UpComingReservationAdapter(it)
                 recyclerView.adapter = adapter
                 recyclerView.adapter?.notifyDataSetChanged()
-//                binding!!.noReservationsTextView.visibility = View.GONE
                 binding!!.reservationRecyclerView.visibility = View.VISIBLE
-//                binding!!.lottieNoDocAnimationView.visibility = View.GONE
-//                binding!!.loaderLayout.visibility = View.GONE
                 if(binding!!.loaderLayout.visibility == View.VISIBLE){
                     binding!!.loaderLayout.visibility = View.GONE
                 }
             }
         })
 
-        binding!!.refreshLayout.setOnRefreshListener {
-            viewModel.getUpcomingReservations()
-            binding!!.refreshLayout.isRefreshing = false
-        }
+//        binding!!.refreshLayout.setOnRefreshListener {
+//            viewModel.getUpcomingReservations()
+//            binding!!.refreshLayout.isRefreshing = false
+//        }
 
         viewModel.isLoading.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             if (it){

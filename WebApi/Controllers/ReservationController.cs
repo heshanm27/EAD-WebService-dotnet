@@ -57,6 +57,16 @@ namespace EAD_WebService.Controllers
             return Ok(response);
         }
 
+        [HttpGet]
+        public async Task<ActionResult<ServiceResponse<List<ReservationFormatedResponse>>>> GetAll([FromQuery] BasicFilters filters)
+        {
+            ServiceResponse<List<ReservationFormatedResponse>> response = await _reservationService.GetAllReservation(filters);
+
+            if (!response.Status) return BadRequest(response);
+
+            return Ok(response);
+        }
+
 
         //API endpoit for add new reservation
 

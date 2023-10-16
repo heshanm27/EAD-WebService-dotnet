@@ -52,7 +52,8 @@ namespace EAD_WebService.Services.Core
                         FirstName = user.FirstName,
                         LastName = user.LastName,
                         AvatarUrl = user.AvatarUrl,
-                        Role = user.Role
+                        Role = user.Role,
+                        UserId = user.Id
                     },
                     Message = "Login Successful",
                     Status = true
@@ -138,7 +139,8 @@ namespace EAD_WebService.Services.Core
                         FirstName = user.FirstName,
                         LastName = user.LastName,
                         AvatarUrl = user.AvatarUrl,
-                        Token = createToken(user)
+                        Token = createToken(user),
+                        UserId = user.Id,
                     },
                     Message = "User created successfully",
                     Status = true

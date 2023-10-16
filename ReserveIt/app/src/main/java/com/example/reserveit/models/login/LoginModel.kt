@@ -22,5 +22,7 @@ data class Data (
     @SerializedName( "avatarUrl")
     val avatarURL: String,
 
-    val role: String
+    val role: String,
+
+    val userId: String
 )

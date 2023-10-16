@@ -54,10 +54,7 @@ class LoginViewModel(
                                 AppConstants.TOKEN_KEY,
                                 data.data?.token ?: ""
                             )
-                            //convert data to json
-                            val gson = Gson()
-                            val json = gson.toJson(data)
-                            SharedPreferenceService.saveValue(AppConstants.USER_DATA, json)
+                            SharedPreferenceService.saveObject(AppConstants.USER_DATA, data)
                             _loginResponse.value = data
                         }
                     }

@@ -428,5 +428,112 @@ namespace EAD_WebService.Services.Core
 
 
         }
+
+        async public Task<ServiceResponse<List<ReservationFormatedResponse>>> GetAllReservation(BasicFilters filters)
+        {
+            try
+            {
+
+
+
+
+                var pipeline = new BsonDocument[]
+                {
+                            new BsonDocument("$lookup", new BsonDocument
+                            {
+                                { "from", "train" },
+                                { "localField", "reserved_train" },
+                                { "foreignField", "_id" },
+                                { "as", "train" }
+                            }),
+                            new BsonDocument("$lookup", new BsonDocument
+                            {
+                                { "from", "user" },
+                                { "localField", "reserved_user" },
+                                { "foreignField", "_id" },
+                                { "as", "user" }
+                            }),
+                            new BsonDocument("$unwind", "$train"),
+                            new BsonDocument("$unwind", "$user"),
+                            new BsonDocument("$project", new BsonDocument
+                            {
+                                {"_id",1},
+                                {"reserved_date",1},
+                                {"reserved_seat_count",1},
+                                {"reservation_price",1},
+                                {"created_at",1},
+                                {"ticket",1},
+                                {"user",new BsonDocument
+                                {
+                                    {"_id",1},
+                                    {"first_name",1},
+                                    {"last_name",1}
+                                }},
+                                {
+                                    "train",new BsonDocument
+                                    {
+                                        {"train_name",1},
+                                        {"_id",1},
+                                        {"train_number",1},
+                                        {"train_start_time",1},
+                                        {"end_station",1},
+                                        {"start_station",1},
+                                        {"train_end_time",1},
+                                        {"departure_date",1}
+                                    }
+                                }
+                            })
+                                        };
+
+                List<BsonDocument> bsonReservations = _reservation.Aggregate<BsonDocument>(pipeline).ToList();
+                List<ReservationSuceessResponse> reservations = bsonReservations.Select(bsonDoc => BsonSerializer.Deserialize<ReservationSuceessResponse>(bsonDoc)).ToList();
+
+                List<ReservationFormatedResponse> formattedTrains = reservations.Select(item => new ReservationFormatedResponse
+                {
+                    CreatedAt = item.CreatedAt.ToString("yyyy-MM-dd"),
+                    Id = item.Id,
+                    IsActive = item.IsActive,
+                    ReservedDate = item.ReservedDate.ToString("yyyy-MM-dd"),
+                    ReservedSeatCount = item.ReservedSeatCount,
+                    ReservationPrice = item.ReservationPrice,
+                    Ticket = item.Ticket,
+                    trainResponse = new TrainDtoResponse
+                    {
+                        DepartureDate = item.trainResponse.DepartureDate.ToString("yyyy-MM-dd"),
+                        EndStation = item.trainResponse.EndStation,
+                        Id = item.trainResponse.Id,
+                        StartStation = item.trainResponse.StartStation,
+                        TrainEndTime = item.trainResponse.TrainEndTime.ToString("HH:mm tt"),
+                        TrainName = item.trainResponse.TrainName,
+                        TrainNumber = item.trainResponse.TrainNumber,
+                        TrainStartTime = item.trainResponse.TrainStartTime.ToString("HH:mm tt")
+                    },
+                    userResponse = new UserDtoResponse
+                    {
+                        Id = item.userResponse.Id,
+                        FirstName = item.userResponse.FirstName,
+                        LastName = item.userResponse.LastName
+                    }
+                }).ToList();
+
+                return new ServiceResponse<List<ReservationFormatedResponse>>
+                {
+                    Message = "Booking retrieved successfully",
+                    Status = true,
+                    Data = formattedTrains
+                };
+            }
+            catch (Exception ex)
+            {
+
+
+                return new ServiceResponse<List<ReservationFormatedResponse>>
+                {
+                    Message = ex.Message,
+                    Status = false
+                };
+
+            }
+        }
     }
 }

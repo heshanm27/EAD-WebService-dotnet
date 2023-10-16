@@ -18,6 +18,8 @@ namespace EAD_WebService.Dto.Auth
 
         public string Role { get; set; } = null!;
 
+        public string UserId { get; set; } = null!;
+
 
     }
 }

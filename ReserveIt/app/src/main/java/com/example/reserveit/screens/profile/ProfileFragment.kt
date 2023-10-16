@@ -38,27 +38,22 @@ class ProfileFragment : Fragment() {
                 findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
         }
         SharedPreferenceService.initialize(requireContext())
-        val sharedPreferences =  SharedPreferenceService.getString(AppConstants.TOKEN_KEY, "")
-//        val jsonString = SharedPreferenceService.getString(AppConstants.USER_DATA_KEY, "")
-//        val gson = Gson()
-//        val user = gson.fromJson(jsonString, LoginModel::class.java)
-//
-//        if (sharedPreferences != null) {
-//            if (sharedPreferences.isNotEmpty()){
-//            Log.d("ggtoken", user.data?.token.toString())
-//            }
-//        }
+        val sharedPreferences =  SharedPreferenceService.loadObject(AppConstants.USER_DATA, LoginModel::class.java)
 
-        if (sharedPreferences != null) {
-            if (sharedPreferences.isNotEmpty()){
-                    binding!!.signInRequiredLayout.visibility = View.GONE
-                    binding!!.profileLayout.visibility = View.VISIBLE
-            }
+
+        if (sharedPreferences != null && sharedPreferences is LoginModel) {
+            binding!!.signInRequiredLayout.visibility = View.GONE
+            binding!!.profileLayout.visibility = View.VISIBLE
+            binding!!.userName.text = sharedPreferences.data.firstName + " " + sharedPreferences.data.lastName
+           Log.d("sharedPreferences", sharedPreferences.data.toString())
         }
 
+        binding!!.pastReservation.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_pastReservationFragment)
+        }
 
         binding!!.logOut.setOnClickListener {
-            SharedPreferenceService.cleatvalue()
+            SharedPreferenceService.clearAll()
             binding!!.signInRequiredLayout.visibility = View.VISIBLE
             binding!!.profileLayout.visibility = View.GONE
         }

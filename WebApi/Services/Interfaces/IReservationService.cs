@@ -16,6 +16,8 @@ namespace EAD_WebService.Services.Interfaces
         //get one reservation service method
         Task<ServiceResponse<Reservation>> GetOneReservation(string id);
 
+
+        Task<ServiceResponse<List<ReservationFormatedResponse>>> GetAllReservation(BasicFilters filters);
         //get all upcoming reservation  for a user service method
         Task<ServiceResponse<List<ReservationFormatedResponse>>> GetUpcomingReservation(BasicFilters filters, string userId);
 

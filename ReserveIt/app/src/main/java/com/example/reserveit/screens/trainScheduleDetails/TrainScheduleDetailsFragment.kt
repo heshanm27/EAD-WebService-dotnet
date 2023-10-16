@@ -13,9 +13,13 @@ import androidx.navigation.fragment.navArgs
 import com.example.reserveit.MainActivity
 
 import com.example.reserveit.databinding.FragmentTrainScheduleDetailsBinding
+import com.example.reserveit.models.login.LoginModel
 import com.example.reserveit.models.reservation.Reservation
 import com.example.reserveit.repo.ReservationRepo
+import com.example.reserveit.util.SharedPreferenceService
+import com.example.reserveit.utill.AppConstants
 import com.google.android.material.chip.Chip
+import com.google.android.material.snackbar.Snackbar
 import kotlin.random.Random
 
 
@@ -93,17 +97,35 @@ class TrainScheduleDetailsFragment : Fragment() {
             binding!!.checkOutBtn.isEnabled = true
         }
 
+
+        SharedPreferenceService.initialize(requireContext())
+        val sharedPreferences =  SharedPreferenceService.loadObject(AppConstants.USER_DATA, LoginModel::class.java)
+//
+//
         binding!!.checkOutBtn.setOnClickListener {
-            val reservation = Reservation(
-                args.trainDetails.departureDate,
-                args.trainDetails.id,
-                "65238be46b014b079674d9a7",
-                binding!!.noSeats.text.toString().toLong(),
-                viewModel.selectedTicket.value!!
-            )
-         viewModel.addReservation(reservation)
-            findNavController().popBackStack()
+
+            if (sharedPreferences != null && sharedPreferences is LoginModel) {
+
+                if(sharedPreferences.data != null){
+                    val reservation = Reservation(
+                        args.trainDetails.departureDate,
+                        args.trainDetails.id,
+                        sharedPreferences.data.userId,
+                        binding!!.noSeats.text.toString().toLong(),
+                        viewModel.selectedTicket.value!!
+                    )
+                    viewModel.addReservation(reservation)
+                    findNavController().popBackStack()
+                }
+            }else{
+                Snackbar.make(binding!!.mainLayout, "Please login to continue", Snackbar.LENGTH_SHORT,)
+                    .show()
+//                findNavController().navigate(R.id.action_trainScheduleDetailsFragment_to_profileFragment)
+            }
+
         }
+
+
         return binding?.root
     }
 

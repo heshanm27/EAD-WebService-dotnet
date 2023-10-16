@@ -46,6 +46,13 @@
             android:layout_marginBottom="32dp"
             />
 
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            app:lottie_rawRes="@raw/login"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

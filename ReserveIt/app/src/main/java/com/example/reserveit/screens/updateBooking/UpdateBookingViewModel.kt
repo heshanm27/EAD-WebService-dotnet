@@ -36,7 +36,6 @@ class UpdateBookingViewModel(
             try {
                 reservationRepo.updateReservation(id,reservation)
 
-
             } catch (e: Exception) {
                 e.printStackTrace()
             }
