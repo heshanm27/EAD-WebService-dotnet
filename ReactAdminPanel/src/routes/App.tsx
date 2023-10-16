@@ -7,7 +7,7 @@ import UserManagmentPage from "../pages/AdminArea/UserManagment/UserManagmentPag
 import NotFound from "../pages/NotFound/NotFound";
 import { ROUTE_CONSTANT } from "./Constatnt";
 import TrainManagment from "../pages/AdminArea/TrainManagment/TrainManagment";
-import Booking from "../pages/TravelerArea/Booking/Booking";
+import Booking from "../pages/AdminArea/BookingManagement/Booking";
 import AddBooking from "../pages/TravelerArea/AddBooking/AddBooking";
 
 function App() {
@@ -29,10 +29,22 @@ function App() {
           {/* <Route element={<ProtectedRoute />}>
             <Route element={<RoleRoute allowedRoles={["admin"]} />}> */}
 
-          <Route path={ROUTE_CONSTANT.TRAIN_MANAGEMENT_DASHBOARD} element={<TrainManagment />} />
-          <Route path={ROUTE_CONSTANT.USER_MANAGEMENT_DASHBOARD} element={<UserManagmentPage />} />
-          <Route path={ROUTE_CONSTANT.BOOKING_DASHBOARD} element={<Booking />} />
-          <Route path={ROUTE_CONSTANT.ADD_BOOKING_DASHBOARD} element={<AddBooking />} />
+          <Route
+            path={ROUTE_CONSTANT.TRAIN_MANAGEMENT_DASHBOARD}
+            element={<TrainManagment />}
+          />
+          <Route
+            path={ROUTE_CONSTANT.USER_MANAGEMENT_DASHBOARD}
+            element={<UserManagmentPage />}
+          />
+          <Route
+            path={ROUTE_CONSTANT.BOOKING_DASHBOARD}
+            element={<Booking />}
+          />
+          <Route
+            path={ROUTE_CONSTANT.ADD_BOOKING_DASHBOARD}
+            element={<AddBooking />}
+          />
 
           {/* </Route> */}
         </Route>

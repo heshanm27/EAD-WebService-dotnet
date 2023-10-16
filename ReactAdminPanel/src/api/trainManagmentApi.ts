@@ -1,6 +1,6 @@
 import apiClient from "./axios";
 
-interface Ticket {
+export interface Ticket {
   id: "string";
   ticketType: "string";
   ticketPrice: 0;
@@ -38,15 +38,29 @@ export const fetchAllTrains = async (): Promise<TrainData> => {
   }
 };
 
-// interface prop {
-//   id: string;
-//   value: Train;
-// }
+interface UpdateTrain {
+  trainName: string;
+  trainNumber: string;
+  startStation: string;
+  endStation: string;
+  trainStartTime: string;
+  trainEndTime: string;
+  departureDate: string;
+}
 
 export const updateTrain = async (train: any) => {
   try {
-    console.log(train.id);
-    const response = await apiClient.patch(`/train/${train.id}`, train);
+    const updateData: UpdateTrain = {
+      trainName: train.trainName,
+      trainNumber: train.trainNumber,
+      startStation: train.startStation,
+      endStation: train.endStation,
+      trainStartTime: train.trainStartTime,
+      trainEndTime: train.trainEndTime,
+      departureDate: train.departureDate,
+    };
+
+    const response = await apiClient.patch(`/train/${train.id}`, updateData);
     return response.data;
   } catch (error: any) {
     throw new Error(error.response.data.message);
