@@ -43,20 +43,20 @@ export const fetchAllTrains = async (): Promise<TrainData> => {
 //   value: Train;
 // }
 
-export const updateTrain = async (value: any) => {
+export const updateTrain = async (train: any) => {
   try {
-    const response = await apiClient.patch(`/train/${value.id}`, value);
+    const response = await apiClient.patch(`/train/${train.id}`, train);
     return response.data;
   } catch (error: any) {
     throw new Error(error.response.data.message);
   }
 };
 
-// export const fetchUser = async (id: string) => {
-//   try {
-//     const response = await apiClient.get(`/user/${id}`);
-//     return response.data;
-//   } catch (error: any) {
-//     throw new Error(error.response.data.message);
-//   }
-// };
+export const deteteTrain = async (train: any) => {
+  try {
+    const response = await apiClient.delete(`/train/${train.id}`);
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response.data.message);
+  }
+};
