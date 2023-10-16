@@ -14,7 +14,7 @@ import { Delete, Edit } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { fetchAllProductsForSeller } from "../../../api/productApi";
 import { useAppSelector } from "../../../redux/redux-hooks";
-import { fetchAllTrains } from "../../../api/trainManagmentApi";
+import { fetchAllTrains, updateTrain } from "../../../api/trainManagmentApi";
 
 export default function TrainManagment() {
   const navigate = useNavigate();
@@ -71,7 +71,12 @@ export default function TrainManagment() {
           noRecordsToDisplay: "No records to display",
         }}
         enableEditing
-        onEditingRowSave={() => {}}
+        onEditingRowSave={(prop) => {
+          // console.log(prop.row.original);
+          updateTrain(prop.row.original).then((data) => {
+            console.log(data);
+          });
+        }}
         onEditingRowCancel={() => {}}
         state={{
           isLoading,
