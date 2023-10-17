@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.example.reserveit.MainActivity
 import com.example.reserveit.R
 import com.example.reserveit.databinding.FragmentLoginBinding
 import com.example.reserveit.databinding.FragmentProfileBinding
@@ -28,12 +29,16 @@ class ProfileFragment : Fragment() {
     private var binding: FragmentProfileBinding ?= null
     private lateinit var viewModel: ProfileViewModel
 
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity?)!!.showBottomNavigationView()
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
-
+        (activity as MainActivity?)!!.showBottomNavigationView()
         binding!!.signInButton.setOnClickListener {
                 findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
         }

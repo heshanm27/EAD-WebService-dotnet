@@ -98,11 +98,11 @@ export default function AddBooking() {
               sx={{ width: "100%" }}
               onChange={(newValue: any) => setFieldValue("departureDate", moment(newValue).format("YYYY-MM-DD"))}
             />
-            <LoadingButton fullWidth loading={isLoading} onClick={() => handleSubmit()} variant="outlined">
+            <LoadingButton fullWidth loading={false} onClick={() => handleSubmit()} variant="outlined">
               Search
             </LoadingButton>
 
-            {isLoading ? (
+            {false ? (
               <CustomCirculerProgress />
             ) : (
               <Grid container spacing={2}>

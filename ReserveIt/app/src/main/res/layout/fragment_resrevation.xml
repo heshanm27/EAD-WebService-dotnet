@@ -32,6 +32,7 @@
         android:id="@+id/loader_layout"
         android:layout_below="@+id/appBarLayout"
         android:orientation="vertical"
+        android:visibility="visible"
         >
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottie_search_animation_view"
@@ -66,7 +67,7 @@
             app:lottie_loop="true"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:visibility="gone"
+            android:visibility="visible"
 
 
 
@@ -88,7 +89,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_below="@+id/appBarLayout"
-
+        android:visibility="gone"
     >
 
     <androidx.recyclerview.widget.RecyclerView

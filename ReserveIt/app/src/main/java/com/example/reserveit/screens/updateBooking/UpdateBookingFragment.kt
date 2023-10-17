@@ -140,11 +140,11 @@ class UpdateBookingFragment : Fragment() {
                 args.editDetails.reservedDate,
                 args.editDetails.trainResponse.id,
                 args.editDetails.userResponse.id,
-                args.editDetails.reservedSeatCount,
+                binding!!.noSeats.text.toString().toLong(),
                 viewModel.selectedTicket.value!!,
             )
             viewModel.updateBooking(args.editDetails.id,reservation)
-            findNavController().popBackStack()
+            findNavController().navigate(R.id.action_updateBookingFragment_to_resrevationFragment)
         }
         return binding?.root
     }

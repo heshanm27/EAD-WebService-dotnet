@@ -41,7 +41,8 @@
             app:destination="@id/signUpFragment" />
         <action
             android:id="@+id/action_loginFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
+            app:destination="@id/profileFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -49,11 +50,9 @@
         android:label="fragment_sign_up"
         tools:layout="@layout/fragment_sign_up" >
         <action
-            android:id="@+id/action_signUpFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
-        <action
             android:id="@+id/action_signUpFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
+            app:destination="@id/profileFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/bookedDetailsFragment"
@@ -81,10 +80,12 @@
             app:argType="com.example.reserveit.models.booked.BookedData" />
         <action
             android:id="@+id/action_updateBookingFragment_to_resrevationFragment"
-            app:destination="@id/resrevationFragment" />
+            app:destination="@id/resrevationFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_updateBookingFragment_to_pastReservationFragment"
-            app:destination="@id/pastReservationFragment" />
+            app:destination="@id/pastReservationFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/trainScheduleDetailsFragment"

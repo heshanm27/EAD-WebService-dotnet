@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import com.example.reserveit.MainActivity
 import com.example.reserveit.R
 import com.example.reserveit.adapters.UpComingReservationAdapter
 import com.example.reserveit.databinding.FragmentPastReservationBinding
@@ -18,14 +20,22 @@ class PastReservationFragment : Fragment() {
     private var binding : FragmentPastReservationBinding?= null
     private lateinit var viewModel: PastReservationViewModel
 
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity?)!!.hideBottomNavigationView()
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentPastReservationBinding.inflate(inflater, container, false)
-
+        (activity as MainActivity?)!!.hideBottomNavigationView()
         viewModel = PastReservationViewModel(ReservationRepo(), requireContext())
         viewModel.getUPastReservations()
+
+        binding!!.topAppBar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
 
         val recyclerView = binding!!.reservationRecyclerView
         recyclerView.setHasFixedSize(true)
@@ -79,6 +89,11 @@ class PastReservationFragment : Fragment() {
 
 
         return binding?.root;
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        (activity as MainActivity?)!!.showBottomNavigationView()
     }
 
 

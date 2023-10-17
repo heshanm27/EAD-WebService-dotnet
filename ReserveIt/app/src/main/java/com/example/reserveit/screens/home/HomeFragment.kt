@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import com.example.reserveit.MainActivity
 import com.example.reserveit.R
 import com.example.reserveit.adapters.TrainScheduleAdapter
 import com.example.reserveit.databinding.FragmentHomeBinding
@@ -44,6 +45,7 @@ class HomeFragment : Fragment() {
         val arradapter = context?.let { ArrayAdapter(it, R.layout.dropdown_item, station) }
         binding!!.startStation.setAdapter(arradapter)
         binding!!.endStation.setAdapter(arradapter)
+        (activity as MainActivity?)!!.showBottomNavigationView()
     }
 
     override fun onCreateView(
@@ -54,7 +56,7 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         val trainScheduleRepo = TrainScheduleRepo()
         viewModel = HomeViewModel(trainScheduleRepo)
-
+        (activity as MainActivity?)!!.showBottomNavigationView()
         val bottomSheet = binding!!.standardBottomSheet
         val standardBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
 

@@ -1,5 +1,7 @@
 package com.example.reserveit.api
 
+import com.example.reserveit.util.SharedPreferenceService
+import com.example.reserveit.utill.AppConstants
 import com.example.reserveit.utill.RetrofitAuthInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -10,14 +12,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitInstance {
         private val retrofit by lazy {
             val logging = HttpLoggingInterceptor()
-            logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
+//            logging.setLevel(HttpLoggingInterceptor.Level.BASIC);
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-            logging.setLevel(HttpLoggingInterceptor.Level.HEADERS);
-
-
+//            logging.setLevel(HttpLoggingInterceptor.Level.HEADERS);
 
             Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:5238/api/v1/")
+                .baseUrl(AppConstants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(OkHttpClient.Builder().addInterceptor(logging).addInterceptor(
                     RetrofitAuthInterceptor(
