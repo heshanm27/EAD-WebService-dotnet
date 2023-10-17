@@ -12,6 +12,7 @@ import com.example.reserveit.repo.AuthRepo
 import com.example.reserveit.util.SharedPreferenceService
 import com.example.reserveit.utill.AppConstants
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.launch
 
 
@@ -60,8 +61,14 @@ class LoginViewModel(
                     }
                 } else {
                     // Handle error response
-                    val errorBody = response.errorBody() // Access the error body here
-                    Log.d("ggview errorBodyinside", errorBody.toString())
+//                    val errorBody = response.errorBody()
+                    val gson = Gson()
+                    val type = object : TypeToken<LoginModel>() {}.type
+                    var errorResponse: LoginModel? = gson.fromJson<LoginModel>(response.errorBody()!!.charStream(), type)
+                    Log.d("vloginViewmidel", errorResponse.toString())// AerrorBodyccess the error body here
+                    if(errorResponse != null){
+                        _loginResponse.value = errorResponse
+                    }
                 }
             } catch (e: Exception) {
                 // Handle network errors or other exceptions here

@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
             app:title="Past Reservations"
+            app:navigationIcon="@drawable/baseline_arrow_back_24"
 
             />
 

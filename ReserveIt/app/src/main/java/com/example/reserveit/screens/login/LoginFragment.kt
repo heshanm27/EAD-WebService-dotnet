@@ -15,6 +15,7 @@ import com.example.reserveit.R
 import com.example.reserveit.databinding.FragmentLoginBinding
 import com.example.reserveit.dto.auth.LoginRequestBody
 import com.example.reserveit.repo.AuthRepo
+import com.google.android.material.snackbar.Snackbar
 
 /*
 * File: BookedDetailsFragment.kt
@@ -133,8 +134,10 @@ class LoginFragment : Fragment() {
                     findNavController().popBackStack()
                     findNavController().navigate(R.id.action_loginFragment_to_profileFragment)
                 }else{
-                    binding!!.errorText.visibility = View.VISIBLE
-                    binding!!.errorText.error = loginResponse.message
+//                    binding!!.errorText.visibility = View.VISIBLE
+//                    binding!!.errorText.error = loginResponse.message
+                    Log.d("ggview", loginResponse.message)
+                    Snackbar.make(requireView(), loginResponse.message, Snackbar.LENGTH_LONG).show()
                 }
             }
         })
