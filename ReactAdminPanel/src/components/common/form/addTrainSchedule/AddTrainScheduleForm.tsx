@@ -68,13 +68,14 @@ export default function AddTrainScheduleForm() {
 
   const [ticketsList, changeTicketsList] = useState([
     {
-      ticketType: "",
-      ticketPrice: "",
-      ticketCount: "",
+      ticketType: "default",
+      ticketPrice: "0",
+      ticketCount: "0",
     },
   ]);
 
   console.log(ticketData);
+  console.log(ticketsList);
 
   return (
     <Box>
@@ -170,13 +171,19 @@ export default function AddTrainScheduleForm() {
 
         <Stack spacing={1}>
           <Stack direction="row" spacing={1}>
-            {ticketsList[0].ticketType === ""
+            {ticketsList.length === 0
               ? ""
               : ticketsList.map((ticket) => (
                   <Chip
                     label={`${ticket.ticketType} : ${ticket.ticketPrice}`}
                     onClick={() => {}}
-                    onDelete={() => {}}
+                    onDelete={() => {
+                      changeTicketsList(
+                        ticketsList.filter(
+                          (t) => t.ticketType !== ticket.ticketType
+                        )
+                      );
+                    }}
                     key={ticket.ticketType}
                   />
                 ))}
@@ -214,7 +221,7 @@ export default function AddTrainScheduleForm() {
           <Button
             variant="outlined"
             onClick={() => {
-              if (ticketsList[0].ticketType === "") {
+              if (ticketsList.length === 0) {
                 changeTicketsList([ticketData]);
               } else {
                 changeTicketsList([...ticketsList, ticketData]);
