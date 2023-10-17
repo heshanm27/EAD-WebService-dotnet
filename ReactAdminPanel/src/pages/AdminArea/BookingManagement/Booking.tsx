@@ -1,11 +1,23 @@
-import { Box, Button, Container, IconButton, Stack, Tooltip, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  IconButton,
+  Stack,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import React, { useMemo, useState } from "react";
 import MaterialReactTable, { MRT_ColumnDef } from "material-react-table";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Delete, Edit } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { ROUTE_CONSTANT } from "../../../routes/Constatnt";
-import { deleteBooking, fetchAllBooking } from "../../../api/bookingManagmentApi";
+import {
+  deleteBooking,
+  fetchAllBooking,
+  updateBooking,
+} from "../../../api/bookingManagmentApi";
 import ConfirmDialog from "../../../components/common/ConfirmDialog/ConfirmDialog";
 import CustomSnackBar from "../../../components/common/snackbar/Snackbar";
 
@@ -66,7 +78,8 @@ export default function Booking() {
         header: "Reservation Date",
       },
       {
-        accessorFn: (row: any) => row.userResponse.firstName + " " + row.userResponse.lastName,
+        accessorFn: (row: any) =>
+          row.userResponse.firstName + " " + row.userResponse.lastName,
         header: "Name Of Reservation",
       },
       {
@@ -111,7 +124,9 @@ export default function Booking() {
           noRecordsToDisplay: "No records to display",
         }}
         enableEditing
-        onEditingRowSave={() => {}}
+        onEditingRowSave={(prop) => {
+          updateBooking(prop.row.original);
+        }}
         onEditingRowCancel={() => {}}
         state={{
           isLoading,
@@ -150,7 +165,11 @@ export default function Booking() {
           </Box>
         )}
         renderTopToolbarCustomActions={() => (
-          <Button color="secondary" onClick={() => navigate(ROUTE_CONSTANT.ADD_BOOKING_DASHBOARD)} variant="contained">
+          <Button
+            color="secondary"
+            onClick={() => navigate(ROUTE_CONSTANT.ADD_BOOKING_DASHBOARD)}
+            variant="contained"
+          >
             Add New Booking
           </Button>
         )}

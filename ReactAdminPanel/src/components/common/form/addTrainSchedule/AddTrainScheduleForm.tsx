@@ -1,4 +1,12 @@
-import { Box, Container, MenuItem, Stack, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  Chip,
+  Container,
+  MenuItem,
+  Stack,
+  TextField,
+} from "@mui/material";
 import { DatePicker, TimePicker } from "@mui/x-date-pickers";
 import React, { useState } from "react";
 import { STATION_ARR } from "../../../../constant/GlobalConstant";
@@ -16,20 +24,21 @@ export default function AddTrainScheduleForm() {
     onError: () => {},
   });
 
-  const { handleChange, values, handleBlur, setFieldValue, handleSubmit } = useFormik({
-    initialValues: {
-      trainName: "",
-      trainNumber: "",
-      startStation: "",
-      endStation: "",
-      trainStartTime: "",
-      trainEndTime: "",
-      departureDate: "",
-    },
-    onSubmit: (values) => {
-      mutate(values);
-    },
-  });
+  const { handleChange, values, handleBlur, setFieldValue, handleSubmit } =
+    useFormik({
+      initialValues: {
+        trainName: "",
+        trainNumber: "",
+        startStation: "",
+        endStation: "",
+        trainStartTime: "",
+        trainEndTime: "",
+        departureDate: "",
+      },
+      onSubmit: (values) => {
+        mutate(values);
+      },
+    });
   const [selectedStartStataion, setSelectedStartStataion] = useState("");
   const [selectedEndStation, setSelectedEndStation] = useState("");
 
@@ -44,11 +53,38 @@ export default function AddTrainScheduleForm() {
     setFieldValue("endStation", event.target.value);
   };
 
-  const filteredStartStation = STATION_ARR.filter((option) => option !== selectedStartStataion);
-  const filteredEndStation = STATION_ARR.filter((option) => option !== selectedEndStation);
+  const filteredStartStation = STATION_ARR.filter(
+    (option) => option !== selectedStartStataion
+  );
+  const filteredEndStation = STATION_ARR.filter(
+    (option) => option !== selectedEndStation
+  );
+
+  const [ticketData, changeTicketData] = useState({
+    ticketType: "",
+    ticketPrice: "",
+    ticketCount: "",
+  });
+
+  const [ticketsList, changeTicketsList] = useState([
+    {
+      ticketType: "default",
+      ticketPrice: "0",
+      ticketCount: "0",
+    },
+  ]);
+
+  console.log(ticketData);
+  console.log(ticketsList);
+
   return (
     <Box>
-      <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
+      <Stack
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+        spacing={2}
+      >
         <TextField
           onChange={handleChange}
           onBlur={handleBlur}
@@ -108,22 +144,100 @@ export default function AddTrainScheduleForm() {
           disablePast
           maxDate={maxDate}
           sx={{ width: "100%" }}
-          onChange={(newValue: any) => setFieldValue("departureDate", moment(newValue).format("YYYY-MM-DD"))}
+          onChange={(newValue: any) =>
+            setFieldValue(
+              "departureDate",
+              moment(newValue).format("YYYY-MM-DD")
+            )
+          }
         />
 
         <TimePicker
           sx={{ width: "100%" }}
           label="Train Departure Time"
           ampm={false}
-          onChange={(newValue: any) => setFieldValue("trainStartTime", moment(newValue).format("HH:mm"))}
+          onChange={(newValue: any) =>
+            setFieldValue("trainStartTime", moment(newValue).format("HH:mm"))
+          }
         />
         <TimePicker
           sx={{ width: "100%" }}
           label="Train Arrival Time"
           ampm={false}
-          onChange={(newValue: any) => setFieldValue("trainEndTime", moment(newValue).format("HH:mm"))}
+          onChange={(newValue: any) =>
+            setFieldValue("trainEndTime", moment(newValue).format("HH:mm"))
+          }
         />
-        <LoadingButton fullWidth loading={false} onClick={() => handleSubmit()} variant="outlined">
+
+        <Stack spacing={1}>
+          <Stack direction="row" spacing={1}>
+            {ticketsList.length === 0
+              ? ""
+              : ticketsList.map((ticket) => (
+                  <Chip
+                    label={`${ticket.ticketType} : ${ticket.ticketPrice}`}
+                    onClick={() => {}}
+                    onDelete={() => {
+                      changeTicketsList(
+                        ticketsList.filter(
+                          (t) => t.ticketType !== ticket.ticketType
+                        )
+                      );
+                    }}
+                    key={ticket.ticketType}
+                  />
+                ))}
+          </Stack>
+
+          <Stack direction="row" spacing={1}>
+            <TextField
+              label="Ticket Class"
+              variant="outlined"
+              onChange={(e) => {
+                changeTicketData({ ...ticketData, ticketType: e.target.value });
+              }}
+            />
+            <TextField
+              label="Ticket Price"
+              variant="outlined"
+              onChange={(e) => {
+                changeTicketData({
+                  ...ticketData,
+                  ticketPrice: e.target.value,
+                });
+              }}
+            />
+            <TextField
+              label="Ticket Count"
+              variant="outlined"
+              onChange={(e) => {
+                changeTicketData({
+                  ...ticketData,
+                  ticketCount: e.target.value,
+                });
+              }}
+            />
+          </Stack>
+          <Button
+            variant="outlined"
+            onClick={() => {
+              if (ticketsList.length === 0) {
+                changeTicketsList([ticketData]);
+              } else {
+                changeTicketsList([...ticketsList, ticketData]);
+              }
+            }}
+          >
+            Add Tickets
+          </Button>
+        </Stack>
+
+        <LoadingButton
+          fullWidth
+          loading={false}
+          onClick={() => handleSubmit()}
+          variant="outlined"
+        >
           Submit
         </LoadingButton>
 
