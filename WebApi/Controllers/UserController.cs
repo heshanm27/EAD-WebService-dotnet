@@ -63,7 +63,7 @@ namespace EAD_WebService.Controllers
 
         //This API is used to activate user for given user ID
         //The status of the user will be acrivated when executed
-        
+
         [HttpPatch("{id}/activate")]
         public async Task<ActionResult<ServiceResponse<EmptyData>>> activateUser(string id)
         {
@@ -87,7 +87,7 @@ namespace EAD_WebService.Controllers
 
         //This API is used to change the user role of the given user ID
         [HttpPatch("{id}/role")]
-        public async Task<ActionResult<ServiceResponse<EmptyData>>> deactivateUser(string id, UserEnum userEnum)
+        public async Task<ActionResult<ServiceResponse<EmptyData>>> updateUserRole(string id, UserEnum userEnum)
         {
             ServiceResponse<EmptyData> response = await _userService.updateUserRole(id, userEnum);
 

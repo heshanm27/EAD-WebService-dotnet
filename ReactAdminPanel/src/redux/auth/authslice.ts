@@ -4,6 +4,7 @@ export interface AuthState {
   isLoggedIn: boolean;
   accessToken: string;
   firstName: string;
+  lastName: string;
   role: string;
   message: string;
   logOutMessage: string;
@@ -20,6 +21,7 @@ const initialState: AuthState = {
   isLoggedIn: false,
   accessToken: "",
   firstName: "",
+  lastName: "",
   role: "",
   message: "",
   logOutMessage: "",
@@ -30,11 +32,12 @@ export const authSlice = createSlice({
   initialState: initialState,
   reducers: {
     login: (state, action) => {
-      state.accessToken = action.payload.accessToken;
-      state.firstName = action.payload.firstName;
-      state.role = action.payload.role;
+      state.accessToken = action.payload.data.token;
+      state.firstName = action.payload.data.firstName;
+      state.lastName = action.payload.data.lastName;
+      state.role = action.payload.data.role;
       state.isLoggedIn = true;
-      state.avatar = action.payload.avatar;
+      state.avatar = action.payload.data.avatarUrl;
     },
     setMessage: (state, action) => {
       state.message = action.payload;

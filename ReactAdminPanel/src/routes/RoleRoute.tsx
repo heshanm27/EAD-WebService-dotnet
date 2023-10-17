@@ -6,7 +6,7 @@ interface RoleRouteProps {
   allowedRoles: string[];
 }
 
-const ROLES = ["user", "seller", "admin"];
+const ROLES = ["user", "user-agent", "admin"];
 
 export default function RoleRoute({ allowedRoles }: RoleRouteProps) {
   const { accessToken, role } = useAppSelector((state) => state.authSlice);

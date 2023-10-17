@@ -60,8 +60,8 @@ export default function SignIn() {
 
   async function hadnleFormSubmit(values: FormValues, {}: FormikHelpers<FormValues>) {
     try {
-      const resposne = await apiClient.post("/auth/signIn", values);
-      console.log(values);
+      const resposne = await apiClient.post("/auth/login", values);
+      console.log("resposne.data", resposne.data);
       dispatch(login(resposne.data));
       resetForm();
     } catch (e: any) {
@@ -90,24 +90,26 @@ export default function SignIn() {
         isOpen: true,
         message: location.state.message,
         type: "success",
-        title: "Success            ",
+        title: "Success ",
       });
     }
   }, [location]);
 
-  // useEffect(() => {
-  //   switch (role) {
-  //     case "admin":
-  //       navigate("/admin/orders/live", { replace: true, preventScrollReset: true });
-  //       return;
-  //     case "seller":
-  //       navigate("/seller/orders/live", { replace: true, preventScrollReset: true });
-  //       return;
-  //     case "user":
-  //       navigate("/", { replace: true });
-  //       return;
-  //   }
-  // }, [isLoggedIn]);
+  useEffect(() => {
+    console.log("isLoggedIn", isLoggedIn, "role", role);
+    switch (role) {
+      case "admin":
+        navigate(ROUTE_CONSTANT.USER_MANAGEMENT_DASHBOARD, { replace: true, preventScrollReset: true });
+        return;
+      case "user-agent":
+        navigate(ROUTE_CONSTANT.BOOKING_DASHBOARD, { replace: true, preventScrollReset: true });
+        return;
+      case "user":
+        navigate("/", { replace: true });
+        return;
+    }
+  }, [isLoggedIn]);
+
   return (
     <>
       <Container component="main" maxWidth="xs">

@@ -51,9 +51,9 @@ export default function SideDrawer() {
 
   const handleClose = (state: string) => {
     switch (state) {
-      case "Logout":
+      case "logout":
         dispatch(logOut("logout"));
-        navigate("/signin", { replace: true });
+        navigate("/", { replace: true });
         setAnchorEl(null);
         return;
       case "home":
