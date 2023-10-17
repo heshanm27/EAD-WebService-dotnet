@@ -89,8 +89,9 @@ namespace EAD_WebService.Services.Core
                 // ReservationDate = ReservationDate.AddHours(5).AddMinutes(30);
 
                 // DateTime SriLankanUtcDate = new DateTime(ReservationDate.Ticks, DateTimeKind.Utc).AddHours(5).AddMinutes(30);
-                Console.WriteLine(new BsonDateTime(ReservationDate.AddHours(5).AddMinutes(30)));
-
+                Console.WriteLine(filters.date);
+                Console.WriteLine(filters.end);
+                Console.WriteLine(filters.start);
                 var filter = Builders<Train>.Filter.AnyEq("start_station", filters.start)
                 & Builders<Train>.Filter.AnyEq("end_station", filters.end)
                 & Builders<Train>.Filter.Eq("departure_date", new BsonDateTime(ReservationDate.AddHours(5).AddMinutes(30)))
@@ -99,7 +100,6 @@ namespace EAD_WebService.Services.Core
                 ;
                 var sort = Builders<Train>.Sort.Descending("train_start_time");
 
-                Console.WriteLine(filter);
                 if (filters.Order == "asc")
                 {
                     sort = Builders<Train>.Sort.Ascending(filters.Order);

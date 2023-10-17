@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.reserveit.MainActivity
 import com.example.reserveit.R
+import com.example.reserveit.adapters.PastReservationAdapter
 import com.example.reserveit.adapters.UpComingReservationAdapter
 import com.example.reserveit.databinding.FragmentPastReservationBinding
 import com.example.reserveit.databinding.FragmentResrevationBinding
@@ -49,7 +50,7 @@ class PastReservationFragment : Fragment() {
                 binding!!.reservationRecyclerView.visibility = View.GONE
                 binding!!.lottieNoDocAnimationView.visibility = View.VISIBLE
             }else {
-                val adapter = UpComingReservationAdapter(it)
+                val adapter = PastReservationAdapter(it)
                 recyclerView.adapter = adapter
                 recyclerView.adapter?.notifyDataSetChanged()
                 binding!!.noReservationsTextView.visibility = View.GONE
@@ -60,19 +61,19 @@ class PastReservationFragment : Fragment() {
         })
 
         binding!!.refreshLayout.setOnRefreshListener {
-            viewModel.getUPastReservations()
-            binding!!.refreshLayout.isRefreshing = false
+//            viewModel.getUPastReservations()
+//            binding!!.refreshLayout.isRefreshing = false
         }
 
         viewModel.isLoading.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
-//            if (it){
-//                binding!!.loaderLayout.visibility = View.VISIBLE
-//                binding!!.lottieSearchAnimationView.visibility = View.VISIBLE
-//                binding!!.refreshLayout.visibility = View.GONE
-//            }else{
-//                binding!!.loaderLayout.visibility = View.GONE
-//                binding!!.refreshLayout.visibility = View.VISIBLE
-//            }
+            if (it){
+                binding!!.loaderLayout.visibility = View.VISIBLE
+                binding!!.lottieSearchAnimationView.visibility = View.VISIBLE
+                binding!!.refreshLayout.visibility = View.GONE
+            }else{
+                binding!!.loaderLayout.visibility = View.GONE
+                binding!!.refreshLayout.visibility = View.VISIBLE
+            }
         })
 
         viewModel.isError.observe(viewLifecycleOwner, androidx.lifecycle.Observer {

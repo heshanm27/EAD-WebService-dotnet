@@ -1,5 +1,7 @@
 package com.example.reserveit.adapters
 
+
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,10 +46,8 @@ class PastReservationAdapter(
         holder.price?.text = reservation.reservationPrice.toString()
         holder.card.setOnClickListener {
             if(reservation != null) {
-                val action =
-                    PastReservationFragmentDirections.actionPastReservationFragmentToBookedDetailsFragment(
-                        reservation,false
-                    )
+                Log.d("ReservationAdapter", "onBindViewHolder: $reservation")
+                val action = PastReservationFragmentDirections.actionPastReservationFragmentToBookedDetailsFragment(reservation, false)
                 holder.card.findNavController().navigate(action)
             }
         }
