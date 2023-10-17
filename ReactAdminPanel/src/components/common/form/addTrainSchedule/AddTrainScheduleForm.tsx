@@ -60,6 +60,22 @@ export default function AddTrainScheduleForm() {
     (option) => option !== selectedEndStation
   );
 
+  const [ticketData, changeTicketData] = useState({
+    ticketType: "",
+    ticketPrice: "",
+    ticketCount: "",
+  });
+
+  const [ticketsList, changeTicketsList] = useState([
+    {
+      ticketType: "",
+      ticketPrice: "",
+      ticketCount: "",
+    },
+  ]);
+
+  console.log(ticketData);
+
   return (
     <Box>
       <Stack
@@ -154,34 +170,57 @@ export default function AddTrainScheduleForm() {
 
         <Stack spacing={1}>
           <Stack direction="row" spacing={1}>
-            <Chip
-              label="Clickable Deletable"
-              onClick={() => {}}
-              onDelete={() => {}}
-            />
-            <Chip
-              label="Clickable Deletable"
+            {ticketsList[0].ticketType === ""
+              ? ""
+              : ticketsList.map((ticket) => (
+                  <Chip
+                    label={`${ticket.ticketType} : ${ticket.ticketPrice}`}
+                    onClick={() => {}}
+                    onDelete={() => {}}
+                    key={ticket.ticketType}
+                  />
+                ))}
+          </Stack>
+
+          <Stack direction="row" spacing={1}>
+            <TextField
+              label="Ticket Class"
               variant="outlined"
-              onClick={() => {}}
-              onDelete={() => {}}
+              onChange={(e) => {
+                changeTicketData({ ...ticketData, ticketType: e.target.value });
+              }}
+            />
+            <TextField
+              label="Ticket Price"
+              variant="outlined"
+              onChange={(e) => {
+                changeTicketData({
+                  ...ticketData,
+                  ticketPrice: e.target.value,
+                });
+              }}
+            />
+            <TextField
+              label="Ticket Count"
+              variant="outlined"
+              onChange={(e) => {
+                changeTicketData({
+                  ...ticketData,
+                  ticketCount: e.target.value,
+                });
+              }}
             />
           </Stack>
-          <TextField
-            id="outlined-basic"
-            label="Ticket Class"
+          <Button
             variant="outlined"
-          />
-          <TextField
-            id="outlined-basic"
-            label="Ticket Price"
-            variant="outlined"
-          />
-          <TextField
-            id="outlined-basic"
-            label="Ticket Count"
-            variant="outlined"
-          />
-          <Button variant="outlined" onClick={() => {}}>
+            onClick={() => {
+              if (ticketsList[0].ticketType === "") {
+                changeTicketsList([ticketData]);
+              } else {
+                changeTicketsList([...ticketsList, ticketData]);
+              }
+            }}
+          >
             Add Tickets
           </Button>
         </Stack>
