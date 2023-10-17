@@ -35,13 +35,15 @@ export default function AddBooking() {
         departureDate: "",
         reservationSeatCount: 1,
         nic: "",
-        ticket: {
-          id: "",
-          ticketType: "First Class",
-          ticketPrice: 0,
-          ticketCount: 0,
-          ticketBooked: 0,
-        },
+        ticket: [
+          {
+            id: "",
+            ticketType: "First Class",
+            ticketPrice: 0,
+            ticketCount: 0,
+            ticketBooked: 0,
+          },
+        ],
       },
       onSubmit: (values) => {
         refetch();
@@ -83,7 +85,7 @@ export default function AddBooking() {
     );
   };
 
-  console.log("data", data, "Values", values);
+  // console.log("data", data, "Values", values);
 
   return (
     <Container maxWidth="lg" sx={{ p: 2 }}>
@@ -267,8 +269,33 @@ export default function AddBooking() {
                 </TextField>
 
                 <Typography variant="h6" fontWeight={"bold"}>
-                  Ahangama - Ahangama 2000
+                  Step 3 : Booking Details
                 </Typography>
+
+                <Typography
+                  fontWeight={"regular"}
+                >{`Ticket Holder NIC : ${values.nic}`}</Typography>
+                <Typography
+                  fontWeight={"regular"}
+                >{`From : ${values.startStation}`}</Typography>
+                <Typography
+                  fontWeight={"regular"}
+                >{`To : ${values.endStation}`}</Typography>
+                <Typography
+                  fontWeight={"regular"}
+                >{`Date : ${values.departureDate}`}</Typography>
+                <Typography
+                  fontWeight={"regular"}
+                >{`Class : ${values.ticket[0].ticketType}`}</Typography>
+                <Typography
+                  fontWeight={"regular"}
+                >{`Tickets Booked : ${values.reservationSeatCount}`}</Typography>
+                <Typography
+                  fontWeight={"regular"}
+                >{`Ticket price : ${values.ticket[0].ticketPrice}`}</Typography>
+                <Typography fontWeight={"regular"}>{`Total : Rs. ${
+                  values.ticket[0].ticketPrice * values.reservationSeatCount
+                }.00`}</Typography>
 
                 <Button
                   variant="contained"
