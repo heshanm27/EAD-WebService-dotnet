@@ -16,6 +16,7 @@ import { ROUTE_CONSTANT } from "../../../routes/Constatnt";
 import {
   deleteBooking,
   fetchAllBooking,
+  updateBooking,
 } from "../../../api/bookingManagmentApi";
 
 export default function Booking() {
@@ -90,7 +91,9 @@ export default function Booking() {
           noRecordsToDisplay: "No records to display",
         }}
         enableEditing
-        onEditingRowSave={() => {}}
+        onEditingRowSave={(prop) => {
+          updateBooking(prop.row.original);
+        }}
         onEditingRowCancel={() => {}}
         state={{
           isLoading,

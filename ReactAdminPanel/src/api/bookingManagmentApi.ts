@@ -51,29 +51,28 @@ export const fetchAllBooking = async (): Promise<BookingData> => {
   }
 };
 
-interface UpdateTrain {
-  trainName: string;
-  trainNumber: string;
-  startStation: string;
-  endStation: string;
-  trainStartTime: string;
-  trainEndTime: string;
-  departureDate: string;
+interface UpdateBooking {
+  reservationDate: string;
+  reservedTrainID: string;
+  reservedUserId: string;
+  reservationSeatCount: number;
+  ticket: TicketData;
 }
 
-export const updateBooking = async (train: any) => {
+export const updateBooking = async (booking: any) => {
   try {
-    const updateData: UpdateTrain = {
-      trainName: train.trainName,
-      trainNumber: train.trainNumber,
-      startStation: train.startStation,
-      endStation: train.endStation,
-      trainStartTime: train.trainStartTime,
-      trainEndTime: train.trainEndTime,
-      departureDate: train.departureDate,
+    const updateData: UpdateBooking = {
+      reservationDate: booking.reservedDate,
+      reservedTrainID: booking.trainResponse.id,
+      reservedUserId: booking.userResponse.id,
+      reservationSeatCount: booking.reservedSeatCount,
+      ticket: booking.ticket,
     };
 
-    const response = await apiClient.patch(`/train/${train.id}`, updateData);
+    console.log("Update data", updateData);
+    console.log("ID", booking.id);
+
+    const response = await apiClient.patch(`/train/${booking.id}`, updateData);
     return response.data;
   } catch (error: any) {
     throw new Error(error.response.data.message);
