@@ -1,28 +1,50 @@
-import {
-  Box,
-  Button,
-  Container,
-  IconButton,
-  Stack,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Container, IconButton, Stack, Tooltip, Typography } from "@mui/material";
 import React, { useMemo, useState } from "react";
 import MaterialReactTable, { MRT_ColumnDef } from "material-react-table";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Delete, Edit } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { ROUTE_CONSTANT } from "../../../routes/Constatnt";
-import {
-  deleteBooking,
-  fetchAllBooking,
-} from "../../../api/bookingManagmentApi";
+import { deleteBooking, fetchAllBooking } from "../../../api/bookingManagmentApi";
+import ConfirmDialog from "../../../components/common/ConfirmDialog/ConfirmDialog";
+import CustomSnackBar from "../../../components/common/snackbar/Snackbar";
 
 export default function Booking() {
   const navigate = useNavigate();
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+  const [notify, setNotify] = useState({
+    isOpen: false,
+    message: "",
+    type: "error",
+    title: "",
+  });
+  const [selectedBookingId, setSelectedBookingId] = useState<string>("");
   const { data, error, isLoading, isError } = useQuery({
     queryKey: ["booking"],
     queryFn: fetchAllBooking,
+  });
+
+  const queryClient = useQueryClient();
+  const { isLoading: isMutaionLoading, mutate } = useMutation({
+    mutationFn: deleteBooking,
+    onSuccess: () => {
+      setNotify({
+        isOpen: true,
+        message: "Deleted Successfully",
+        type: "success",
+        title: "Deleted",
+      });
+      queryClient.invalidateQueries({ queryKey: ["booking"] });
+      setIsConfirmDialogOpen(false);
+    },
+    onError: () => {
+      setNotify({
+        isOpen: true,
+        message: "Deletetion Failed",
+        type: "error",
+        title: "Deleted",
+      });
+    },
   });
 
   console.log(data);
@@ -44,8 +66,7 @@ export default function Booking() {
         header: "Reservation Date",
       },
       {
-        accessorFn: (row: any) =>
-          row.userResponse.firstName + " " + row.userResponse.lastName,
+        accessorFn: (row: any) => row.userResponse.firstName + " " + row.userResponse.lastName,
         header: "Name Of Reservation",
       },
       {
@@ -107,7 +128,7 @@ export default function Booking() {
               }
             : undefined
         }
-        renderRowActions={({ row, table }) => (
+        renderRowActions={({ row, table }: any) => (
           <Box sx={{ display: "flex", gap: "1rem" }}>
             <Tooltip arrow placement="left" title="Edit">
               <IconButton onClick={() => table.setEditingRow(row)}>
@@ -118,8 +139,9 @@ export default function Booking() {
               <IconButton
                 color="error"
                 onClick={() => {
-                  console.log(row.original);
-                  deleteBooking(row.original);
+                  console.log(row?.original?.id);
+                  setIsConfirmDialogOpen(true);
+                  setSelectedBookingId(row?.original?.id);
                 }}
               >
                 <Delete />
@@ -128,15 +150,20 @@ export default function Booking() {
           </Box>
         )}
         renderTopToolbarCustomActions={() => (
-          <Button
-            color="secondary"
-            onClick={() => navigate(ROUTE_CONSTANT.ADD_BOOKING_DASHBOARD)}
-            variant="contained"
-          >
+          <Button color="secondary" onClick={() => navigate(ROUTE_CONSTANT.ADD_BOOKING_DASHBOARD)} variant="contained">
             Add New Booking
           </Button>
         )}
       />
+      <ConfirmDialog
+        isOpen={() => setIsConfirmDialogOpen(false)}
+        onConfirm={() => mutate(selectedBookingId)}
+        open={isConfirmDialogOpen}
+        subTitle="This action can not be undone"
+        title="Delete User"
+        loading={isMutaionLoading}
+      />
+      <CustomSnackBar notify={notify} setNotify={setNotify} />
     </Container>
   );
 }
