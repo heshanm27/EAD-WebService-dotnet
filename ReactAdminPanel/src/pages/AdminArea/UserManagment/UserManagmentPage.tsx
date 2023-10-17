@@ -24,6 +24,8 @@ import { deleteUser } from "../../../api/userApi";
 import { updateUser } from "../../../api/userApi";
 import ConfirmDialog from "../../../components/common/ConfirmDialog/ConfirmDialog";
 import CustomSnackBar from "../../../components/common/snackbar/Snackbar";
+import CustomeDialog from "../../../components/common/CustomDialog/CustomDialog";
+import UpdateUserForm from "../../../components/common/form/updateUserForm/UpdateUserForm";
 export default function UserManagmentPage() {
   const [open, setOpen] = useState(false);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
@@ -223,20 +225,11 @@ export default function UserManagmentPage() {
             <Tooltip arrow placement="left" title="Edit">
               <IconButton
                 onClick={() => {
-                  table.setEditingRow(row);
+                  setOpen(true);
                   setSelectedUser(row.original);
                 }}
               >
                 <Edit />
-              </IconButton>
-            </Tooltip>
-            <Tooltip arrow placement="left" title="Edit">
-              <IconButton
-                onClick={() => {
-                  table.setEditingRow(null);
-                }}
-              >
-                <Close />
               </IconButton>
             </Tooltip>
             <Tooltip arrow placement="left" title="Delete">
@@ -252,33 +245,9 @@ export default function UserManagmentPage() {
           </Box>
         )}
       />
-      <Dialog open={userStatusDialogOpen} onClose={() => setUserStatusDialogOpen(false)}>
-        <DialogTitle>Update User Status</DialogTitle>
-        <DialogContent>
-          <p>Select the user status:</p>
-          <FormControl fullWidth>
-            <InputLabel id="user-status-label">User Status</InputLabel>
-            <Select
-              labelId="user-status-label"
-              id="user-status"
-              value={updatedUserStatus}
-              onChange={(e) => setUpdatedUserStatus(e.target.value as string)}
-              label="User Status"
-            >
-              <MenuItem value="active">Active</MenuItem>
-              <MenuItem value="deactivate">Deactivate</MenuItem>
-            </Select>
-          </FormControl>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setUserStatusDialogOpen(false)} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleUpdateStatusConfirm} color="primary">
-            Confirm
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <CustomeDialog open={open} setOpen={setOpen} title="Update user state">
+        <UpdateUserForm />
+      </CustomeDialog>
 
       <ConfirmDialog
         isOpen={() => setIsConfirmDialogOpen(false)}

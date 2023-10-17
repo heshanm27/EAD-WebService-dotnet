@@ -15,7 +15,6 @@ export default function UpdateUserForm({ user, setOpen }: any) {
     title: "",
   });
 
-  console.log("Update USer", user);
   const handleChange = (event: any) => {
     setRole(event.target.value as string);
   };
@@ -41,11 +40,10 @@ export default function UpdateUserForm({ user, setOpen }: any) {
   return (
     <Container>
       <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Select role</InputLabel>
+        <InputLabel id="demo-simple-select-label">Select State</InputLabel>
         <Select labelId="demo-simple-select-label" id="demo-simple-select" value={role} label="Age" onChange={handleChange}>
-          <MenuItem value={"user"}>User</MenuItem>
-          <MenuItem value={"seller"}>Seller</MenuItem>
-          <MenuItem value={"admin"}>Admin</MenuItem>
+          <MenuItem value={"user"}>Active</MenuItem>
+          <MenuItem value={"seller"}>Deactive</MenuItem>
         </Select>
         {isError && <FormHelperText id="my-helper-text">{error.message}</FormHelperText>}
       </FormControl>
