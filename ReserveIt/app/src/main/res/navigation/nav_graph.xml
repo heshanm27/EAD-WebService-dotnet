@@ -85,7 +85,7 @@
         <action
             android:id="@+id/action_updateBookingFragment_to_pastReservationFragment"
             app:destination="@id/pastReservationFragment"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/trainScheduleDetailsFragment"

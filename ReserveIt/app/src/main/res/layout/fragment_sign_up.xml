@@ -7,7 +7,7 @@
     android:background="#FDFDFD"
     android:orientation="vertical"
     tools:context=".screens.signUp.SignUpFragment"
-
+    android:fitsSystemWindows="true"
     >
 
     <com.google.android.material.appbar.AppBarLayout

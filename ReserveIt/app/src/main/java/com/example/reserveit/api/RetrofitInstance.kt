@@ -17,7 +17,7 @@ object RetrofitInstance {
 //            logging.setLevel(HttpLoggingInterceptor.Level.HEADERS);
 
             Retrofit.Builder()
-                .baseUrl(AppConstants.BASE_URL)
+                .baseUrl(AppConstants.BASE_URL_PRODUCTION)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(OkHttpClient.Builder().addInterceptor(logging).addInterceptor(
                     RetrofitAuthInterceptor(

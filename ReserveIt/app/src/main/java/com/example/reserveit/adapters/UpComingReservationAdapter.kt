@@ -10,8 +10,6 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.reserveit.R
 import com.example.reserveit.models.booked.BookedData
-import com.example.reserveit.screens.home.HomeFragmentDirections
-import com.example.reserveit.screens.pastReservation.PastReservationFragmentDirections
 import com.example.reserveit.screens.resrevation.ResrevationFragmentDirections
 
 /*
