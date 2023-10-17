@@ -1,4 +1,12 @@
-import { Box, Container, MenuItem, Stack, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  Chip,
+  Container,
+  MenuItem,
+  Stack,
+  TextField,
+} from "@mui/material";
 import { DatePicker, TimePicker } from "@mui/x-date-pickers";
 import React, { useState } from "react";
 import { STATION_ARR } from "../../../../constant/GlobalConstant";
@@ -16,20 +24,21 @@ export default function AddTrainScheduleForm() {
     onError: () => {},
   });
 
-  const { handleChange, values, handleBlur, setFieldValue, handleSubmit } = useFormik({
-    initialValues: {
-      trainName: "",
-      trainNumber: "",
-      startStation: "",
-      endStation: "",
-      trainStartTime: "",
-      trainEndTime: "",
-      departureDate: "",
-    },
-    onSubmit: (values) => {
-      mutate(values);
-    },
-  });
+  const { handleChange, values, handleBlur, setFieldValue, handleSubmit } =
+    useFormik({
+      initialValues: {
+        trainName: "",
+        trainNumber: "",
+        startStation: "",
+        endStation: "",
+        trainStartTime: "",
+        trainEndTime: "",
+        departureDate: "",
+      },
+      onSubmit: (values) => {
+        mutate(values);
+      },
+    });
   const [selectedStartStataion, setSelectedStartStataion] = useState("");
   const [selectedEndStation, setSelectedEndStation] = useState("");
 
@@ -44,11 +53,21 @@ export default function AddTrainScheduleForm() {
     setFieldValue("endStation", event.target.value);
   };
 
-  const filteredStartStation = STATION_ARR.filter((option) => option !== selectedStartStataion);
-  const filteredEndStation = STATION_ARR.filter((option) => option !== selectedEndStation);
+  const filteredStartStation = STATION_ARR.filter(
+    (option) => option !== selectedStartStataion
+  );
+  const filteredEndStation = STATION_ARR.filter(
+    (option) => option !== selectedEndStation
+  );
+
   return (
     <Box>
-      <Stack direction="column" justifyContent="center" alignItems="center" spacing={2}>
+      <Stack
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+        spacing={2}
+      >
         <TextField
           onChange={handleChange}
           onBlur={handleBlur}
@@ -108,22 +127,71 @@ export default function AddTrainScheduleForm() {
           disablePast
           maxDate={maxDate}
           sx={{ width: "100%" }}
-          onChange={(newValue: any) => setFieldValue("departureDate", moment(newValue).format("YYYY-MM-DD"))}
+          onChange={(newValue: any) =>
+            setFieldValue(
+              "departureDate",
+              moment(newValue).format("YYYY-MM-DD")
+            )
+          }
         />
 
         <TimePicker
           sx={{ width: "100%" }}
           label="Train Departure Time"
           ampm={false}
-          onChange={(newValue: any) => setFieldValue("trainStartTime", moment(newValue).format("HH:mm"))}
+          onChange={(newValue: any) =>
+            setFieldValue("trainStartTime", moment(newValue).format("HH:mm"))
+          }
         />
         <TimePicker
           sx={{ width: "100%" }}
           label="Train Arrival Time"
           ampm={false}
-          onChange={(newValue: any) => setFieldValue("trainEndTime", moment(newValue).format("HH:mm"))}
+          onChange={(newValue: any) =>
+            setFieldValue("trainEndTime", moment(newValue).format("HH:mm"))
+          }
         />
-        <LoadingButton fullWidth loading={false} onClick={() => handleSubmit()} variant="outlined">
+
+        <Stack spacing={1}>
+          <Stack direction="row" spacing={1}>
+            <Chip
+              label="Clickable Deletable"
+              onClick={() => {}}
+              onDelete={() => {}}
+            />
+            <Chip
+              label="Clickable Deletable"
+              variant="outlined"
+              onClick={() => {}}
+              onDelete={() => {}}
+            />
+          </Stack>
+          <TextField
+            id="outlined-basic"
+            label="Ticket Class"
+            variant="outlined"
+          />
+          <TextField
+            id="outlined-basic"
+            label="Ticket Price"
+            variant="outlined"
+          />
+          <TextField
+            id="outlined-basic"
+            label="Ticket Count"
+            variant="outlined"
+          />
+          <Button variant="outlined" onClick={() => {}}>
+            Add Tickets
+          </Button>
+        </Stack>
+
+        <LoadingButton
+          fullWidth
+          loading={false}
+          onClick={() => handleSubmit()}
+          variant="outlined"
+        >
           Submit
         </LoadingButton>
 
