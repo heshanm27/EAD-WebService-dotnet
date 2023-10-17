@@ -61,8 +61,17 @@ export default function AddBooking() {
 
   const [bookingStep, setBookingStep] = useState(1);
   const [selecedTrain, setSelectedTrain] = useState(0);
+  const [selectedTicket, setSelectedTicket] = useState(0);
 
-  console.log(data);
+  const handleTicketSelection = (event: any) => {
+    // setSelectedTicket(Number(event.target.value));
+    setFieldValue(
+      "ticket",
+      data?.data[selecedTrain].tickets[Number(event.target.value)]
+    );
+  };
+
+  // console.log("data", data, "selected ticket", selectedTicket);
 
   return (
     <Container maxWidth="lg" sx={{ p: 2 }}>
@@ -210,21 +219,26 @@ export default function AddBooking() {
                   helperText="Please select NIC od User"
                 ></TextField>
                 <TextField
-                  name="ticketSelect"
+                  name="ticket"
                   fullWidth
                   id="ticket-select"
                   select
                   // value={values.endStation}
                   value=""
                   label="Select Ticket Type"
-                  onChange={() => {}}
+                  onChange={(e) => {
+                    // setSelectedTicket(Number(e.target.value));
+                    handleTicketSelection(e);
+                  }}
                   helperText="Please select the number of tickets"
                 >
-                  {data?.data[selecedTrain].tickets.map((option: any) => (
-                    <MenuItem key={option.id} value={option.ticketPrice}>
-                      {option.ticketType}
-                    </MenuItem>
-                  ))}
+                  {data?.data[selecedTrain].tickets.map(
+                    (option: any, index: number) => (
+                      <MenuItem key={option.id} value={index}>
+                        {option.ticketType}
+                      </MenuItem>
+                    )
+                  )}
                 </TextField>
                 <TextField
                   name="seatCount"
@@ -243,6 +257,11 @@ export default function AddBooking() {
                   <MenuItem value={4}>4</MenuItem>
                   <MenuItem value={5}>5</MenuItem>
                 </TextField>
+
+                <Typography variant="h6" fontWeight={"bold"}>
+                  Ahangama - Ahangama 2000
+                </Typography>
+
                 <Button
                   variant="contained"
                   onClick={() => {
