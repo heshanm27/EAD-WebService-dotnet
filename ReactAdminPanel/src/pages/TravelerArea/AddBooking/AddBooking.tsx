@@ -33,6 +33,15 @@ export default function AddBooking() {
         startStation: "",
         endStation: "",
         departureDate: "",
+        reservationSeatCount: 1,
+        nic: "",
+        ticket: {
+          id: "",
+          ticketType: "First Class",
+          ticketPrice: 0,
+          ticketCount: 0,
+          ticketBooked: 0,
+        },
       },
       onSubmit: (values) => {
         refetch();
@@ -61,17 +70,20 @@ export default function AddBooking() {
 
   const [bookingStep, setBookingStep] = useState(1);
   const [selecedTrain, setSelectedTrain] = useState(0);
-  const [selectedTicket, setSelectedTicket] = useState(0);
+  const [selectedTicket, setSelectedTicket] = useState("");
 
   const handleTicketSelection = (event: any) => {
-    // setSelectedTicket(Number(event.target.value));
+    setSelectedTicket(event.target.value);
     setFieldValue(
       "ticket",
-      data?.data[selecedTrain].tickets[Number(event.target.value)]
+      // data?.data[selecedTrain].tickets[Number(event.target.value)]
+      data?.data[selecedTrain].tickets.filter((tkt: any) => {
+        return tkt.ticketType === event.target.value;
+      })
     );
   };
 
-  // console.log("data", data, "selected ticket", selectedTicket);
+  console.log("data", data, "Values", values);
 
   return (
     <Container maxWidth="lg" sx={{ p: 2 }}>
@@ -212,10 +224,9 @@ export default function AddBooking() {
                   name="nic"
                   fullWidth
                   id="user-nic"
-                  // value={values.endStation}
-                  value=""
+                  value={values.nic}
                   label="NIC"
-                  onChange={() => {}}
+                  onChange={handleChange}
                   helperText="Please select NIC od User"
                 ></TextField>
                 <TextField
@@ -223,32 +234,29 @@ export default function AddBooking() {
                   fullWidth
                   id="ticket-select"
                   select
-                  // value={values.endStation}
-                  value=""
+                  value={selectedTicket}
                   label="Select Ticket Type"
                   onChange={(e) => {
-                    // setSelectedTicket(Number(e.target.value));
                     handleTicketSelection(e);
                   }}
-                  helperText="Please select the number of tickets"
+                  helperText="Please select the ticket type"
                 >
                   {data?.data[selecedTrain].tickets.map(
                     (option: any, index: number) => (
-                      <MenuItem key={option.id} value={index}>
+                      <MenuItem key={option.id} value={option.ticketType}>
                         {option.ticketType}
                       </MenuItem>
                     )
                   )}
                 </TextField>
                 <TextField
-                  name="seatCount"
+                  name="reservationSeatCount"
                   fullWidth
                   id="seat-count"
-                  // value={values.endStation}
-                  value={1}
+                  value={values.reservationSeatCount}
                   label="Select Number Of Tickets"
-                  onChange={() => {}}
-                  helperText="Please select end station"
+                  onChange={handleChange}
+                  helperText="Please select number of tickets"
                   select
                 >
                   <MenuItem value={1}>1</MenuItem>
