@@ -16,6 +16,7 @@ import { ROUTE_CONSTANT } from "../../../routes/Constatnt";
 import {
   deleteBooking,
   fetchAllBooking,
+  updateBooking,
 } from "../../../api/bookingManagmentApi";
 import ConfirmDialog from "../../../components/common/ConfirmDialog/ConfirmDialog";
 import CustomSnackBar from "../../../components/common/snackbar/Snackbar";
