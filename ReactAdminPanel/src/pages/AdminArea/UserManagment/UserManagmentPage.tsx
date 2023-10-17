@@ -16,29 +16,55 @@ import {
   DialogTitle,
 } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
-import MaterialReactTable, {
-  MRT_ColumnDef,
-  MaterialReactTableProps,
-} from "material-react-table";
-import { Delete, Edit } from "@mui/icons-material";
-import { useQuery } from "@tanstack/react-query";
-import CustomeDialog from "../../../components/common/CustomDialog/CustomDialog";
-import AddCategoryForm from "../../../components/common/form/addCategoryForm/AddCategoryForm";
+import MaterialReactTable, { MRT_ColumnDef, MaterialReactTableProps } from "material-react-table";
+import { Close, Delete, Edit } from "@mui/icons-material";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchAllUsers } from "../../../api/userApi";
-import UpdateUserForm from "../../../components/common/form/updateUserForm/UpdateUserForm";
 import { deleteUser } from "../../../api/userApi";
 import { updateUser } from "../../../api/userApi";
+import ConfirmDialog from "../../../components/common/ConfirmDialog/ConfirmDialog";
+import CustomSnackBar from "../../../components/common/snackbar/Snackbar";
 export default function UserManagmentPage() {
   const [open, setOpen] = useState(false);
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<any>();
+  const [selectedUserId, setSelectedUserId] = useState<string>("");
   const [userStatusDialogOpen, setUserStatusDialogOpen] = useState(false);
   const [updatedUserStatus, setUpdatedUserStatus] = useState("active");
+  const [notify, setNotify] = useState({
+    isOpen: false,
+    message: "",
+    type: "error",
+    title: "",
+  });
+
   const { data, error, isLoading, isError, isSuccess } = useQuery({
     queryKey: ["users"],
     queryFn: fetchAllUsers,
   });
+  const queryClient = useQueryClient();
+  const { isLoading: isMutaionLoading, mutate } = useMutation({
+    mutationFn: deleteUser,
+    onSuccess: () => {
+      setNotify({
+        isOpen: true,
+        message: "Deleted Successfully",
+        type: "success",
+        title: "Deleted",
+      });
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      setIsConfirmDialogOpen(false);
+    },
+    onError: () => {
+      setNotify({
+        isOpen: true,
+        message: "Deleted Failed",
+        type: "error",
+        title: "Deleted",
+      });
+    },
+  });
   const [tableData, setTableData] = useState<any>();
-  console.log("User data", data);
 
   const handleStatusChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setUpdatedUserStatus(event.target.value as string);
@@ -51,9 +77,7 @@ export default function UserManagmentPage() {
     })
       .then((response) => {
         const updatedTableData = tableData.map((user: { id: any }) =>
-          user.id === selectedUser.id
-            ? { ...user, isActive: updatedUserStatus === "active" }
-            : user
+          user.id === selectedUser.id ? { ...user, isActive: updatedUserStatus === "active" } : user
         );
 
         setTableData(updatedTableData);
@@ -71,6 +95,7 @@ export default function UserManagmentPage() {
       setTableData(data.data);
     }
   }, [data]);
+
   const columns = useMemo<MRT_ColumnDef<any>[]>(
     () => [
       {
@@ -89,36 +114,44 @@ export default function UserManagmentPage() {
         accessorKey: "isActive", //access nested data with dot notation
         header: "IsAcvtive",
         enableGlobalFilter: true,
-        enableEditing: false,
-        Cell: ({ renderedCellValue, row }: any) => {
-          return row.original.isVerified ? (
-            <Chip label="Active" color="primary" />
-          ) : (
-            <Chip label="DeActive" color="warning" />
+        enableEditing: true,
+        Edit: ({ row, cell, column, table }) => {
+          console.log(cell);
+          return (
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Is Active</InputLabel>
+              <Select labelId="demo-simple-select-label" id="demo-simple-select" value={row.original?.isActive} onChange={(e) => {}} label="Is Active">
+                <MenuItem value={"true"}>Active</MenuItem>
+                <MenuItem value={"false"}>Deactive</MenuItem>
+              </Select>
+            </FormControl>
           );
+        },
+
+        Cell: ({ renderedCellValue, row }: any) => {
+          return row.original.isVerified ? <Chip label="Active" color="primary" /> : <Chip label="DeActive" color="warning" />;
         },
       },
       {
         accessorKey: "role", //access nested data with dot notation
         header: "User Role",
         enableGlobalFilter: true,
-
         Edit: ({ row, cell, column, table }) => {
           console.log(cell);
           return (
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Age</InputLabel>
+              <InputLabel id="demo-simple-select-label">Role</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={row.original?.role}
                 onChange={(e) => {
-                  console.log(e.target.value);
+                  tableData[row.index].role = e.target.value as string;
                 }}
                 label="Role"
               >
                 <MenuItem value={"user"}>User</MenuItem>
-                <MenuItem value={"seller"}>Seller</MenuItem>
+                <MenuItem value={"user-agent"}>Travel Agent</MenuItem>
                 <MenuItem value={"admin"}>Admin</MenuItem>
               </Select>
             </FormControl>
@@ -138,15 +171,16 @@ export default function UserManagmentPage() {
     ],
     []
   );
-  const handleSaveRowEdits: MaterialReactTableProps<any>["onEditingRowSave"] =
-    async ({ exitEditingMode, row, values }) => {
-      //if using flat data and simple accessorKeys/ids, you can just do a simple assignment here.
-      tableData[row.index] = values;
-      //send/receive api updates here
-      setTableData([...tableData]);
+  const handleSaveRowEdits: MaterialReactTableProps<any>["onEditingRowSave"] = async ({ exitEditingMode, row, values }) => {
+    //if using flat data and simple accessorKeys/ids, you can just do a simple assignment here.
+    console.log("row", row);
+    console.log("row values", values);
+    tableData[row.index] = values;
+    //send/receive api updates here
+    setTableData([...tableData]);
 
-      exitEditingMode();
-    };
+    exitEditingMode();
+  };
 
   console.log("tableData", tableData);
   return (
@@ -175,6 +209,7 @@ export default function UserManagmentPage() {
         rowCount={tableData?.length ?? 0}
         columns={columns}
         data={tableData ?? []}
+        editingMode="row"
         muiToolbarAlertBannerProps={
           isError
             ? {
@@ -188,19 +223,27 @@ export default function UserManagmentPage() {
             <Tooltip arrow placement="left" title="Edit">
               <IconButton
                 onClick={() => {
+                  table.setEditingRow(row);
                   setSelectedUser(row.original);
-                  setOpen(true);
-                  setUserStatusDialogOpen(true);
                 }}
               >
                 <Edit />
               </IconButton>
             </Tooltip>
+            <Tooltip arrow placement="left" title="Edit">
+              <IconButton
+                onClick={() => {
+                  table.setEditingRow(null);
+                }}
+              >
+                <Close />
+              </IconButton>
+            </Tooltip>
             <Tooltip arrow placement="left" title="Delete">
               <IconButton
                 onClick={() => {
-                  deleteUser(row.original.id);
-                  //setOpen(true);
+                  setSelectedUserId(row.original.id);
+                  setIsConfirmDialogOpen(true);
                 }}
               >
                 <Delete />
@@ -209,10 +252,7 @@ export default function UserManagmentPage() {
           </Box>
         )}
       />
-      <Dialog
-        open={userStatusDialogOpen}
-        onClose={() => setUserStatusDialogOpen(false)}
-      >
+      <Dialog open={userStatusDialogOpen} onClose={() => setUserStatusDialogOpen(false)}>
         <DialogTitle>Update User Status</DialogTitle>
         <DialogContent>
           <p>Select the user status:</p>
@@ -231,10 +271,7 @@ export default function UserManagmentPage() {
           </FormControl>
         </DialogContent>
         <DialogActions>
-          <Button
-            onClick={() => setUserStatusDialogOpen(false)}
-            color="primary"
-          >
+          <Button onClick={() => setUserStatusDialogOpen(false)} color="primary">
             Cancel
           </Button>
           <Button onClick={handleUpdateStatusConfirm} color="primary">
@@ -242,6 +279,16 @@ export default function UserManagmentPage() {
           </Button>
         </DialogActions>
       </Dialog>
+
+      <ConfirmDialog
+        isOpen={() => setIsConfirmDialogOpen(false)}
+        onConfirm={() => mutate(selectedUserId)}
+        open={isConfirmDialogOpen}
+        subTitle="This action can not be undone"
+        title="Delete User"
+        loading={isMutaionLoading}
+      />
+      <CustomSnackBar notify={notify} setNotify={setNotify} />
     </Container>
   );
 }
