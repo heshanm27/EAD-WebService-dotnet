@@ -10,7 +10,9 @@ import ConfirmDialog from "../../../components/common/ConfirmDialog/ConfirmDialo
 import CustomSnackBar from "../../../components/common/snackbar/Snackbar";
 import AddTrainScheduleForm from "../../../components/common/form/addTrainSchedule/AddTrainScheduleForm";
 import CustomeDialog from "../../../components/common/CustomDialog/CustomDialog";
-
+import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
+import UpdateTrainSchedule from "../../../components/common/form/updateTrainShedule/UpdateTrainSchedule";
+import UpdateTrainTickets from "../../../components/common/form/updateTrainTickets/UpdateTrainTickets";
 export default function TrainManagment() {
   const navigate = useNavigate();
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
@@ -25,6 +27,9 @@ export default function TrainManagment() {
     title: "",
   });
   const [selectedTrainId, setSelectedTrainId] = useState<string>("");
+  const [selectedTrain, setSelectedTrain] = useState<any>();
+  const [isUpdateTrainScheduleDialogOpen, setIsUpdateTrainScheduleDialogOpen] = useState(false);
+  const [isUpdateTrainTicketDialogOpen, setIsUpdateTrainTicketDialogOpen] = useState(false);
   const queryClient = useQueryClient();
 
   const { isLoading: isMutaionLoading, mutate } = useMutation({
@@ -39,10 +44,11 @@ export default function TrainManagment() {
       queryClient.invalidateQueries({ queryKey: ["booking"] });
       setIsConfirmDialogOpen(false);
     },
-    onError: () => {
+    onError: (message: any) => {
+      console.log(message, "message");
       setNotify({
         isOpen: true,
-        message: "Deletetion Failed",
+        message: message.message,
         type: "error",
         title: "Deleted",
       });
@@ -117,18 +123,33 @@ export default function TrainManagment() {
         }
         renderRowActions={({ row, table }: any) => (
           <Box sx={{ display: "flex", gap: "1rem" }}>
-            <Tooltip arrow placement="left" title="Edit">
-              <IconButton onClick={() => table.setEditingRow(row)}>
+            <Tooltip arrow placement="left" title="Edit schedule">
+              <IconButton
+                onClick={() => {
+                  setSelectedTrain(row.original);
+                  setIsUpdateTrainScheduleDialogOpen(true);
+                }}
+              >
                 <Edit />
               </IconButton>
             </Tooltip>
+            {/* <Tooltip arrow placement="left" title="Manage Ticket">
+              <IconButton
+                onClick={() => {
+                  setSelectedTrain(row.original);
+                  setIsUpdateTrainTicketDialogOpen(true);
+                }}
+              >
+                <ConfirmationNumberIcon />
+              </IconButton>
+            </Tooltip> */}
             <Tooltip arrow placement="right" title="Delete">
               <IconButton
                 color="error"
                 onClick={() => {
                   console.log(row?.original?.id);
-                  setIsConfirmDialogOpen(true);
                   setSelectedTrainId(row?.original?.id);
+                  setIsConfirmDialogOpen(true);
                 }}
               >
                 <Delete />
@@ -145,15 +166,27 @@ export default function TrainManagment() {
 
       <ConfirmDialog
         isOpen={() => setIsConfirmDialogOpen(false)}
-        onConfirm={() => mutate(selectedTrainId)}
+        onConfirm={() => {
+          console.log(selectedTrainId, "selectedTrainId");
+          mutate(selectedTrainId);
+        }}
         open={isConfirmDialogOpen}
         subTitle="This action can not be undone"
         title="Delete User"
         loading={isMutaionLoading}
       />
       <CustomeDialog open={open} setOpen={setOpen} title="Add New Train">
-        <AddTrainScheduleForm />
+        <AddTrainScheduleForm closeDialog={setOpen} setNotify={setNotify} />
       </CustomeDialog>
+
+      <CustomeDialog open={isUpdateTrainScheduleDialogOpen} setOpen={setIsUpdateTrainScheduleDialogOpen} title="Update Train Schedule">
+        <UpdateTrainSchedule trainData={selectedTrain} setNotify={setNotify} closeDialog={setIsUpdateTrainScheduleDialogOpen} />
+      </CustomeDialog>
+
+      <CustomeDialog open={isUpdateTrainTicketDialogOpen} setOpen={setIsUpdateTrainTicketDialogOpen} title="Update train ticket">
+        <UpdateTrainTickets trainData={selectedTrain} setNotify={setNotify} closeDialog={setIsUpdateTrainTicketDialogOpen} />
+      </CustomeDialog>
+
       <CustomSnackBar notify={notify} setNotify={setNotify} />
     </Container>
   );

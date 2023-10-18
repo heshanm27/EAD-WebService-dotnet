@@ -69,19 +69,34 @@ export const updateBooking = async (booking: any) => {
       ticket: booking.ticket,
     };
 
-    console.log("Update data", updateData);
+    console.log("inside api call", updateData);
     console.log("ID", booking.id);
 
-    const response = await apiClient.patch(`/train/${booking.id}`, updateData);
+    const response = await apiClient.patch(`/reservation/${booking.id}`, updateData);
     return response.data;
   } catch (error: any) {
     throw new Error(error.response.data.message);
   }
 };
 
-export const deleteBooking = async (booking: any) => {
+export const deleteBooking = async (id: any) => {
   try {
-    const response = await apiClient.delete(`/reservation/${booking.id}`);
+    const response = await apiClient.delete(`/reservation/${id}`);
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response.data.message);
+  }
+};
+
+export const createBooking = async (booking: any) => {
+  try {
+    const createData: UpdateBooking = {
+      ...booking,
+    };
+
+    console.log("Create data", createData);
+
+    const response = await apiClient.post(`/reservation`, createData);
     return response.data;
   } catch (error: any) {
     throw new Error(error.response.data.message);

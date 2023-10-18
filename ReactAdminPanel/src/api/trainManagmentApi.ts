@@ -104,9 +104,9 @@ export const updateTrain = async (train: any) => {
   }
 };
 
-export const deteteTrain = async (train: any) => {
+export const deteteTrain = async (id: any) => {
   try {
-    const response = await apiClient.delete(`/train/${train.id}`);
+    const response = await apiClient.delete(`/train/${id}`);
     return response.data;
   } catch (error: any) {
     throw new Error(error.response.data.message);
@@ -116,6 +116,42 @@ export const deteteTrain = async (train: any) => {
 export const searchTrains = async (train: any) => {
   try {
     const response = await apiClient.get(`/train?Page=1&PageSize=10&Order=asc&start=${train.startStation}&end=${train.endStation}&date=${train.departureDate}`);
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response.data.message);
+  }
+};
+
+export const addTrainTicket = async (trainid: any, ticket: any) => {
+  try {
+    const response = await apiClient.post(`/train/${trainid.id}/ticket`, ticket);
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response.data.message);
+  }
+};
+
+export const updateTrainTicket = async (trainid: any, ticket: any) => {
+  try {
+    const response = await apiClient.patch(`/train/${trainid.id}/ticket/${ticket.id}`, ticket);
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response.data.message);
+  }
+};
+
+export const deleteTrainTicket = async (trainid: any, ticket: any) => {
+  try {
+    const response = await apiClient.delete(`/train/${trainid.id}/ticket/${ticket.id}`);
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response.data.message);
+  }
+};
+
+export const getTrainById = async (id: any) => {
+  try {
+    const response = await apiClient.get(`/train/${id}`);
     return response.data;
   } catch (error: any) {
     throw new Error(error.response.data.message);

@@ -9,6 +9,7 @@ export interface AuthState {
   message: string;
   logOutMessage: string;
   avatar: string;
+  id: string;
 }
 
 export interface LoginResponse {
@@ -26,6 +27,7 @@ const initialState: AuthState = {
   message: "",
   logOutMessage: "",
   avatar: "",
+  id: "",
 };
 export const authSlice = createSlice({
   name: "auth",
@@ -38,6 +40,7 @@ export const authSlice = createSlice({
       state.role = action.payload.data.role;
       state.isLoggedIn = true;
       state.avatar = action.payload.data.avatarUrl;
+      state.id = action.payload.data.userId;
     },
     setMessage: (state, action) => {
       state.message = action.payload;

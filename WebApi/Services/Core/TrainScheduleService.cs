@@ -89,24 +89,30 @@ namespace EAD_WebService.Services.Core
                 // ReservationDate = ReservationDate.AddHours(5).AddMinutes(30);
 
                 // DateTime SriLankanUtcDate = new DateTime(ReservationDate.Ticks, DateTimeKind.Utc).AddHours(5).AddMinutes(30);
-                Console.WriteLine(new BsonDateTime(ReservationDate.AddHours(5).AddMinutes(30)));
+                Console.WriteLine(ReservationDate.Date);
 
                 var filter = Builders<Train>.Filter.AnyEq("start_station", filters.start)
                 & Builders<Train>.Filter.AnyEq("end_station", filters.end)
-                & Builders<Train>.Filter.AnyEq("departure_date", new BsonDateTime(ReservationDate.AddHours(5).AddMinutes(30)))
+                //  Builders<Train>.Filter.AnyEq("departure_date", new BsonDateTime(ReservationDate.AddHours(5).AddMinutes(30))) &
+                //     Builders<Train>.Filter.AnyLte("departure_date", new BsonDateTime(ReservationDate.AddHours(5).AddMinutes(30)))
                 ;
                 // & Builders<Train>.Filter.Lte("departure_date", new BsonDateTime(ReservationDate))
                 ;
                 var sort = Builders<Train>.Sort.Descending("train_start_time");
 
-                Console.WriteLine(filter);
+
                 if (filters.Order == "asc")
                 {
                     sort = Builders<Train>.Sort.Ascending(filters.Order);
                 }
                 var trains = await _train.Find(filter).Sort(sort).Skip((filters.Page - 1) * filters.PageSize).Limit(filters.PageSize).ToListAsync();
 
-                List<TrainGetReponseDto> formattedTrains = trains.Select(train => new TrainGetReponseDto
+                var filteredTrains = trains.Where(train => train.DepartureDate.Date == ReservationDate).ToList();
+                filteredTrains.ForEach(train =>
+                {
+                    Console.WriteLine(train.DepartureDate);
+                });
+                List<TrainGetReponseDto> formattedTrains = filteredTrains.Select(train => new TrainGetReponseDto
                 {
                     Id = train.Id,
                     TrainName = train.TrainName,

@@ -1,27 +1,26 @@
 import apiClient from "./axios";
 
-
 export interface UserData {
-  data:    User[];
-  status:  boolean;
+  data: User[];
+  status: boolean;
   message: string;
 }
 
 export interface User {
-  id:        string;
-  email:     string;
-  nic:       string;
+  id: string;
+  email: string;
+  nic: string;
   firstName: string;
-  lastName:  string;
-  password:  string;
+  lastName: string;
+  password: string;
   avatarUrl: string;
-  role:      string;
-  isActive:  boolean;
+  role: string;
+  isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
 
-export const fetchAllUsers = async ():Promise<UserData> => {
+export const fetchAllUsers = async (): Promise<UserData> => {
   try {
     const response = await apiClient.get("/user");
     return response.data;
@@ -55,6 +54,24 @@ export const updateUser = async ({ id, value }: prop) => {
 export const deleteUser = async (id: string) => {
   try {
     const response = await apiClient.delete(`/user/${id}`);
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response.data.message);
+  }
+};
+
+export const activateUser = async (id: string) => {
+  try {
+    const response = await apiClient.patch(`/user/${id}/activate`);
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error.response.data.message);
+  }
+};
+
+export const deactivateUser = async (id: string) => {
+  try {
+    const response = await apiClient.patch(`/user/${id}/deactivate`);
     return response.data;
   } catch (error: any) {
     throw new Error(error.response.data.message);

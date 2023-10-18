@@ -1,52 +1,62 @@
 import { Box, Button, Chip, Container, MenuItem, Stack, TextField, Typography } from "@mui/material";
 import { DatePicker, TimePicker } from "@mui/x-date-pickers";
 import React, { useState } from "react";
-import { STATION_OBJ } from "../../../../constant/GlobalConstant";
 import { useFormik } from "formik";
 import moment, { Moment } from "moment";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addTrain } from "../../../../api/trainManagmentApi";
+import { addTrain, updateTrain } from "../../../../api/trainManagmentApi";
 import Select from "react-select";
+import { STATION_OBJ } from "../../../../constant/GlobalConstant";
 import * as Yup from "yup";
-interface TicketType {
-  ticketType: string;
-  ticketPrice: string;
-  ticketCount: string;
+interface TrainData {
+  id: string;
+  trainName: string;
+  trainNumber: string;
+  startStation: string;
+  endStation: string;
+  trainStartTime: string;
+  trainEndTime: string;
+  departureDate: string;
 }
-export default function AddTrainScheduleForm({ closeDialog, setNotify }: any) {
+
+interface UpdateTrainScheduleProps {
+  trainData: TrainData;
+  setNotify: any;
+  closeDialog: any;
+}
+export default function UpdateTrainSchedule({ trainData, setNotify, closeDialog }: UpdateTrainScheduleProps) {
+  const { trainName, trainNumber, startStation, endStation, trainStartTime, trainEndTime, departureDate } = trainData;
   const maxDate = moment().add(30, "days");
   const queryClient = useQueryClient();
-
+  function removeAMPMIndicator(timeString: string): string {
+    const timeParts = timeString.split(" ");
+    console.log("timeParts", timeParts);
+    timeParts.pop(); // remove AM/PM indicator
+    return timeParts.join(":");
+  }
   const { mutate, isLoading } = useMutation({
-    mutationFn: addTrain,
+    mutationFn: updateTrain,
     onSuccess: () => {
+      queryClient.invalidateQueries(["trains"]);
       setNotify({
         isOpen: true,
-        message: "Train Added Successfully",
+        message: "Train Updated Successfully",
         type: "success",
         title: "Success",
       });
       closeDialog(false);
-      queryClient.invalidateQueries(["trains"]);
     },
     onError: () => {
       setNotify({
         isOpen: true,
-        message: "Train Added Failed",
+        message: "Train Update Failed",
         type: "error",
         title: "Error",
       });
       closeDialog(false);
     },
   });
-  const [ticketData, changeTicketData] = useState({
-    ticketType: "",
-    ticketPrice: "",
-    ticketCount: "",
-  });
-
-  const [ticketsList, changeTicketsList] = useState<any>([]);
   const validationSchema = Yup.object({
     trainName: Yup.string().required("Train name is required"),
     trainNumber: Yup.string().required("Train number is required"),
@@ -56,22 +66,28 @@ export default function AddTrainScheduleForm({ closeDialog, setNotify }: any) {
     trainEndTime: Yup.string().required("Train end time is required"),
     departureDate: Yup.date().required("Departure date is required"),
   });
-
   const { handleChange, values, handleBlur, setFieldValue, handleSubmit, errors } = useFormik({
     initialValues: {
-      trainName: "",
-      trainNumber: "",
-      startStation: "",
-      endStation: "",
-      trainStartTime: "",
-      trainEndTime: "",
-      departureDate: "",
+      trainName: trainName,
+      trainNumber: trainNumber,
+      startStation: startStation,
+      endStation: endStation,
+      trainStartTime: trainStartTime,
+      trainEndTime: trainEndTime,
+      departureDate: departureDate,
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
+      console.log("values", {
+        ...values,
+        trainEndTime: removeAMPMIndicator(values.trainEndTime),
+        trainStartTime: removeAMPMIndicator(values.trainStartTime),
+      });
       mutate({
         ...values,
-        tickets: ticketsList,
+        trainEndTime: moment(values.trainEndTime, "HH:mm").format("HH:mm"),
+        trainStartTime: moment(values.trainStartTime, "HH:mm").format("HH:mm"),
+        id: trainData.id,
       });
     },
   });
@@ -106,7 +122,11 @@ export default function AddTrainScheduleForm({ closeDialog, setNotify }: any) {
         <Stack sx={{ width: "100%" }}>
           <Typography variant="caption">Select Start Station</Typography>
 
-          <Select onChange={(val: any) => setFieldValue("startStation", val.value)} options={STATION_OBJ} />
+          <Select
+            defaultValue={{ value: startStation, label: startStation }}
+            onChange={(val: any) => setFieldValue("startStation", val.value)}
+            options={STATION_OBJ}
+          />
           {errors.startStation && (
             <div>
               {
@@ -119,7 +139,11 @@ export default function AddTrainScheduleForm({ closeDialog, setNotify }: any) {
         </Stack>
         <Stack sx={{ width: "100%" }}>
           <Typography variant="caption">Select End Station</Typography>
-          <Select onChange={(val: any) => setFieldValue("endStation", val.value)} options={STATION_OBJ} />
+          <Select
+            defaultValue={{ value: endStation, label: endStation }}
+            onChange={(val: any) => setFieldValue("endStation", val.value)}
+            options={STATION_OBJ}
+          />
           {errors.endStation && (
             <div>
               {
@@ -132,6 +156,7 @@ export default function AddTrainScheduleForm({ closeDialog, setNotify }: any) {
         </Stack>
         <Stack sx={{ width: "100%" }}>
           <DatePicker
+            defaultValue={moment(departureDate, "YYYY-MM-DD")}
             disablePast
             maxDate={maxDate}
             sx={{ width: "100%" }}
@@ -150,6 +175,7 @@ export default function AddTrainScheduleForm({ closeDialog, setNotify }: any) {
 
         <Stack sx={{ width: "100%" }}>
           <TimePicker
+            defaultValue={moment(trainStartTime, "HH:mm")}
             sx={{ width: "100%" }}
             label="Train Departure Time"
             ampm={false}
@@ -167,6 +193,7 @@ export default function AddTrainScheduleForm({ closeDialog, setNotify }: any) {
         </Stack>
         <Stack sx={{ width: "100%" }}>
           <TimePicker
+            defaultValue={moment(trainEndTime, "HH:mm")}
             sx={{ width: "100%" }}
             label="Train Arrival Time"
             ampm={false}
@@ -182,74 +209,9 @@ export default function AddTrainScheduleForm({ closeDialog, setNotify }: any) {
             </div>
           )}
         </Stack>
-        <Stack spacing={1}>
-          <Stack direction="row" spacing={1}>
-            {ticketsList.length === 0
-              ? ""
-              : ticketsList.map((ticket: any) => (
-                  <Chip
-                    label={`${ticket.ticketType} : ${ticket.ticketPrice}`}
-                    onClick={() => {}}
-                    onDelete={() => {
-                      changeTicketsList(ticketsList.filter((t: any) => t.ticketType !== ticket.ticketType));
-                    }}
-                    key={ticket.ticketType}
-                  />
-                ))}
-          </Stack>
-          <Stack direction="row" spacing={1}>
-            <TextField
-              label="Ticket Class"
-              variant="outlined"
-              required
-              onChange={(e) => {
-                changeTicketData({ ...ticketData, ticketType: e.target.value });
-              }}
-            />
-            <TextField
-              label="Ticket Price"
-              variant="outlined"
-              required
-              onChange={(e) => {
-                changeTicketData({
-                  ...ticketData,
-                  ticketPrice: e.target.value,
-                });
-              }}
-            />
-            <TextField
-              label="Ticket Count"
-              variant="outlined"
-              required
-              onChange={(e) => {
-                changeTicketData({
-                  ...ticketData,
-                  ticketCount: e.target.value,
-                });
-              }}
-            />
-          </Stack>
-          <Button
-            variant="outlined"
-            onClick={() => {
-              if (ticketsList.length === 0) {
-                changeTicketsList([ticketData]);
-              } else {
-                changeTicketsList([...ticketsList, ticketData]);
-              }
-            }}
-          >
-            Add Tickets
-          </Button>
-          {ticketsList.length === 0 && <Typography variant="caption">Please add at least one ticket</Typography>}
-        </Stack>
-
         <LoadingButton fullWidth loading={isLoading} onClick={() => handleSubmit()} variant="outlined">
-          Submit
+          Update
         </LoadingButton>
-
-        {/* <TimePicker label="Train Departure Time" value={startTime} onChange={(newValue) => setStartTime(newValue)} />
-        <TimePicker label="Train Arrival Time" value={endTime} onChange={(newValue) => setEndTime(newValue)} /> */}
       </Stack>
     </Box>
   );

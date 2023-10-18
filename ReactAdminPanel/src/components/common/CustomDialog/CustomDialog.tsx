@@ -20,7 +20,7 @@ export default function CustomeDialog({ open, setOpen, children, title }: any) {
     },
   };
   return (
-    <Dialog open={open} onClose={() => setOpen(false)} fullWidth sx={displaywraper}>
+    <Dialog open={open} onClose={() => setOpen(false)} fullWidth sx={displaywraper} maxWidth={"md"}>
       <DialogTitle>
         <Box
           sx={{
