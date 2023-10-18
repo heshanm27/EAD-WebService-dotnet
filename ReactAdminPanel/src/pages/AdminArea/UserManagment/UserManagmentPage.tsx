@@ -117,48 +117,15 @@ export default function UserManagmentPage() {
         header: "IsAcvtive",
         enableGlobalFilter: true,
         enableEditing: true,
-        Edit: ({ row, cell, column, table }) => {
-          console.log(cell);
-          return (
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Is Active</InputLabel>
-              <Select labelId="demo-simple-select-label" id="demo-simple-select" value={row.original?.isActive} onChange={(e) => {}} label="Is Active">
-                <MenuItem value={"true"}>Active</MenuItem>
-                <MenuItem value={"false"}>Deactive</MenuItem>
-              </Select>
-            </FormControl>
-          );
-        },
 
         Cell: ({ renderedCellValue, row }: any) => {
-          return row.original.isVerified ? <Chip label="Active" color="primary" /> : <Chip label="DeActive" color="warning" />;
+          return row.original.isActive ? <Chip label="Active" color="primary" /> : <Chip label="Deactive" color="warning" />;
         },
       },
       {
         accessorKey: "role", //access nested data with dot notation
         header: "User Role",
         enableGlobalFilter: true,
-        Edit: ({ row, cell, column, table }) => {
-          console.log(cell);
-          return (
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Role</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={row.original?.role}
-                onChange={(e) => {
-                  tableData[row.index].role = e.target.value as string;
-                }}
-                label="Role"
-              >
-                <MenuItem value={"user"}>User</MenuItem>
-                <MenuItem value={"user-agent"}>Travel Agent</MenuItem>
-                <MenuItem value={"admin"}>Admin</MenuItem>
-              </Select>
-            </FormControl>
-          );
-        },
         Cell: ({ renderedCellValue, row }: any) => {
           switch (row.original.role) {
             case "admin":
@@ -225,6 +192,7 @@ export default function UserManagmentPage() {
             <Tooltip arrow placement="left" title="Edit">
               <IconButton
                 onClick={() => {
+                  console.log(row.original);
                   setOpen(true);
                   setSelectedUser(row.original);
                 }}
@@ -246,7 +214,7 @@ export default function UserManagmentPage() {
         )}
       />
       <CustomeDialog open={open} setOpen={setOpen} title="Update user state">
-        <UpdateUserForm />
+        <UpdateUserForm user={selectedUser} setOpen={setOpen} />
       </CustomeDialog>
 
       <ConfirmDialog

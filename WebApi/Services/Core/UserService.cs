@@ -149,7 +149,7 @@ namespace EAD_WebService.Services.Core
             try
             {
                 var filter = Builders<User>.Filter.Eq("Id", new ObjectId(id));
-                var update = Builders<User>.Update.Set("is_active", true);
+                var update = Builders<User>.Update.Set("is_active", false);
 
                 await _user.UpdateOneAsync(filter, update);
 

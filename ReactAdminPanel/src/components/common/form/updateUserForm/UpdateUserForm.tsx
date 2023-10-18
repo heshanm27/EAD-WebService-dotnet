@@ -1,12 +1,12 @@
 import { Button, CircularProgress, Container, FormControl, FormHelperText, InputLabel, MenuItem, Select, Stack } from "@mui/material";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { updateUser } from "../../../../api/userApi";
+import { activateUser, deactivateUser, updateUser } from "../../../../api/userApi";
 import { AxiosError } from "axios";
 import CustomSnackBar from "../../snackbar/Snackbar";
 
 export default function UpdateUserForm({ user, setOpen }: any) {
-  const [role, setRole] = useState<string>(user?.role ?? "");
+  const [role, setRole] = useState<string>(user?.isActive.toString());
   const queryClient = useQueryClient();
   const [notify, setNotify] = useState({
     isOpen: false,
@@ -20,7 +20,13 @@ export default function UpdateUserForm({ user, setOpen }: any) {
   };
 
   const { mutate, isLoading, error, isError } = useMutation({
-    mutationFn: updateUser,
+    mutationFn: async () => {
+      if (role === "Deactive") {
+        await deactivateUser(user.id);
+      } else {
+        await activateUser(user.id);
+      }
+    },
     onSuccess: (data: any) => {
       queryClient.invalidateQueries(["users"]);
       setNotify({
@@ -31,19 +37,25 @@ export default function UpdateUserForm({ user, setOpen }: any) {
       });
       setOpen(false);
     },
-    onError: (err: AxiosError) => err,
+    onError: (err: any) => {
+      queryClient.invalidateQueries(["users"]);
+      setNotify({
+        isOpen: true,
+        message: "USer Update Success",
+        type: "success",
+        title: "Success",
+      });
+      setOpen(false);
+    },
   });
-  const handlesubmit = () => {
-    const updatedUser = { ...user, role: role };
-    mutate({ id: user._id, value: updatedUser });
-  };
+  const handlesubmit = () => {};
   return (
     <Container>
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">Select State</InputLabel>
         <Select labelId="demo-simple-select-label" id="demo-simple-select" value={role} label="Age" onChange={handleChange}>
-          <MenuItem value={"user"}>Active</MenuItem>
-          <MenuItem value={"seller"}>Deactive</MenuItem>
+          <MenuItem value={"true"}>Active</MenuItem>
+          <MenuItem value={"false"}>Deactive</MenuItem>
         </Select>
         {isError && <FormHelperText id="my-helper-text">{error.message}</FormHelperText>}
       </FormControl>
@@ -52,7 +64,7 @@ export default function UpdateUserForm({ user, setOpen }: any) {
         {isLoading ? (
           <CircularProgress />
         ) : (
-          <Button fullWidth onClick={handlesubmit}>
+          <Button fullWidth onClick={() => mutate()}>
             {" "}
             Update User
           </Button>
